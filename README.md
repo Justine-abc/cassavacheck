@@ -1,6 +1,6 @@
 # CassaCheck: initial software product
 
-**Repository:** https://github.com/<your-username>/cassacheck
+**Repository:** https://github.com/Justine-abc/cassacheck
 
 ## Description
 CassaCheck classifies a photograph of a cassava leaf into one of five conditions (cassava bacterial blight, cassava brown streak disease, cassava green mite, cassava mosaic disease, healthy) and returns the class with its confidence. Published district-level disease information is shown beside the result, never combined with it. This initial product contains the data pipeline with a published split, a first MobileNetV3-Large baseline with its metrics, and two interfaces: Swagger UI and a one-page web interface.
