@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CassaCheck</title>
+<style>
+  :root { --ink:#1f2933; --muted:#52606d; --line:#d9dde3; --accent:#2f4f6f; --panel:#f4f7fa; }
+  body { margin:0; font-family: Georgia, "Times New Roman", serif; color:var(--ink); background:#fff; }
+  header { background:var(--accent); color:#fff; padding:14px 18px; }
+  header h1 { margin:0; font-size:1.25rem; font-weight:600; }
+  header p { margin:4px 0 0; font-size:.9rem; opacity:.9; }
+  main { max-width:720px; margin:0 auto; padding:16px; display:grid; gap:16px; }
+  section { border:1px solid var(--line); border-radius:10px; padding:14px; }
+  h2 { font-size:1.05rem; margin:0 0 10px; }
+  .step { color:var(--muted); font-size:.85rem; margin-bottom:6px; }
+  label { display:block; font-size:.9rem; margin:8px 0 4px; }
+  select, input[type=file] { width:100%; padding:8px; border:1px solid var(--line); border-radius:6px; font:inherit; }
+  button { margin-top:12px; width:100%; padding:11px; background:var(--accent); color:#fff; border:0; border-radius:8px; font:inherit; font-size:1rem; }
+  button:disabled { opacity:.5; }
+  .result { background:var(--panel); }
+  .big { font-size:1.6rem; font-weight:700; }
+  .bar { height:8px; background:#e1e6ec; border-radius:4px; overflow:hidden; margin:3px 0 8px; }
+  .bar > span { display:block; height:100%; background:var(--accent); }
+  .panel { border-left:4px solid #bfa14a; }
+  .muted { color:var(--muted); font-size:.85rem; }
+  img#preview { max-width:100%; border-radius:8px; margin-top:8px; display:none; }
+</style>
+</head>
+<body>
+<header>
+  <h1>CassaCheck</h1>
+  <p>Cassava leaf diagnosis, with district information shown beside the result</p>
+</header>
+<main>
+  <section>
+    <h2>1. Where is the field?</h2>
+    <p class="step">Choose a district and season. This only fills the information panel; it does not change the diagnosis.</p>
+    <label for="district">District</label>
+    <select id="district"></select>
+    <label for="season">Season</label>
+    <select id="season"><option value="A">Season A (Sept to Jan)</option><option value="B">Season B (Feb to June)</option><option value="C">Season C (June to Aug)</option></select>
+  </section>
+
+  <section>
+    <h2>2. Photograph one leaf</h2>
+    <p class="step">One leaf, filling the frame, in daylight. JPEG or PNG.</p>
+    <input type="file" id="photo" accept="image/jpeg,image/png" capture="environment">
+    <img id="preview" alt="Selected leaf photo">
+    <button id="run" disabled>Diagnose</button>
+  </section>
+
+  <section class="result" id="result" hidden>
+    <h2>3. Result</h2>
+    <div class="big" id="label"></div>
+    <div class="muted" id="confidence"></div>
+    <div id="bars"></div>
+    <p class="muted" id="advice"></p>
+  </section>
+
+  <section class="panel" id="panel" hidden>
+    <h2>District information</h2>
+    <p id="panelText"></p>
+    <p class="muted">Published survey values for the district, with the survey year and the number of fields surveyed. Not a probability for this leaf.</p>
+  </section>
+</main>
+<script>
+const classNames = { CBB:"Cassava bacterial blight", CBSD:"Cassava brown streak disease", CGM:"Cassava green mite", CMD:"Cassava mosaic disease", healthy:"Healthy" };
+const advice = { CBB:"Remove badly affected plants; use clean cuttings next season; ask the extension officer to confirm.", CBSD:"Confirm with the extension officer; do not take cuttings from this plant; use certified planting material.", CGM:"Check the undersides of young leaves; mite damage eases with the rains; keep the field weeded.", CMD:"Use resistant certified varieties for the next planting; do not take cuttings from this plant.", healthy:"No disease signs detected on this leaf; check other leaves and plants." };
+let districtRows = [];
+async function loadDistricts() {
+  districtRows = await (await fetch("/districts")).json();
+  const names = [...new Set(districtRows.map(r => r.district))];
+  document.getElementById("district").innerHTML = names.map(n => `<option>${n}</option>`).join("");
+  showPanel();
+}
+function showPanel() {
+  const d = document.getElementById("district").value, s = document.getElementById("season").value;
+  const row = districtRows.find(r => r.district === d && r.season === s) || districtRows.find(r => r.district === d);
+  const panel = document.getElementById("panel"); panel.hidden = !row;
+  if (row) document.getElementById("panelText").textContent = `${row.district}: CBSD found in ${row.cbsd_incidence_pct}% of fields` + (row.cmd_incidence_pct ? `, CMD in ${row.cmd_incidence_pct}%` : "") + ` (${row.survey_year} survey, ${row.fields_surveyed} fields; ${row.source}).`;
+}
+document.getElementById("district").addEventListener("change", showPanel);
+document.getElementById("season").addEventListener("change", showPanel);
+document.getElementById("photo").addEventListener("change", e => {
+  const file = e.target.files[0]; document.getElementById("run").disabled = !file;
+  if (file) { const img = document.getElementById("preview"); img.src = URL.createObjectURL(file); img.style.display = "block"; }
+});
+document.getElementById("run").addEventListener("click", async () => {
+  const form = new FormData(); form.append("image", document.getElementById("photo").files[0]);
+  const button = document.getElementById("run"); button.disabled = true; button.textContent = "Working...";
+  try {
+    const response = await fetch("/diagnose", { method:"POST", body: form });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.detail || "Request failed");
+    document.getElementById("label").textContent = classNames[data.prediction];
+    document.getElementById("confidence").textContent = `Confidence ${(data.confidence * 100).toFixed(0)}% (uncalibrated baseline)`;
+    document.getElementById("bars").innerHTML = Object.entries(data.probabilities).map(([k, v]) => `<div class="muted">${classNames[k]} ${(v*100).toFixed(0)}%</div><div class="bar"><span style="width:${v*100}%"></span></div>`).join("");
+    document.getElementById("advice").textContent = advice[data.prediction];
+    document.getElementById("result").hidden = false;
+  } catch (err) { alert(err.message); }
+  button.disabled = false; button.textContent = "Diagnose";
+});
+loadDistricts();
+</script>
+</body>
+</html>
