@@ -4,3 +4,4 @@ data/ccmt_raw/
 *.pt
 kaggle.json
 __pycache__/
+.ipynb_checkpoints/
