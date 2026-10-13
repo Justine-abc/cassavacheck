@@ -57,7 +57,7 @@ Screenshots in `docs/screenshots/`: the web page before upload, the result card 
 See `docs/deployment_plan.md`: FastAPI and the static page on Render, PostgreSQL for the district table and the anonymised log, calibration and abstention loaded with the weights, latency measured as the forward pass at batch size 1 on one CPU core.
 
 ## 9. Video demo
-<paste the link>
+Video: VIDEO_LINK
 
 ## Repository layout
 ```
@@ -71,4 +71,3 @@ models/mobilenetv3_baseline.pt   (download link below if not in the repository)
 notebooks/01_data_and_split.ipynb, notebooks/02_baseline_train.ipynb
 requirements.txt
 ```
-Model weights
