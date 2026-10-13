@@ -1,7 +1,6 @@
 data/raw/
 data/ccmt_raw/
 *.zip
-*.pt
 kaggle.json
 __pycache__/
 .ipynb_checkpoints/
