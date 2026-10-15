@@ -23,7 +23,7 @@ cd cassavacheck
 python3 -m venv .venv && source .venv/bin/activate      # Windows: .venv\Scripts\activate
 pip install --requirement requirements.txt
 ```
-Data: accept the competition rules at https://www.kaggle.com/competitions/cassava-leaf-disease-classification, create an API token on the Kaggle settings page, and paste it into the first cell of notebook 01. The notebooks are written for Google Colab (Runtime, Change runtime type, T4 GPU); notebook 01 downloads the data (5.76 GB).
+Data: accept the competition rules at https://www.kaggle.com/competitions/cassava-leaf-disease-classification, create an API token on the Kaggle settings page, and paste it into the first cell of notebook 01. Python 3.10 to 3.12 is required (PyTorch 2.3.1 has no wheel for 3.13 or newer); on a newer system create the environment with `uv venv --python 3.12 .venv`. Install PyTorch as the CPU build first to avoid the 2 GB GPU download: `pip install torch==2.3.1 torchvision==0.18.1 --index-url https://download.pytorch.org/whl/cpu`, then `pip install --requirement requirements.txt`. The notebooks are written for Google Colab (Runtime, Change runtime type, T4 GPU); notebook 01 downloads the data (5.76 GB).
 
 ## 3. Run the product
 ```bash
@@ -44,11 +44,11 @@ MobileNetV3-Large, ImageNet pre-trained, classifier head replaced by a 5-way lin
 ## 6. Initial performance (validation split, 3,210 images, seed 42, 2 epochs)
 | Metric | Value |
 |---|---|
-| Accuracy | 0.8274 |
-| Macro-F1 | 0.7102 |
-| Per-class F1 | CBB 0.5707, CBSD 0.7110, CGM 0.6978, CMD 0.9356, healthy 0.6360 |
+| Accuracy | 0.8237 |
+| Macro-F1 | 0.7109 |
+| Per-class F1 | CBB 0.5955, CBSD 0.7123, CGM 0.6838, CMD 0.9292, healthy 0.6336 |
 
-Precision and recall per class are in the notebook output. The confusion matrix is in `docs/screenshots/confusion_matrix.png`; the largest remaining confusions are CMD photographs read as CGM (89 of 1,972) and healthy leaves read as CBB (54 of 387), which is what calibration and abstention are meant to catch in the next version. The test split is not read in this product; it is reserved for the final evaluation after calibration and abstention are frozen.
+Precision and recall per class are in the notebook output. The confusion matrix is in `docs/screenshots/confusion_matrix.png`; the largest remaining confusions are CMD photographs read as CGM (108 of 1,972) and healthy leaves read as CBB (52 of 387), which is what calibration and abstention are meant to catch in the next version. The test split is not read in this product; it is reserved for the final evaluation after calibration and abstention are frozen.
 
 ## 7. Designs
 Screenshots in `docs/screenshots/`: the web page before upload, the result card with the district panel, the Swagger UI, and the `/diagnose` response. The page has one flow: choose district and season, upload a photo, read the result.
@@ -57,7 +57,7 @@ Screenshots in `docs/screenshots/`: the web page before upload, the result card 
 See `docs/deployment_plan.md`: FastAPI and the static page on Render, PostgreSQL for the district table and the anonymised log, calibration and abstention loaded with the weights, latency measured as the forward pass at batch size 1 on one CPU core.
 
 ## 9. Video demo
-Video: VIDEO_LINK
+Video: VIDEO_LINK_HERE
 
 ## Repository layout
 ```
@@ -67,7 +67,7 @@ data/district_prevalence.csv
 data/split_v1_seed42.csv
 demo.py                     command-line check for one image
 docs/deployment_plan.md, docs/video_script.md, docs/screenshots/
-models/mobilenetv3_baseline.pt   (download link below if not in the repository)
+models/mobilenetv3_baseline.pt   (16.3 MB, in the repository)
 notebooks/01_data_and_split.ipynb, notebooks/02_baseline_train.ipynb
 requirements.txt
 ```
