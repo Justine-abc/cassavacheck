@@ -1,0 +1,108 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"><meta content="mobile_tab" name="shell-type"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Merriweather:wght@700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "secondary": "#745b05", "on-primary": "#ffffff", "primary-fixed": "#d0e4ff", "surface-container-highest": "#e0e3e6", "surface-container-low": "#f1f4f7", "on-tertiary-fixed": "#281800", "surface-variant": "#e0e3e6", "on-tertiary": "#ffffff", "on-secondary-fixed": "#241a00", "on-primary-fixed": "#001d34", "secondary-fixed": "#ffe08c", "outline": "#73777e", "primary-fixed-dim": "#a9c9ef", "primary-container": "#2f4f6f", "error-container": "#ffdad6", "surface-container-high": "#e5e8eb", "surface-tint": "#416182", "surface-dim": "#d7dadd", "on-primary-container": "#a1c1e6", "tertiary": "#4b3100", "tertiary-fixed-dim": "#ebc081", "on-background": "#181c1e", "tertiary-fixed": "#ffddb0", "on-primary-fixed-variant": "#294969", "on-error-container": "#93000a", "surface": "#f7fafd", "on-secondary": "#ffffff", "inverse-surface": "#2d3133", "secondary-container": "#ffdd7f", "on-secondary-container": "#78600a", "error": "#ba1a1a", "on-surface-variant": "#43474d", "tertiary-container": "#654714", "surface-bright": "#f7fafd", "outline-variant": "#c3c7ce", "surface-container": "#ebeef1", "background": "#f7fafd", "on-secondary-fixed-variant": "#584400", "on-tertiary-fixed-variant": "#5e410e", "surface-container-lowest": "#ffffff", "on-surface": "#181c1e", "inverse-on-surface": "#eef1f4", "primary": "#153857", "inverse-primary": "#a9c9ef", "secondary-fixed-dim": "#e4c368", "on-tertiary-container": "#e1b779", "on-error": "#ffffff" }, "borderRadius": { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" }, "spacing": { "space-md": "0.75rem", "space-xl": "1.5rem", "gutter": "1rem", "space-lg": "1rem", "margin": "1rem", "margin-mobile": "0.75rem", "gutter-mobile": "0.75rem", "space-xs": "0.25rem", "space-sm": "0.5rem" }, "fontFamily": { "title-lg": ["Inter"], "headline-md-mobile": ["Merriweather"], "headline-md": ["Merriweather"], "body-lg": ["Inter"], "headline-lg-mobile": ["Merriweather"], "label-md": ["Inter"], "title-md": ["Inter"], "headline-lg": ["Merriweather"], "body-md": ["Inter"], "headline-sm": ["Merriweather"], "label-sm": ["Inter"], "label-lg": ["Inter"], "body-sm": ["Inter"] }, "fontSize": { "title-lg": ["18px", { "lineHeight": "24px", "fontWeight": "600" }], "headline-md-mobile": ["20px", { "lineHeight": "26px", "fontWeight": "700" }], "headline-md": ["22px", { "lineHeight": "30px", "fontWeight": "700" }], "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }], "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "700" }], "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "700" }], "title-md": ["16px", { "lineHeight": "22px", "fontWeight": "600" }], "headline-lg": ["30px", { "lineHeight": "38px", "fontWeight": "700" }], "body-md": ["15px", { "lineHeight": "22px", "fontWeight": "400" }], "headline-sm": ["18px", { "lineHeight": "24px", "fontWeight": "700" }], "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "700" }], "label-lg": ["14px", { "lineHeight": "18px", "letterSpacing": "0.02em", "fontWeight": "700" }], "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "500" }] } } } };</script><style>@layer base{html,body{width:100vw;margin:0;padding:0;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head><body class="bg-surface font-body-md text-on-surface flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 bg-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] pt-safe"><div class="h-16 px-margin-mobile flex items-center justify-between"><div class="flex items-center gap-space-sm"><span class="font-headline-sm text-headline-sm text-primary tracking-tight font-bold">CassaCheck</span></div></div></header><main class="flex flex-col relative w-full pt-16 pb-24 bg-surface min-h-screen"><div class="flex flex-col w-full">
+<!-- Offline & Field Sync Status Banner -->
+<div class="px-gutter-mobile py-space-md flex flex-col gap-space-lg">
+<!-- Title & Purpose Introduction -->
+<div class="flex flex-col gap-1">
+<h1 class="font-headline-md-mobile text-headline-md-mobile text-primary tracking-tight">How CassaCheck Works</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Clear facts about automated leaf diagnosis for farmers and extension officers.</p>
+</div>
+<!-- Educational Progress / Quick Stats Strip -->
+<!-- Card 1: What the model is -->
+<section class="bg-surface-container-lowest rounded-xl p-space-lg shadow-md flex flex-col gap-space-md relative overflow-hidden"><div class="flex items-start justify-between gap-2"><div class="flex items-center gap-2.5"><div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-on-primary text-[22px]">memory</span></div><div><span class="font-label-sm text-label-sm text-secondary uppercase font-bold tracking-wider">Concept 1 of 3</span><h2 class="font-headline-sm text-headline-sm text-on-surface">1. What the computer model is</h2></div></div></div><p class="font-body-md text-body-md text-on-surface">The model is a small image classifier trained on 21,397 public field photographs of cassava leaves from Uganda and tested on photographs from Ghana. It recognises five conditions: bacterial blight, brown streak disease, green mite damage, mosaic disease and healthy.</p><div class="bg-surface-container-low rounded-lg p-space-sm flex flex-col gap-2"><div class="flex items-center justify-between"><span class="font-label-md text-label-md text-on-surface font-semibold">Conditions Recognised</span></div><div class="grid grid-cols-2 gap-2 pt-1"><div class="flex items-center gap-2 bg-surface-container-lowest p-2 rounded-lg"><span class="material-symbols-outlined text-secondary text-[20px]">coronavirus</span><span class="font-label-sm text-label-sm text-on-surface font-semibold">Bacterial blight</span></div><div class="flex items-center gap-2 bg-surface-container-lowest p-2 rounded-lg"><span class="material-symbols-outlined text-secondary text-[20px]">texture</span><span class="font-label-sm text-label-sm text-on-surface font-semibold">Brown streak disease</span></div><div class="flex items-center gap-2 bg-surface-container-lowest p-2 rounded-lg"><span class="material-symbols-outlined text-secondary text-[20px]">bug_report</span><span class="font-label-sm text-label-sm text-on-surface font-semibold">Green mite damage</span></div><div class="flex items-center gap-2 bg-surface-container-lowest p-2 rounded-lg"><span class="material-symbols-outlined text-secondary text-[20px]">grain</span><span class="font-label-sm text-label-sm text-on-surface font-semibold">Mosaic disease</span></div><div class="col-span-2 flex items-center justify-center gap-2 bg-surface-container-lowest p-2 rounded-lg"><span class="material-symbols-outlined text-primary text-[20px]">check_circle</span><span class="font-label-sm text-label-sm text-on-surface font-semibold">Healthy leaf</span></div></div></div></section>
+<!-- Card 2: What "confidence" means -->
+<section class="bg-surface-container-lowest rounded-xl p-space-lg shadow-md flex flex-col gap-space-md relative overflow-hidden"><div class="flex items-start justify-between gap-2"><div class="flex items-center gap-2.5"><div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-on-primary text-[22px]">analytics</span></div><div><span class="font-label-sm text-label-sm text-secondary uppercase font-bold tracking-wider">Concept 2 of 3</span><h2 class="font-headline-sm text-headline-sm text-on-surface">2. What "confidence" means</h2></div></div></div><p class="font-body-md text-body-md text-on-surface">Confidence is adjusted on data the model has never trained on, so a confidence of 80% means the model is right about 80 times out of 100 on such leaves.</p><div class="bg-surface-container-low rounded-lg p-space-md flex flex-col gap-space-sm"><div class="grid grid-cols-2 gap-2 mt-1"><div class="p-2.5 bg-surface-container-lowest rounded-lg flex flex-col gap-1 shadow-sm"><div class="flex items-center gap-1.5 text-error"><span class="material-symbols-outlined text-[18px]">cancel</span><span class="font-label-md text-label-md font-bold">NOT This:</span></div><p class="font-body-sm text-body-sm text-on-surface-variant">"A portion of my farm field or harvest is infected."</p></div><div class="p-2.5 bg-surface-container-lowest rounded-lg flex flex-col gap-1 shadow-sm"><div class="flex items-center gap-1.5 text-primary"><span class="material-symbols-outlined text-[18px]">check_circle</span><span class="font-label-md text-label-md font-bold">What It Means:</span></div><p class="font-body-sm text-body-sm text-on-surface-variant">"How frequently the model is correct on similar leaf symptoms."</p></div></div></div></section>
+<!-- Card 3: Why it sometimes says "Not sure" -->
+<section class="bg-surface-container-lowest rounded-xl p-space-lg shadow-md flex flex-col gap-space-md relative overflow-hidden"><div class="flex items-start justify-between gap-2"><div class="flex items-center gap-2.5"><div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-on-primary text-[22px]">verified_user</span></div><div><span class="font-label-sm text-label-sm text-secondary uppercase font-bold tracking-wider">Concept 3 of 3</span><h2 class="font-headline-sm text-headline-sm text-on-surface">3. Why it sometimes says "Not sure"</h2></div></div></div><p class="font-body-md text-body-md text-on-surface">When confidence is below a threshold set on that data, the app says 'not sure' instead of guessing, asks three short questions, and refers you to an extension officer.</p><div class="bg-surface-container-low rounded-lg p-space-md flex flex-col gap-2"><div class="flex items-center gap-2"><span class="material-symbols-outlined text-secondary text-[20px]" style="font-variation-settings: 'FILL' 1;">shield</span><span class="font-title-md text-title-md text-on-surface">Safety Standard</span></div><p class="font-body-sm text-body-sm text-on-surface-variant">If environmental glare, dust, or camera shake reduces certainty below the threshold, CassaCheck stops automated recommendations and connects you with an extension officer.</p><div class="flex items-center justify-between bg-surface-container-lowest p-2.5 rounded-lg mt-1 shadow-sm"><div class="flex items-center gap-2"><div class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center"><span class="material-symbols-outlined text-primary text-[18px]">support_agent</span></div><div class="flex flex-col"><span class="font-label-md text-label-md text-on-surface font-semibold">Human Agronomist Escalation</span><span class="font-label-sm text-label-sm text-on-surface-variant">Extension Officer Direct Route</span></div></div><span class="material-symbols-outlined text-primary text-[20px]">chevron_right</span></div></div></section>
+<!-- Visual Example Photos (Rwandan Field Context) -->
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<span class="font-label-lg text-label-lg text-on-surface uppercase tracking-wide">Real Field Examples</span>
+<span class="font-label-sm text-label-sm text-secondary font-semibold">Field Guide</span>
+</div>
+<div class="grid grid-cols-2 gap-2">
+<div class="flex flex-col bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm">
+<div class="h-28 bg-cover bg-center relative" data-alt="Close up photograph of a fresh green cassava leaf under bright Rwandan daylight, sharply focused showing clear leaf vein anatomy and clean edges with no motion blur." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDypw8eJCtNg1AAQr4hagH1-5qBVEG93SfjrqNi0M3pKyjPb9qFwMgcE_Cxq3HkkbRKhERgBPVjhGttujLTj7DliPX0NBkr1wxjTP32jecvv9mmDq5roA-d1hAGEoENeRpQgvjCG_2nc8q7StmJRfAWOXVZgVAEewYqchgxyKSnQycMh1cIop8CpEHENucys2jicG0ZKjj9RjZcxb5wdfBR1M7nQ5TvDSj1_gjTpfH3A3Z5MAhcoms')">
+<span class="absolute top-2 left-2 bg-primary text-on-primary font-label-sm text-label-sm px-2 py-0.5 rounded-full font-bold">Good Quality</span>
+</div>
+<div class="p-2">
+<span class="font-label-sm text-label-sm text-on-surface font-bold block">Sharp &amp; Centered</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant text-[11px]">Clear diagnosis</span>
+</div>
+</div>
+<div class="flex flex-col bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm">
+<div class="h-28 bg-cover bg-center relative" data-alt="A blurry and dark photograph of cassava plants taken from far away with heavy tree branch shadows and hand motion shake under direct harsh noon sunlight." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCb-4DrRlfykeXmfQCttplHn1EGdp3dtTcYKysVJ3p0sZRqzM4RfeN3vAH3oFgfV3A8tcYTXLZNj3CSdtg6ylwQwsFQOO5DnmKoM1F_8YtiSYywgTXnIXd6-6VYc1wOY10xKblfbZbPjpsyG35fZGtjO0ksB61bapLjL3pSlTXuMUYfbYp9ylLubp-K1NA85g9N6BZAIvI-R61NGlShSY367BAbgi67Ef68TQ1ZwUTJRTf94Q1aB20')">
+<span class="absolute top-2 left-2 bg-error text-on-error font-label-sm text-label-sm px-2 py-0.5 rounded-full font-bold">Rejected Photo</span>
+</div>
+<div class="p-2">
+<span class="font-label-sm text-label-sm text-on-surface font-bold block">Shadowy or Far</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant text-[11px]">Triggers "Not Sure" state</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Summary Checklist Card -->
+<section class="bg-surface-container-high rounded-xl p-space-lg shadow-md flex flex-col gap-space-md">
+<div class="flex items-center gap-2.5">
+<div class="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-secondary text-[22px]" style="font-variation-settings: 'FILL' 1;">checklist</span>
+</div>
+<div>
+<span class="font-label-sm text-label-sm text-secondary uppercase font-bold tracking-wider">Field Best Practice</span>
+<h2 class="font-title-lg text-title-lg text-on-surface">Best photo rules for accurate results</h2>
+</div>
+</div>
+<div class="flex flex-col gap-2.5">
+<!-- Rule 1 -->
+<div class="flex items-center gap-3 p-3 bg-surface-container-lowest rounded-lg shadow-sm">
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg text-on-surface font-bold">One single leaf</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Isolate one symptomatic leaf rather than the whole branch.</span>
+</div>
+</div>
+<!-- Rule 2 -->
+<div class="flex items-center gap-3 p-3 bg-surface-container-lowest rounded-lg shadow-sm">
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg text-on-surface font-bold">Fill the phone screen</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Hold the lens 15–20 cm away until the leaf spans edge-to-edge.</span>
+</div>
+</div>
+<!-- Rule 3 -->
+<div class="flex items-center gap-3 p-3 bg-surface-container-lowest rounded-lg shadow-sm">
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg text-on-surface font-bold">Bright morning daylight, no shadows</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Avoid harsh midday direct sun or casting your own body shadow over the leaf.</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Action Section -->
+<div class="pt-2 pb-4 flex flex-col gap-space-sm">
+<button class="w-full h-[52px] bg-primary-container text-on-primary font-label-lg text-label-lg rounded-xl flex items-center justify-center gap-2 shadow-md active:bg-primary transition-colors cursor-pointer" id="btn-try-diagnosis">
+<span class="material-symbols-outlined text-[20px]">photo_camera</span>
+<span class="">Try a diagnosis now</span>
+</button>
+<p class="font-label-sm text-label-sm text-center text-on-surface-variant">
+        No internet needed • Fully functions offline in rural zones
+      </p>
+</div>
+</div>
+</div>
+<script>
+  // Simple micro-interaction for primary button
+  document.getElementById('btn-try-diagnosis')?.addEventListener('click', function() {
+    const navDiagnoseLink = document.querySelector('nav a[data-path="diagnose"]');
+    if (navDiagnoseLink) {
+      navDiagnoseLink.click();
+    } else {
+      window.location.hash = '#diagnose';
+    }
+  });
+</script></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface/90 backdrop-blur-xl shadow-[0_-2px_12px_rgba(0,0,0,0.05)]" data-active-classes="text-primary font-bold"><div class="flex justify-around items-center h-16 px-margin-mobile"><a class="flex flex-col items-center justify-center min-w-[48px] min-h-[48px] text-on-surface-variant transition-colors hover:text-on-surface" data-path="diagnose" href="#"><span class="material-symbols-outlined text-[24px]">photo_camera</span><span class="font-label-md text-label-md mt-0.5">Diagnose</span></a><a aria-current="page" class="flex flex-col items-center justify-center min-w-[48px] min-h-[48px] transition-colors text-primary font-bold" data-path="how-it-works" href="#"><span class="material-symbols-outlined text-[24px]">menu_book</span><span class="font-label-md text-label-md mt-0.5">How It Works</span></a><a class="flex flex-col items-center justify-center min-w-[48px] min-h-[48px] text-on-surface-variant transition-colors hover:text-on-surface" data-path="officer-view" href="#"><span class="material-symbols-outlined text-[24px]">assignment</span><span class="font-label-md text-label-md mt-0.5">Officer View</span></a></div></nav>
+
+</body></html>
