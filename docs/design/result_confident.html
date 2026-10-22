@@ -1,0 +1,251 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"><meta content="mobile_stack" name="shell-type"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Merriweather:wght@700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "secondary": "#745b05", "on-primary": "#ffffff", "primary-fixed": "#d0e4ff", "surface-container-highest": "#e0e3e6", "surface-container-low": "#f1f4f7", "on-tertiary-fixed": "#281800", "surface-variant": "#e0e3e6", "on-tertiary": "#ffffff", "on-secondary-fixed": "#241a00", "on-primary-fixed": "#001d34", "secondary-fixed": "#ffe08c", "outline": "#73777e", "primary-fixed-dim": "#a9c9ef", "primary-container": "#2f4f6f", "error-container": "#ffdad6", "surface-container-high": "#e5e8eb", "surface-tint": "#416182", "surface-dim": "#d7dadd", "on-primary-container": "#a1c1e6", "tertiary": "#4b3100", "tertiary-fixed-dim": "#ebc081", "on-background": "#181c1e", "tertiary-fixed": "#ffddb0", "on-primary-fixed-variant": "#294969", "on-error-container": "#93000a", "surface": "#f7fafd", "on-secondary": "#ffffff", "inverse-surface": "#2d3133", "secondary-container": "#ffdd7f", "on-secondary-container": "#78600a", "error": "#ba1a1a", "on-surface-variant": "#43474d", "tertiary-container": "#654714", "surface-bright": "#f7fafd", "outline-variant": "#c3c7ce", "surface-container": "#ebeef1", "background": "#f7fafd", "on-secondary-fixed-variant": "#584400", "on-tertiary-fixed-variant": "#5e410e", "surface-container-lowest": "#ffffff", "on-surface": "#181c1e", "inverse-on-surface": "#eef1f4", "primary": "#153857", "inverse-primary": "#a9c9ef", "secondary-fixed-dim": "#e4c368", "on-tertiary-container": "#e1b779", "on-error": "#ffffff" }, "borderRadius": { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" }, "spacing": { "space-md": "0.75rem", "space-xl": "1.5rem", "gutter": "1rem", "space-lg": "1rem", "margin": "1rem", "margin-mobile": "0.75rem", "gutter-mobile": "0.75rem", "space-xs": "0.25rem", "space-sm": "0.5rem" }, "fontFamily": { "title-lg": ["Inter"], "headline-md-mobile": ["Merriweather"], "headline-md": ["Merriweather"], "body-lg": ["Inter"], "headline-lg-mobile": ["Merriweather"], "label-md": ["Inter"], "title-md": ["Inter"], "headline-lg": ["Merriweather"], "body-md": ["Inter"], "headline-sm": ["Merriweather"], "label-sm": ["Inter"], "label-lg": ["Inter"], "body-sm": ["Inter"] }, "fontSize": { "title-lg": ["18px", { "lineHeight": "24px", "fontWeight": "600" }], "headline-md-mobile": ["20px", { "lineHeight": "26px", "fontWeight": "700" }], "headline-md": ["22px", { "lineHeight": "30px", "fontWeight": "700" }], "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }], "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "700" }], "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "700" }], "title-md": ["16px", { "lineHeight": "22px", "fontWeight": "600" }], "headline-lg": ["30px", { "lineHeight": "38px", "fontWeight": "700" }], "body-md": ["15px", { "lineHeight": "22px", "fontWeight": "400" }], "headline-sm": ["18px", { "lineHeight": "24px", "fontWeight": "700" }], "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "700" }], "label-lg": ["14px", { "lineHeight": "18px", "letterSpacing": "0.02em", "fontWeight": "700" }], "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "500" }] } } } };</script><style>@layer base{html,body{width:100vw;margin:0;padding:0;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head><body class="bg-surface font-body-md text-on-surface flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 bg-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] pt-safe"><div class="h-16 px-margin-mobile flex items-center justify-between"><div class="flex items-center gap-space-sm"><button class="w-11 h-11 flex items-center justify-center text-primary -ml-2 rounded-full active:bg-surface-container" onclick="history.back()"><span class="material-symbols-outlined text-[24px]">arrow_back</span></button><img alt="CassaCheck Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UVGuVLtipawttSfnv9ekxoXeoE2aA1gPsFMg28CznOjSFSWxL5bc1G1tbiaPA6YitYuWz2DFWFuZOAD2SRsfg3DsuHur4XgCPYodh3huGYE2EKrcJd9VfYxEK0tYyfoSTv3Tr1e7FNFAv4_ThHjn5a37sYSvidQuxCJqF6xZmGBiJYGrhmLcNw_U2RqZhKO9KAQFL7s7DlMDOExupgRyAhgvy1y805_ktj6JODtwe2mN8XkS8MFPIMsw"><h1 class="font-title-md text-title-md text-primary font-bold">Diagnosis Result</h1></div><div class="flex items-center gap-space-sm"><span class="font-title-md text-title-md text-primary font-bold">CassaCheck</span></div></div></header><main class="flex flex-col relative w-full pt-16 pb-safe bg-surface min-h-screen"><div class="flex flex-col w-full px-margin-mobile pb-space-xl">
+<!-- Top Navigation & Action -->
+<div class="py-space-md flex items-center justify-between">
+<button class="inline-flex items-center gap-space-xs text-primary active:opacity-70 transition-opacity" onclick="window.history.back()">
+<span class="material-symbols-outlined text-[20px]">arrow_back</span>
+<span class="font-label-lg text-label-lg uppercase tracking-wider underline underline-offset-4 decoration-2">Check another leaf</span>
+</button>
+</div>
+<!-- Diagnostic Status Pill & Main Disease Identification -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col gap-space-md">
+<div class="flex items-center justify-between gap-space-sm flex-wrap">
+<span class="bg-primary text-on-primary font-label-md text-label-md px-3 py-1 rounded-full uppercase tracking-wider flex items-center gap-1 shadow-sm">
+<span class="material-symbols-outlined text-[15px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+        Diagnostic Complete
+      </span>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">5 conditions</span>
+</div>
+<div>
+<h2 class="font-headline-md-mobile text-headline-md-mobile text-on-surface text-balance">
+        Cassava mosaic disease (CMD)
+      </h2>
+</div>
+<!-- Scanned Leaf Photo Preview with Visual Crop Details -->
+<div class="relative w-full h-44 rounded-xl overflow-hidden bg-surface-container shadow-inner">
+<img class="w-full h-full object-cover" data-alt="Close up agronomic photo of infected cassava leaf showing characteristic severe yellow chlorotic mosaic pattern, curled and distorted foliage under direct Rwandan equatorial sunlight, shot by an extension worker in Nyanza district." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB6XaJSYxI8DBZAXN9oGKeQv6xmonFhRrwDwa5o5BNGia2_l32iqqRpLqxFeiy_Li3KW6JtDckt93sDJ6wuSXOjxODULodwPWgxlADptmPYgdzRR2oOfkqM6CrZ7-IPiEhFMGbxNFoLP_x8K3eUvw5uDQsgGeXu8_K_UCFv_z_ZkkUoaCw3lQGTFSlt_C8PXaHz0UgjpKWr2qd0Kyg2LxUZiujspdjyi99_TPJHYb55YloE_X1AmWM">
+<div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div>
+</div>
+<!-- Calibrated Confidence Gauge -->
+<div class="bg-surface-container-low rounded-xl p-space-md flex flex-col gap-1.5">
+<div class="flex items-baseline justify-between">
+<div class="flex items-baseline gap-1.5">
+<span class="font-label-lg text-label-lg text-on-surface font-bold uppercase tracking-wide">Confidence</span>
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-primary font-extrabold leading-none">78%</span>
+</div>
+
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Above the decision threshold</p>
+</div>
+<!-- Five Horizontal Probability Bars -->
+<div class="flex flex-col gap-space-sm pt-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface uppercase tracking-wider">Multi-Class Probability Distribution</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">5 conditions</span>
+</div>
+<!-- Class 1: CMD (Primary) -->
+<div class="bg-surface-container-high rounded-xl p-space-sm flex flex-col gap-1.5">
+<div class="flex justify-between items-center text-on-surface">
+<div class="flex items-center gap-1.5">
+<span class="w-2.5 h-2.5 rounded-full bg-primary-container"></span>
+<span class="font-label-lg text-label-lg font-bold">Cassava mosaic disease (CMD)</span>
+</div>
+<span class="font-title-md text-title-md text-primary font-black">78%</span>
+</div>
+<div class="w-full bg-surface-container-highest h-3 rounded-full overflow-hidden">
+<div class="bg-primary-container h-full rounded-full transition-all duration-700 ease-out" style="width: 78%;"></div>
+</div>
+</div>
+<!-- Class 2: CBSD -->
+<div class="bg-surface-container-low rounded-xl p-space-sm flex flex-col gap-1">
+<div class="flex justify-between items-center text-on-surface">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-outline"></span>
+<span class="font-body-sm text-body-sm font-semibold">Cassava brown streak disease (CBSD)</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface font-bold">12%</span>
+</div>
+<div class="w-full bg-surface-container h-2 rounded-full overflow-hidden">
+<div class="bg-surface-tint h-full rounded-full" style="width: 12%;"></div>
+</div>
+</div>
+<!-- Class 3: CGM -->
+<div class="bg-surface-container-low rounded-xl p-space-sm flex flex-col gap-1">
+<div class="flex justify-between items-center text-on-surface">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-outline"></span>
+<span class="font-body-sm text-body-sm font-semibold">Cassava green mite (CGM)</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface font-bold">5%</span>
+</div>
+<div class="w-full bg-surface-container h-2 rounded-full overflow-hidden">
+<div class="bg-surface-tint h-full rounded-full" style="width: 5%;"></div>
+</div>
+</div>
+<!-- Class 4: CBB -->
+<div class="bg-surface-container-low rounded-xl p-space-sm flex flex-col gap-1">
+<div class="flex justify-between items-center text-on-surface">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-outline"></span>
+<span class="font-body-sm text-body-sm font-semibold">Cassava bacterial blight (CBB)</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface font-bold">3%</span>
+</div>
+<div class="w-full bg-surface-container h-2 rounded-full overflow-hidden">
+<div class="bg-surface-tint h-full rounded-full" style="width: 3%;"></div>
+</div>
+</div>
+<!-- Class 5: Healthy Leaf -->
+<div class="bg-surface-container-low rounded-xl p-space-sm flex flex-col gap-1">
+<div class="flex justify-between items-center text-on-surface">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-outline"></span>
+<span class="font-body-sm text-body-sm font-semibold">Healthy Leaf</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface font-bold">2%</span>
+</div>
+<div class="w-full bg-surface-container h-2 rounded-full overflow-hidden">
+<div class="bg-surface-tint h-full rounded-full" style="width: 2%;"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Management Advice Card (Strict agronomic sanitation focus, zero pesticide recommendation) -->
+<div class="mt-space-md bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col gap-space-sm">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">eco</span>
+</div>
+<div>
+<span class="font-label-sm text-label-sm text-secondary font-bold uppercase tracking-wider block">Agronomic Protocol</span>
+<h3 class="font-title-md text-title-md text-on-surface font-bold">Management Advice</h3>
+</div>
+</div>
+<div class="bg-surface-container-low p-space-md rounded-xl">
+<p class="font-body-md text-body-md text-on-surface font-medium leading-relaxed">
+        Use clean, certified cuttings next season; do not take cuttings from this plant or any plants showing mosaic curling.
+      </p>
+</div>
+<!-- Key sanitation points list -->
+<div class="flex flex-col gap-space-xs pt-1">
+<div class="flex items-start gap-2 text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-secondary text-[18px] shrink-0 mt-0.5">verified</span>
+<span class="">Source planting stems exclusively from certified RAB (Rwanda Agriculture and Animal Resources Development Board) distributors.</span>
+</div>
+<div class="flex items-start gap-2 text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-secondary text-[18px] shrink-0 mt-0.5">do_not_disturb_on</span>
+<span class="">Rogue and safely uproot heavily affected seedlings during the first 2-3 months after sprouting.</span>
+</div>
+</div>
+</div>
+<!-- "What to do next" Advisory Action Card -->
+<div class="mt-space-md">
+<button class="w-full bg-surface-container-high active:bg-surface-container-highest text-left p-space-lg rounded-xl flex items-center justify-between shadow-sm transition-all" id="whatNextBtn">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-10 h-10 rounded-full bg-primary text-on-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[22px]">contact_support</span>
+</div>
+<div class="min-w-0">
+<h4 class="font-title-md text-title-md text-on-surface font-bold">What to do next</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">Step-by-step guidance for extension officers &amp; plot managers</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary text-[24px] shrink-0 ml-2">chevron_right</span>
+</button>
+</div>
+<!-- Collapsible Advisory Drawer / Details (Interactive Micro-Action) -->
+<div class="hidden mt-space-xs bg-surface-container-lowest rounded-xl p-space-md shadow-sm" id="advisoryDrawer">
+<h5 class="font-label-lg text-label-lg text-primary uppercase font-bold mb-2">Extension Officer Steps</h5>
+<ol class="list-decimal list-inside space-y-1.5 font-body-sm text-body-sm text-on-surface">
+<li class="">Tag plot row for post-harvest monitoring.</li>
+<li class="">Notify Sector Agronomist if plot incidence exceeds 15%.</li>
+<li class="">Provide farmer with certification slip for season B procurement.</li>
+</ol>
+</div>
+<!-- District Information Panel (Integrated directly below result) -->
+<div class="mt-space-md bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col gap-space-sm relative overflow-hidden">
+<!-- Left Accent Stripe (#BFA14A / #2F4F6F styling via secondary & primary tokens) -->
+<div class="absolute left-0 top-0 bottom-0 w-1.5 bg-secondary"></div>
+<div class="flex items-center justify-between pl-2">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-secondary text-[20px]" style="font-variation-settings: 'FILL' 1;">analytics</span>
+<h3 class="font-title-md text-title-md text-on-surface font-bold">District information</h3>
+</div>
+<span class="font-label-sm text-label-sm bg-surface-container-high px-2 py-0.5 rounded text-on-surface font-bold uppercase">Nyanza</span>
+</div>
+<!-- Survey Details Card -->
+<div class="pl-2 flex flex-col gap-space-xs">
+<div class="bg-surface-container-low p-space-md rounded-xl">
+<p class="font-body-md text-body-md text-on-surface font-semibold leading-snug">
+          Nyanza, season A: CBSD found in 62% of fields (2019 survey, 10 fields surveyed, Nyirakanani et al. 2021)
+        </p>
+</div>
+<!-- Verbatim Mandatory Disclaimer -->
+<div class="p-2.5 rounded-lg bg-surface-container flex items-start gap-2">
+<span class="material-symbols-outlined text-on-surface-variant text-[18px] shrink-0 mt-0.5">info</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant italic">
+          This is published survey information for the district; it is not a probability for this leaf.
+        </p>
+</div>
+</div>
+</div>
+<!-- Bottom Primary Action (Sticky / Field-Accessible) -->
+<div class="mt-space-xl pt-space-xs">
+<button class="w-full h-[52px] bg-primary text-on-primary active:bg-primary-container rounded-xl font-title-md text-title-md font-bold uppercase tracking-wide flex items-center justify-center gap-space-sm shadow-md transition-all" id="saveShareBtn">
+<span class="material-symbols-outlined text-[22px]">send_and_archive</span>
+<span class="">Save Record or Share with Officer</span>
+</button>
+</div>
+<!-- Feedback Toast confirmation (micro-interaction) -->
+<div class="fixed bottom-6 left-margin right-margin bg-inverse-surface text-inverse-on-surface p-space-md rounded-xl shadow-xl flex items-center justify-between opacity-0 pointer-events-none transition-opacity duration-300 z-50" id="toastNotification">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary-fixed text-[20px]">cloud_done</span>
+<span class="font-body-sm text-body-sm font-semibold">Record saved to local ledger &amp; queued for sync</span>
+</div>
+<span class="font-label-sm text-label-sm uppercase bg-surface-variant/20 px-2 py-1 rounded text-inverse-on-surface">Offline OK</span>
+</div>
+</div>
+<script>
+  // Micro-interaction for advisory drawer toggle
+  const whatNextBtn = document.getElementById('whatNextBtn');
+  const advisoryDrawer = document.getElementById('advisoryDrawer');
+  if (whatNextBtn && advisoryDrawer) {
+    whatNextBtn.addEventListener('click', () => {
+      const isHidden = advisoryDrawer.classList.contains('hidden');
+      if (isHidden) {
+        advisoryDrawer.classList.remove('hidden');
+        whatNextBtn.querySelector('.material-symbols-outlined:last-child').innerText = 'expand_less';
+      } else {
+        advisoryDrawer.classList.add('hidden');
+        whatNextBtn.querySelector('.material-symbols-outlined:last-child').innerText = 'chevron_right';
+      }
+    });
+  }
+
+  // Micro-interaction for Save/Share toast notification
+  const saveShareBtn = document.getElementById('saveShareBtn');
+  const toast = document.getElementById('toastNotification');
+  if (saveShareBtn && toast) {
+    saveShareBtn.addEventListener('click', () => {
+      toast.classList.remove('opacity-0', 'pointer-events-none');
+      toast.classList.add('opacity-100');
+      
+      // Haptic imitation / audio feedback cue in field
+      if (navigator.vibrate) {
+        navigator.vibrate([40, 60, 40]);
+      }
+      
+      setTimeout(() => {
+        toast.classList.remove('opacity-100');
+        toast.classList.add('opacity-0', 'pointer-events-none');
+      }, 3500);
+    });
+  }
+</script></main>
+
+</body></html>
