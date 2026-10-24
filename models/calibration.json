@@ -1,0 +1,8 @@
+{
+  "temperature": 0.9313,
+  "threshold": 0.6455,
+  "target_coverage": 0.8,
+  "fitted_on": "validation split, stratified fit half (1,605 images), seed 42",
+  "measured_on": "validation split, other half (1,605 images)",
+  "model": "mobilenetv3_baseline.pt"
+}
