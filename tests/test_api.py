@@ -48,3 +48,15 @@ def test_diagnose_returns_schema_and_district_panel():
     assert body["decision"] in {"abstain", "CBB", "CBSD", "CGM", "CMD", "healthy"}
     assert (body["decision"] == "abstain") == (body["confidence"] < body["threshold"])
     assert body["district_panel"] is not None and "Nyanza" in body["district_panel"]
+@pytest.mark.skipif(not config.WEIGHTS_PATH.exists(), reason="model weights not present")
+def test_district_does_not_change_the_probabilities():
+    photo = green_leaf_jpeg()
+    with_district = client.post("/diagnose", data={"district": "Nyanza", "season": "A"}, files={"image": ("leaf.jpg", photo, "image/jpeg")}).json()
+    without_district = client.post("/diagnose", files={"image": ("leaf.jpg", photo, "image/jpeg")}).json()
+    assert with_district["probabilities"] == without_district["probabilities"]
+    assert with_district["decision"] == without_district["decision"]
+
+
+
+
+
