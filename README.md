@@ -1,3 +1,91 @@
+CassaCheck - Technical Report
+
+Calibrated and abstaining cassava leaf disease diagnosis, with district information shown beside the result.
+
+Repository: https://github.com/Justine-abc/cassavacheck 
+Walkthrough video (technical): https://youtu.be/vphYf2nHZVs?si=BnazzsQD0cSPHhoS
+Technical report: https://docs.google.com/document/d/1vgKi-RFGxIOhqZMwrSjIWANC7bGGATMXlVcnxsnRL3s/edit?usp=sharing
+
+Project overview
+
+A farmer or extension officer uploads one photograph of a cassava leaf. The system returns one of five conditions (cassava bacterial blight, brown streak disease, green mite damage, mosaic disease, healthy) with a calibrated confidence, or says "not sure" and asks three follow-up questions when the confidence is below a threshold fixed on validation data. Published district survey information is shown in a separate panel and never changes the diagnosis. Advice is management-level and never names a pesticide.
+
+Research protocol behind it: public Makerere field photographs (21,397) with a published 70/15/15 split and near-duplicate control; MobileNetV3-Large fine-tuned with class-weighted loss; temperature scaling and an abstention threshold fitted on one half of the validation split and measured on the other; the test split and the Ghanaian CCMT set are reserved for the final evaluation.
+
+Current results (validation split, one seed, two epochs)
+Measure	Value
+Accuracy / macro-F1	0.8237 / 0.7109
+Per-class F1	CBB 0.5955, CBSD 0.7123, CGM 0.6838, CMD 0.9292, healthy 0.6336
+Temperature / threshold	0.931 / 0.6455 (target coverage 0.80)
+ECE before / after calibration (held-out half)	0.0275 / 0.0296
+Abstention (held-out half)	coverage 0.791; accuracy 0.907 on retained answers vs 0.825 on all; 0.513 on abstained
+Forward pass, 1 CPU thread, batch 1, median of 100	19.8 ms (MobileNetV3-Large); 61.7 ms (ResNet-18 architecture)
+End to end	261 ms (laptop Chrome); under 1 s (iPhone Safari over hotspot)
+Technical requirements
+Item	Version
+Python	3.10 to 3.12 (PyTorch 2.3.1 has no wheel for 3.13 or newer)
+PyTorch / torchvision	2.3.1 (CPU build) / 0.18.1
+FastAPI / Uvicorn	0.111.0 / 0.30.1
+scikit-learn, pandas, numpy, Pillow, imagehash	pinned in requirements.txt
+pytest, httpx	8.3.2, 0.27.0 (tests)
+Training	Google Colab, T4 GPU (notebooks 01, 02, 04)
+Tested on	Ubuntu (Chrome, Firefox), iPhone 14 Pro Safari; laptop: HP ProBook 430 G8, Intel Core i7-1165G7, 8 GB RAM, Ubuntu 26.04
+Installation
+bash
+git clone https://github.com/Justine-abc/cassavacheck.git
+cd cassavacheck
+uv venv --python 3.12 .venv            # or: python3.12 -m venv .venv
+source .venv/bin/activate              # Windows: .venv\Scripts\activate
+uv pip install torch==2.3.1 torchvision==0.18.1 --index-url https://download.pytorch.org/whl/cpu   # or pip
+uv pip install --requirement requirements.txt
+
+The model weights (models/mobilenetv3_baseline.pt, 16.3 MB) and the calibration values (models/calibration.json) are in the repository; no download is needed to run the product.
+
+Run
+bash
+uvicorn api.main:app --host 0.0.0.0 --port 8000 --reload
+Web interface: http://localhost:8000/
+Swagger UI: http://localhost:8000/docs
+Health, with the active calibration values: http://localhost:8000/health
+From a phone on the same network: http://<laptop IP>:8000/ (choose "Files" in the picker; direct camera capture needs HTTPS)
+Test and measure
+bash
+python3 -m pytest --verbose                      # 16 unit and integration tests
+python3 -m scripts.measure_latency --runs 100    # forward-pass latency, one CPU thread
+Repository structure
+api/
+  main.py          routes only: /health, /districts, /log, /diagnose, /
+  classifier.py    abstract ImageClassifier; MobileNetV3Classifier, ResNet18Classifier
+  calibration.py   Calibrator (temperature scaling), AbstentionGate, Decision, CalibrationSettings
+  districts.py     DistrictRepository, DistrictPrevalence (CSV-backed, season fallback)
+  advice.py        AdvisoryService; advice and follow-up questions as data; forbidden-word guard
+  log_store.py     DiagnosisLog (SQLite; anonymised)
+  config.py        paths and class names
+  static/index.html  one-page interface: confident state, not-sure state with questions, district panel
+tests/             test_calibration.py, test_districts_and_advice.py, test_api.py
+scripts/           measure_latency.py
+notebooks/         01_data_and_split, 02_baseline_train, 04_calibration_abstention
+data/              split_v1_seed42.csv (published split), district_prevalence.csv
+models/            mobilenetv3_baseline.pt, calibration.json
+docs/              technical report, design exports (docs/design), screenshots, deployment plan, video script
+CONTRIBUTING.md    design constraints every change must respect
+Scope status against the approved proposal
+
+Completed: FR-01 to FR-06, near-duplicate split, calibration and abstention, latency measurement, tests. Partial: district table (2 of 13 districts verified), baseline (one seed, two epochs; ResNet-18 implemented, not trained), interface (designed in six screens, implemented as one static page). Scheduled: five-seed runs (2 November), external evaluation on CCMT (9 November), Render deployment, React build. Details and evidence in the technical report, Section 1.
+
+Deployment plan
+
+See docs/deployment_plan.md: FastAPI and the page on Render (HTTPS), PostgreSQL for the district table and the log, calibration values loaded with the weights.
+
+
+
+
+
+
+
+
+
+
 # CassaCheck: initial software product
 
 **Repository:** https://github.com/Justine-abc/cassavacheck
