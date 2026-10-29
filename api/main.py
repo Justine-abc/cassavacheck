@@ -9,6 +9,7 @@ from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from PIL import Image, UnidentifiedImageError
+from pydantic import BaseModel
 
 from api import config
 from api.advice import AdvisoryService
@@ -44,6 +45,12 @@ def list_districts():
     return districts.all_rows()
 
 
+@app.get("/districts/choices")
+def district_choices():
+    """All 30 districts for the picker, each flagged with whether a published survey value exists."""
+    return districts.choices()
+
+
 @app.get("/log")
 def recent_log(limit: int = 50, district: str | None = None):
     """Extension-officer view: anonymised recent requests (date, district, season, decision, confidence)."""
@@ -70,9 +77,10 @@ async def diagnose(image: UploadFile = File(...), district: str | None = Form(de
     decision = gate.decide(calibrator.calibrate(logits))
     guidance = advisory.advice_for(decision)
     panel = districts.lookup(district, season or "A") if district else None
-    log.record(district, season, decision, MODEL_VERSION)
+    diagnosis_id = log.record(district, season, decision, MODEL_VERSION)
 
     return {
+        "diagnosis_id": diagnosis_id,
         "decision": "abstain" if decision.abstained else decision.label,
         "label_long": None if decision.abstained else config.CLASS_LONG_NAMES[decision.label],
         "confidence": decision.confidence,
@@ -86,9 +94,34 @@ async def diagnose(image: UploadFile = File(...), district: str | None = Form(de
     }
 
 
+class FollowUp(BaseModel):
+    diagnosis_id: int
+    answers: dict[str, str] = {}
+    referral_requested: bool = False
+
+
+@app.post("/follow_up")
+def follow_up(body: FollowUp):
+    """The farmer's answers to the follow-up questions and, if asked, a referral to the extension officer.
+    Adds guidance and goes to the officer's log; the diagnosis and its probabilities are never recomputed."""
+    if not log.exists(body.diagnosis_id):
+        raise HTTPException(status_code=404, detail="Unknown diagnosis")
+    answers = advisory.valid_answers(body.answers)
+    log.add_follow_up(body.diagnosis_id, answers, body.referral_requested)
+    return {"diagnosis_id": body.diagnosis_id, "answers": answers, "guidance": advisory.guidance_for_answers(answers),
+            "referral_requested": body.referral_requested}
+
+
 app.mount("/static", StaticFiles(directory=config.STATIC_DIRECTORY), name="static")
 
 
-@app.get("/", include_in_schema=False)
-def index():
-    return FileResponse(config.STATIC_DIRECTORY / "index.html")
+# One HTML file per screen of the design; all logic is in the API, the pages only call it.
+PAGES = {"/": "index.html", "/result": "result.html", "/how-it-works": "how_it_works.html", "/officer": "officer.html"}
+
+
+def page_route(file_name: str):
+    return lambda: FileResponse(config.STATIC_DIRECTORY / file_name)
+
+
+for path, file_name in PAGES.items():
+    app.get(path, include_in_schema=False)(page_route(file_name))

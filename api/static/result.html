@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>CassaCheck result</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<script src="/static/theme.js"></script>
+<script src="/static/app.js"></script>
+</head>
+<body class="bg-surface font-body-md text-on-surface min-h-screen">
+<div id="app-header"></div>
+<main id="content" class="pt-20 pb-24 px-margin-mobile max-w-3xl mx-auto flex flex-col gap-space-md"></main>
+<div id="app-nav"></div>
+
+<script>
+renderHeader("Diagnosis result", { back: true });
+renderBottomNav("diagnose");
+
+const stored = JSON.parse(sessionStorage.getItem("cassacheck_result") || "null");
+const content = document.getElementById("content");
+const answers = {};
+
+const card = (inner, accent = "") => `
+  <section class="bg-surface-container-lowest rounded-xl p-space-lg border border-outline-variant/30 shadow-sm flex flex-col gap-space-sm relative overflow-hidden">
+    ${accent ? `<div class="absolute left-0 top-0 bottom-0 w-1.5 ${accent}"></div>` : ""}${inner}
+  </section>`;
+
+const bullets = (items) => `<ul class="flex flex-col gap-2">${items.map((text) => `
+  <li class="flex gap-2 font-body-md text-body-md"><span class="material-symbols-outlined text-[20px] text-secondary shrink-0">check_circle</span><span>${escapeHtml(text)}</span></li>`).join("")}</ul>`;
+
+function photoBlock() {
+  return stored.photo ? `<img src="${stored.photo}" alt="The leaf you checked" class="w-full max-h-64 object-cover rounded-xl"/>` : "";
+}
+
+function probabilityBars(probabilities, highlight) {
+  return Object.entries(probabilities).sort((a, b) => b[1] - a[1]).map(([name, value]) => `
+    <div class="bg-surface-container-low rounded-lg px-3 py-2">
+      <div class="flex justify-between font-body-sm text-body-sm ${name === highlight ? "font-bold text-primary" : ""}"><span>${name === "healthy" ? CLASS_LONG_NAMES[name] : `${CLASS_LONG_NAMES[name]} (${name})`}</span><span>${percent(value)}</span></div>
+      <div class="h-1.5 bg-surface-container-high rounded-full mt-1"><div class="h-1.5 rounded-full ${name === highlight ? "bg-primary" : "bg-primary-container/60"}" style="width:${Math.max(1, value * 100)}%"></div></div>
+    </div>`).join("");
+}
+
+function districtPanel(result) {
+  if (!stored.district) return "";
+  const text = result.district_panel || `No published survey value for ${stored.district} yet.`;
+  return card(`
+    <div class="flex items-center justify-between pl-1">
+      <div class="flex items-center gap-2"><span class="material-symbols-outlined text-[20px] text-secondary">public</span><h3 class="font-title-md text-title-md">District information</h3></div>
+      <span class="font-label-sm text-label-sm bg-surface-container px-2 py-1 rounded uppercase">${escapeHtml(stored.district)}</span>
+    </div>
+    <p class="font-body-md text-body-md pl-1">${escapeHtml(text)}</p>
+    <p class="flex gap-2 items-start bg-surface-container-low rounded-lg px-3 py-2 font-body-sm text-body-sm italic text-on-surface-variant">
+      <span class="material-symbols-outlined text-[18px] not-italic">info</span>This is published survey information for the district. It is not a probability for this leaf and did not change the diagnosis.</p>`, "bg-secondary");
+}
+
+async function sendFollowUp(referralRequested) {
+  const response = await fetch("/follow_up", { method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ diagnosis_id: stored.result.diagnosis_id, answers, referral_requested: referralRequested }) });
+  if (!response.ok) throw new Error("Could not reach the server. Try again.");
+  return response.json();
+}
+
+function referralConfirmation(target) {
+  document.getElementById(target).innerHTML = `
+    <div class="flex gap-2 items-start bg-primary-fixed text-on-primary-fixed rounded-lg px-3 py-3 font-body-md text-body-md">
+      <span class="material-symbols-outlined text-[22px]">mark_email_read</span>
+      <span>Sent to the extension officer's list as case <b>#${stored.result.diagnosis_id}</b>. Show this number to your RAB extension officer.</span>
+    </div>`;
+}
+
+function renderConfident(result) {
+  content.innerHTML = `
+    <a href="/" class="flex items-center gap-1 text-primary font-label-lg text-label-lg uppercase"><span class="material-symbols-outlined text-[20px]">arrow_back</span>Check another leaf</a>
+    ${card(`
+      <span class="self-start flex items-center gap-1 bg-primary text-on-primary px-2.5 py-1 rounded-full font-label-md text-label-md uppercase"><span class="material-symbols-outlined text-[16px]" style="font-variation-settings:'FILL' 1">check_circle</span>Diagnosis</span>
+      <h2 class="font-headline-md-mobile text-headline-md-mobile">${result.decision === "healthy" ? "Healthy leaf" : `${escapeHtml(result.label_long)} (${escapeHtml(result.decision)})`}</h2>
+      ${photoBlock()}
+      <div class="bg-surface-container-low rounded-lg px-3 py-2">
+        <span class="font-label-lg text-label-lg uppercase">Confidence</span> <span class="font-headline-md text-headline-md text-primary">${percent(result.confidence)}</span>
+        <p class="font-body-sm text-body-sm text-on-surface-variant">Above the decision threshold of ${percent(result.threshold)}. On photos the model did not learn from, answers at this confidence were right about this often.</p>
+      </div>
+      <span class="font-label-md text-label-md uppercase text-on-surface-variant mt-1">All five conditions</span>
+      ${probabilityBars(result.probabilities, result.decision)}`)}
+    ${card(`
+      <div class="flex items-center gap-2"><span class="w-9 h-9 rounded-lg bg-secondary-fixed flex items-center justify-center"><span class="material-symbols-outlined text-[20px] text-secondary">eco</span></span>
+        <div><span class="font-label-sm text-label-sm text-secondary uppercase">What to do</span><h3 class="font-title-md text-title-md">Management advice</h3></div></div>
+      ${bullets(result.advice)}
+      <p class="font-body-sm text-body-sm text-on-surface-variant">Management steps only. CassaCheck never recommends a chemical or a dose.</p>`)}
+    ${districtPanel(result)}
+    <div id="referral-area">
+      <button id="refer-button" class="w-full h-14 rounded-lg bg-primary text-on-primary font-title-md text-title-md flex items-center justify-center gap-2"><span class="material-symbols-outlined">support_agent</span>Send to extension officer</button>
+    </div>`;
+  document.getElementById("refer-button").onclick = async () => {
+    try { await sendFollowUp(true); referralConfirmation("referral-area"); } catch (error) { alert(error.message); }
+  };
+}
+
+function questionCard(question) {
+  return `
+    <div class="bg-surface-container-lowest rounded-xl p-space-md border border-outline-variant/30 shadow-sm">
+      <p class="font-title-md text-title-md mb-2">${escapeHtml(question.question)}</p>
+      <div class="grid grid-cols-1 sm:grid-cols-${Math.min(question.options.length, 2)} gap-2">
+        ${question.options.map((option) => `
+          <button type="button" data-question="${question.id}" data-option="${escapeHtml(option)}"
+            class="answer min-h-[48px] rounded-lg border border-outline-variant/60 bg-surface-container-low font-body-md text-body-md px-4 text-left flex items-center justify-between">
+            <span>${escapeHtml(option)}</span><span class="material-symbols-outlined text-[20px] hidden">check_circle</span></button>`).join("")}
+      </div>
+    </div>`;
+}
+
+function renderNotSure(result) {
+  content.innerHTML = `
+    <a href="/" class="flex items-center gap-1 text-primary font-label-lg text-label-lg uppercase"><span class="material-symbols-outlined text-[20px]">photo_camera</span>Take another photo</a>
+    ${card(`
+      <div class="flex items-start justify-between gap-2 pl-1">
+        <span class="flex items-center gap-1 bg-secondary-fixed text-on-secondary-fixed px-2.5 py-1 rounded-full font-label-md text-label-md whitespace-nowrap"><span class="material-symbols-outlined text-[16px]" style="font-variation-settings:'FILL' 1">help</span>Not sure</span>
+        <div class="text-right"><span class="font-label-sm text-label-sm uppercase text-on-surface-variant block">Confidence</span>
+          <span class="font-title-md text-title-md text-secondary">${percent(result.confidence)}, below the threshold of ${percent(result.threshold)}</span></div>
+      </div>
+      <h2 class="font-headline-md-mobile text-headline-md-mobile pl-1">Not sure from this photo</h2>
+      <p class="font-body-md text-body-md text-on-surface-variant pl-1">The model is not confident enough to name a condition for this leaf, so it does not guess. Answer the questions below for advice, or send the case to an extension officer. Your answers do not change the diagnosis.</p>
+      ${photoBlock()}`, "bg-secondary")}
+    <div class="flex items-center justify-between px-1">
+      <span class="font-label-sm text-label-sm uppercase text-on-surface-variant">What do you see in the field?</span>
+      <span class="font-label-sm text-label-sm text-primary">${result.follow_up_questions.length} questions</span>
+    </div>
+    ${result.follow_up_questions.map(questionCard).join("")}
+    <button id="advice-button" disabled class="h-14 rounded-lg bg-primary text-on-primary font-title-md text-title-md flex items-center justify-center gap-2 disabled:bg-surface-container-high disabled:text-on-surface-variant">
+      <span class="material-symbols-outlined">lightbulb</span>Get advice</button>
+    <div id="advice-area"></div>
+    <div id="referral-area">
+      <button id="refer-button" class="w-full h-14 rounded-lg border-2 border-primary text-primary font-title-md text-title-md flex items-center justify-center gap-2"><span class="material-symbols-outlined">support_agent</span>Ask an extension officer</button>
+    </div>
+    ${districtPanel(result)}
+    <details class="bg-surface-container-low rounded-xl px-space-lg py-space-md">
+      <summary class="font-label-lg text-label-lg cursor-pointer">Details for the extension officer</summary>
+      <p class="font-body-sm text-body-sm text-on-surface-variant my-2">Calibrated probabilities. None reached the threshold of ${percent(result.threshold)}, so no condition is named.</p>
+      <div class="flex flex-col gap-2">${probabilityBars(result.probabilities, null)}</div>
+    </details>`;
+
+  document.querySelectorAll(".answer").forEach((button) => button.onclick = () => {
+    answers[button.dataset.question] = button.dataset.option;
+    document.querySelectorAll(`.answer[data-question="${button.dataset.question}"]`).forEach((other) => {
+      const chosen = other === button;
+      other.classList.toggle("bg-primary", chosen); other.classList.toggle("text-on-primary", chosen);
+      other.classList.toggle("bg-surface-container-low", !chosen);
+      other.querySelector(".material-symbols-outlined").classList.toggle("hidden", !chosen);
+    });
+    document.getElementById("advice-button").disabled = false;
+  });
+
+  document.getElementById("advice-button").onclick = async () => {
+    try {
+      const reply = await sendFollowUp(false);
+      const notes = reply.guidance.length ? reply.guidance : ["Your answers do not point to anything specific. Follow the steps below."];
+      document.getElementById("advice-area").innerHTML = card(`
+        <div class="flex items-center gap-2"><span class="w-9 h-9 rounded-lg bg-secondary-fixed flex items-center justify-center"><span class="material-symbols-outlined text-[20px] text-secondary">lightbulb</span></span>
+          <div><span class="font-label-sm text-label-sm text-secondary uppercase">From your answers</span><h3 class="font-title-md text-title-md">What this tells us</h3></div></div>
+        ${bullets(notes)}
+        <h3 class="font-title-md text-title-md mt-2">What to do now</h3>
+        ${bullets(result.advice)}`);
+    } catch (error) { alert(error.message); }
+  };
+
+  document.getElementById("refer-button").onclick = async () => {
+    try { await sendFollowUp(true); referralConfirmation("referral-area"); } catch (error) { alert(error.message); }
+  };
+}
+
+if (!stored) {
+  content.innerHTML = card(`<h2 class="font-headline-sm text-headline-sm">No result yet</h2><p>Check a leaf first.</p>
+    <a href="/" class="h-12 rounded-lg bg-primary text-on-primary font-label-lg text-label-lg flex items-center justify-center">Go to diagnose</a>`);
+} else if (stored.result.decision === "abstain") {
+  renderNotSure(stored.result);
+} else {
+  renderConfident(stored.result);
+}
+</script>
+</body>
+</html>

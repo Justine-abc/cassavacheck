@@ -57,6 +57,21 @@ def test_district_does_not_change_the_probabilities():
     assert with_district["decision"] == without_district["decision"]
 
 
+@pytest.mark.skipif(not config.WEIGHTS_PATH.exists(), reason="model weights not present")
+def test_follow_up_is_logged_for_the_officer_and_leaves_the_diagnosis_alone():
+    diagnosis = client.post("/diagnose", data={"district": "Nyanza", "season": "A"}, files={"image": ("leaf.jpg", green_leaf_jpeg(), "image/jpeg")}).json()
+    reply = client.post("/follow_up", json={"diagnosis_id": diagnosis["diagnosis_id"], "answers": {"whiteflies": "Yes"}, "referral_requested": True})
+    assert reply.status_code == 200 and reply.json()["guidance"]
+    logged = next(row for row in client.get("/log").json() if row["id"] == diagnosis["diagnosis_id"])
+    assert logged["referral_requested"] and logged["answers"] == {"whiteflies": "Yes"}
+    assert logged["decision"] == diagnosis["decision"] and logged["confidence"] == diagnosis["confidence"]
 
 
+def test_follow_up_for_unknown_diagnosis_is_404():
+    assert client.post("/follow_up", json={"diagnosis_id": 10**9, "answers": {}}).status_code == 404
 
+
+def test_every_page_is_served():
+    for path in ("/", "/result", "/how-it-works", "/officer"):
+        response = client.get(path)
+        assert response.status_code == 200 and "<html" in response.text

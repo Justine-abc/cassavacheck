@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>CassaCheck officer view</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<script src="/static/theme.js"></script>
+<script src="/static/app.js"></script>
+</head>
+<body class="bg-surface font-body-md text-on-surface min-h-screen">
+<div id="app-header"></div>
+<main class="pt-20 pb-24 px-margin-mobile max-w-3xl mx-auto flex flex-col gap-space-md">
+  <section class="bg-primary text-on-primary rounded-xl p-space-lg">
+    <span class="font-label-sm text-label-sm uppercase text-primary-fixed-dim">Extension officer</span>
+    <h1 class="font-headline-md text-headline-md">Officer view</h1>
+    <p class="font-body-sm text-body-sm text-primary-fixed-dim">Anonymised checks from farmers: district, season, result and their answers. No photos, no names.</p>
+  </section>
+
+  <section class="bg-surface-container-lowest rounded-xl p-space-lg border border-outline-variant/30 shadow-sm flex flex-col gap-space-sm">
+    <label for="district-filter" class="font-label-lg text-label-lg">District</label>
+    <select id="district-filter" class="h-12 rounded-lg border border-outline-variant bg-surface-container-low px-3"><option value="">All districts</option></select>
+    <span class="font-label-md text-label-md uppercase text-on-surface-variant mt-1">Show</span>
+    <div id="status-filter" class="grid grid-cols-4 gap-1 bg-surface-container-low p-1 rounded-lg"></div>
+  </section>
+
+  <div id="stats" class="grid grid-cols-3 gap-2"></div>
+
+  <div class="flex items-center justify-between px-1">
+    <h2 class="font-title-lg text-title-lg flex items-center gap-2"><span class="material-symbols-outlined">inventory_2</span>Checks</h2>
+    <span id="showing" class="font-label-sm text-label-sm text-on-surface-variant"></span>
+  </div>
+  <div id="rows" class="flex flex-col gap-2"></div>
+
+  <button id="export-button" class="h-12 rounded-lg bg-surface-container-high font-label-lg text-label-lg flex items-center justify-center gap-2"><span class="material-symbols-outlined text-[20px]">download</span>Download as CSV</button>
+</main>
+<div id="app-nav"></div>
+
+<script>
+renderHeader("Officer view");
+renderBottomNav("officer");
+
+const STATUSES = { all: "All", confident: "Diagnosed", not_sure: "Not sure", referred: "Referred" };
+let rows = [];
+let status = "all";
+
+const matches = (row) => status === "all" || (status === "confident" && row.decision !== "abstain")
+  || (status === "not_sure" && row.decision === "abstain") || (status === "referred" && row.referral_requested);
+
+function renderStatus() {
+  document.getElementById("status-filter").innerHTML = Object.entries(STATUSES).map(([key, label]) => `
+    <button data-status="${key}" class="h-10 rounded-md font-label-md text-label-md ${key === status ? "bg-surface-container-lowest shadow-sm text-primary" : "text-on-surface-variant"}">${label}</button>`).join("");
+  document.querySelectorAll("[data-status]").forEach((b) => b.onclick = () => { status = b.dataset.status; renderStatus(); render(); });
+}
+
+function stat(label, value, note, colour = "text-primary") {
+  return `<div class="bg-surface-container-lowest rounded-xl p-space-md border border-outline-variant/30 shadow-sm">
+    <span class="font-label-sm text-label-sm uppercase text-on-surface-variant">${label}</span>
+    <div class="font-headline-md text-headline-md ${colour}">${value}</div><span class="font-label-sm text-label-sm text-on-surface-variant">${note}</span></div>`;
+}
+
+function rowCard(row) {
+  const abstained = row.decision === "abstain";
+  const label = abstained ? "Not sure (no condition named)" : row.decision === "healthy" ? CLASS_LONG_NAMES.healthy : `${CLASS_LONG_NAMES[row.decision]} (${row.decision})`;
+  const answerText = Object.entries(row.answers || {}).map(([key, value]) => `${QUESTION_SHORT_NAMES[key] || key}: ${value}`).join(" · ");
+  return `
+    <div class="bg-surface-container-lowest rounded-xl p-space-md border border-outline-variant/30 shadow-sm flex flex-col gap-2">
+      <div class="flex items-start justify-between">
+        <div><span class="font-title-md text-title-md">${escapeHtml(row.district || "District not given")}</span>
+          ${row.season ? `<span class="ml-1 font-label-sm text-label-sm bg-surface-container px-2 py-0.5 rounded">Season ${escapeHtml(row.season)}</span>` : ""}
+          <div class="font-label-sm text-label-sm text-on-surface-variant">#${row.id} · ${new Date(row.created_at).toLocaleString()}</div></div>
+        <span class="font-label-md text-label-md px-2 py-1 rounded ${abstained ? "bg-secondary-fixed text-on-secondary-fixed" : "bg-surface-container"}">${percent(row.confidence)}</span>
+      </div>
+      <div class="flex items-center justify-between bg-surface-container-low rounded-lg px-3 py-2">
+        <span class="flex items-center gap-2 font-body-md text-body-md"><span class="w-2 h-2 rounded-full ${abstained ? "bg-secondary" : row.decision === "healthy" ? "bg-primary" : "bg-error"}"></span>${label}</span>
+        ${row.referral_requested ? `<span class="font-label-sm text-label-sm bg-secondary text-on-secondary px-2 py-1 rounded uppercase">Referred</span>` : ""}
+      </div>
+      ${answerText ? `<p class="font-body-sm text-body-sm text-on-surface-variant"><b>Farmer's answers:</b> ${escapeHtml(answerText)}</p>` : ""}
+    </div>`;
+}
+
+function render() {
+  const shown = rows.filter(matches);
+  document.getElementById("stats").innerHTML =
+    stat("Checks", rows.length, "recorded") +
+    stat("Not sure", rows.filter((r) => r.decision === "abstain").length, "no condition named", "text-secondary") +
+    stat("Referrals", rows.filter((r) => r.referral_requested).length, "asked for an officer", "text-secondary");
+  document.getElementById("showing").textContent = `Showing ${shown.length}`;
+  document.getElementById("rows").innerHTML = shown.length ? shown.map(rowCard).join("")
+    : `<p class="text-center font-body-md text-body-md text-on-surface-variant py-8">No checks yet for this filter.</p>`;
+}
+
+async function load() {
+  const district = document.getElementById("district-filter").value;
+  rows = await (await fetch(`/log?limit=200${district ? `&district=${encodeURIComponent(district)}` : ""}`)).json();
+  render();
+}
+
+async function loadDistricts() {
+  const choices = await (await fetch("/districts/choices")).json();
+  document.getElementById("district-filter").innerHTML += choices.map((c) => `<option>${escapeHtml(c.district)}</option>`).join("");
+}
+
+document.getElementById("district-filter").onchange = load;
+document.getElementById("export-button").onclick = () => {
+  const header = ["id", "created_at", "district", "season", "decision", "confidence", "referral_requested", "answers"];
+  const lines = rows.filter(matches).map((r) => [r.id, r.created_at, r.district ?? "", r.season ?? "", r.decision, r.confidence, r.referral_requested,
+    Object.entries(r.answers || {}).map(([k, v]) => `${k}=${v}`).join("; ")].map((v) => `"${String(v).replace(/"/g, '""')}"`).join(","));
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(new Blob([[header.join(","), ...lines].join("\n")], { type: "text/csv" }));
+  link.download = "cassacheck_checks.csv"; link.click();
+};
+
+renderStatus();
+loadDistricts().then(load);
+</script>
+</body>
+</html>

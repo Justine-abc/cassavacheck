@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>How CassaCheck works</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<script src="/static/theme.js"></script>
+<script src="/static/app.js"></script>
+</head>
+<body class="bg-surface font-body-md text-on-surface min-h-screen">
+<div id="app-header"></div>
+<main class="pt-20 pb-24 px-margin-mobile max-w-3xl mx-auto flex flex-col gap-space-md">
+  <div>
+    <h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary">How CassaCheck works</h1>
+    <p class="font-body-md text-body-md text-on-surface-variant">Plain facts about the leaf diagnosis, for farmers and extension officers.</p>
+  </div>
+
+  <section class="bg-surface-container-lowest rounded-xl p-space-lg border border-outline-variant/30 shadow-sm flex flex-col gap-space-sm">
+    <div class="flex items-center gap-3"><span class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary">memory</span></span>
+      <div><span class="font-label-sm text-label-sm text-secondary uppercase">1 of 3</span><h2 class="font-headline-sm text-headline-sm">What the model is</h2></div></div>
+    <p class="font-body-md text-body-md">A small image classifier (MobileNetV3-Large) that learned from 14,977 public field photos of cassava leaves taken in Uganda, and was checked on thousands of photos it had never seen, including photos from Ghana. It recognises five conditions:</p>
+    <div class="grid grid-cols-2 gap-2 font-body-sm text-body-sm">
+      <span class="bg-surface-container-low rounded-lg px-3 py-2">Bacterial blight (CBB)</span>
+      <span class="bg-surface-container-low rounded-lg px-3 py-2">Brown streak disease (CBSD)</span>
+      <span class="bg-surface-container-low rounded-lg px-3 py-2">Green mite damage (CGM)</span>
+      <span class="bg-surface-container-low rounded-lg px-3 py-2">Mosaic disease (CMD)</span>
+      <span class="bg-surface-container-low rounded-lg px-3 py-2 col-span-2 text-center">Healthy leaf</span>
+    </div>
+    <p class="font-body-sm text-body-sm text-on-surface-variant">Anything else, such as another crop or another disease, is outside what it knows. That is one reason it can say "not sure".</p>
+  </section>
+
+  <section class="bg-surface-container-lowest rounded-xl p-space-lg border border-outline-variant/30 shadow-sm flex flex-col gap-space-sm">
+    <div class="flex items-center gap-3"><span class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary">insights</span></span>
+      <div><span class="font-label-sm text-label-sm text-secondary uppercase">2 of 3</span><h2 class="font-headline-sm text-headline-sm">What "confidence" means</h2></div></div>
+    <p class="font-body-md text-body-md">The confidence is adjusted (calibrated) on photos the model did not learn from, so that 80% means the model was right about 80 times out of 100 on similar photos.</p>
+    <div class="grid sm:grid-cols-2 gap-2 font-body-sm text-body-sm">
+      <div class="bg-surface-container-low rounded-lg px-3 py-2"><b class="text-error">It is not:</b> how much of your field is infected.</div>
+      <div class="bg-surface-container-low rounded-lg px-3 py-2"><b class="text-primary">It is:</b> how often the model is right on leaves like this one.</div>
+    </div>
+    <p class="font-body-sm text-body-sm text-on-surface-variant">On photos that look very different from the ones it learned from, for example from another country or camera, the confidence is less reliable. The "not sure" answer is the safety net for those cases.</p>
+  </section>
+
+  <section class="bg-surface-container-lowest rounded-xl p-space-lg border border-outline-variant/30 shadow-sm flex flex-col gap-space-sm">
+    <div class="flex items-center gap-3"><span class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary">shield</span></span>
+      <div><span class="font-label-sm text-label-sm text-secondary uppercase">3 of 3</span><h2 class="font-headline-sm text-headline-sm">Why it sometimes says "not sure"</h2></div></div>
+    <p class="font-body-md text-body-md">When the confidence is below a threshold fixed in advance, CassaCheck does not guess. It asks a few questions about what you see in the field, gives safe next steps, and lets you send the case to an extension officer. The threshold is set so that it answers about 8 photos in 10 of the kind it was tested on.</p>
+    <div class="bg-surface-container-low rounded-lg px-3 py-3 flex flex-col gap-1 font-body-sm text-body-sm">
+      <b class="flex items-center gap-1"><span class="material-symbols-outlined text-[18px] text-secondary">verified_user</span>Safety rules</b>
+      <span>A wrong answer that sounds certain is worse than an honest "not sure".</span>
+      <span>Advice is management steps only. It never names a chemical or a dose.</span>
+      <span>District survey information is shown beside the result and never changes the diagnosis.</span>
+      <span>Photos are not stored. The officer's list keeps district, season, result and your answers, nothing personal.</span>
+    </div>
+  </section>
+
+  <section class="bg-surface-container-high rounded-xl p-space-lg flex flex-col gap-space-sm">
+    <div class="flex items-center gap-3"><span class="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center"><span class="material-symbols-outlined text-on-secondary">checklist</span></span>
+      <div><span class="font-label-sm text-label-sm text-secondary uppercase">Field practice</span><h2 class="font-headline-sm text-headline-sm">Photo rules for a clear result</h2></div></div>
+    <div class="bg-surface-container-lowest rounded-lg px-3 py-2"><b>One leaf</b><br/><span class="font-body-sm text-body-sm">Photograph one leaf with symptoms, not the whole plant.</span></div>
+    <div class="bg-surface-container-lowest rounded-lg px-3 py-2"><b>Fill the screen</b><br/><span class="font-body-sm text-body-sm">Hold the phone 15 to 20 cm away so the leaf fills the frame.</span></div>
+    <div class="bg-surface-container-lowest rounded-lg px-3 py-2"><b>Daylight, no shadow</b><br/><span class="font-body-sm text-body-sm">Avoid harsh midday sun and your own shadow on the leaf.</span></div>
+  </section>
+
+  <a href="/" class="h-14 rounded-lg bg-primary text-on-primary font-title-md text-title-md flex items-center justify-center gap-2"><span class="material-symbols-outlined">photo_camera</span>Check a leaf now</a>
+</main>
+<div id="app-nav"></div>
+<script>renderHeader("How it works"); renderBottomNav("how");</script>
+</body>
+</html>

@@ -1,9 +1,9 @@
 """Unit tests for the district repository and the advisory rules."""
 from pathlib import Path
 
-from api.advice import ADVICE_BY_LABEL, ABSTAIN_ADVICE, AdvisoryService
+from api.advice import ADVICE_BY_LABEL, ABSTAIN_ADVICE, GUIDANCE_BY_ANSWER, AdvisoryService
 from api.calibration import Decision
-from api.districts import DistrictRepository
+from api.districts import RWANDA_DISTRICTS, DistrictRepository
 
 
 def write_table(path: Path) -> Path:
@@ -28,11 +28,24 @@ def test_sentence_states_year_and_denominator(tmp_path):
 
 def test_advice_never_names_a_pesticide():
     service = AdvisoryService()
-    for lines in list(ADVICE_BY_LABEL.values()) + [ABSTAIN_ADVICE]:
+    for lines in list(ADVICE_BY_LABEL.values()) + [ABSTAIN_ADVICE, list(GUIDANCE_BY_ANSWER.values())]:
         for line in lines:
             assert not service.contains_forbidden_words(line), line
 
 
 def test_abstention_returns_questions_and_no_label():
     guidance = AdvisoryService().advice_for(Decision(label=None, confidence=0.4, probabilities={}, abstained=True))
-    assert len(guidance["follow_up_questions"]) == 3 and guidance["referral"] is True
+    assert len(guidance["follow_up_questions"]) == 4 and guidance["referral"] is True
+
+
+def test_only_known_answers_are_kept_and_turned_into_guidance():
+    service = AdvisoryService()
+    answers = service.valid_answers({"whiteflies": "Yes", "other_signs": "free text a farmer typed", "unknown_question": "Yes"})
+    assert answers == {"whiteflies": "Yes"}                            # the log never stores free text
+    assert any("Whiteflies" in note for note in service.guidance_for_answers(answers))
+
+
+def test_district_choices_cover_all_thirty_and_flag_surveyed(tmp_path):
+    choices = DistrictRepository(write_table(tmp_path / "districts.csv")).choices()
+    assert len(choices) == 30 == sum(len(names) for names in RWANDA_DISTRICTS.values())
+    assert {c["district"] for c in choices if c["has_survey"]} == {"Nyanza", "Bugesera"}

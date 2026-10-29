@@ -4,6 +4,16 @@ from dataclasses import dataclass
 from pathlib import Path
 
 
+# All 30 districts, so a farmer can always pick theirs; only districts with a verified survey row get a panel.
+RWANDA_DISTRICTS = {
+    "Kigali": ["Gasabo", "Kicukiro", "Nyarugenge"],
+    "Southern": ["Gisagara", "Huye", "Kamonyi", "Muhanga", "Nyamagabe", "Nyanza", "Nyaruguru", "Ruhango"],
+    "Western": ["Karongi", "Ngororero", "Nyabihu", "Nyamasheke", "Rubavu", "Rusizi", "Rutsiro"],
+    "Northern": ["Burera", "Gakenke", "Gicumbi", "Musanze", "Rulindo"],
+    "Eastern": ["Bugesera", "Gatsibo", "Kayonza", "Kirehe", "Ngoma", "Nyagatare", "Rwamagana"],
+}
+
+
 @dataclass(frozen=True)
 class DistrictPrevalence:
     district: str
@@ -59,3 +69,9 @@ class DistrictRepository:
 
     def all_rows(self) -> list[dict]:
         return [row.__dict__ for row in self.rows]
+
+    def choices(self) -> list[dict]:
+        """Every district for the picker, with whether a surveyed value exists for it."""
+        surveyed = {row.district.lower() for row in self.rows}
+        return [{"district": name, "province": province, "has_survey": name.lower() in surveyed}
+                for province, names in RWANDA_DISTRICTS.items() for name in names]
