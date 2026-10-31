@@ -16,6 +16,7 @@ from api.advice import AdvisoryService
 from api.calibration import AbstentionGate, CalibrationSettings, Calibrator
 from api.classifier import MobileNetV3Classifier
 from api.districts import DistrictRepository
+from api.leaf_check import LeafCheck
 from api.log_store import DiagnosisLog
 
 app = FastAPI(title="CassaCheck API", version="0.2.0",
@@ -27,6 +28,7 @@ classifier = MobileNetV3Classifier(config.WEIGHTS_PATH)
 settings = CalibrationSettings.load(config.CALIBRATION_PATH)
 calibrator = Calibrator(settings.temperature)
 gate = AbstentionGate(settings.threshold)
+leaf_check = LeafCheck.load(config.LEAF_CHECK_PATH)
 advisory = AdvisoryService()
 districts = DistrictRepository(config.DISTRICT_TABLE_PATH)
 log = DiagnosisLog(config.LOG_DATABASE_PATH)
@@ -36,7 +38,8 @@ MODEL_VERSION = f"{classifier.name}:{config.WEIGHTS_PATH.name}:T{settings.temper
 @app.get("/health")
 def health():
     return {"status": "ok", "weights_loaded": classifier.weights_loaded, "classes": config.CLASS_NAMES,
-            "temperature": settings.temperature, "threshold": settings.threshold, "calibration_fitted_on": settings.fitted_on}
+            "temperature": settings.temperature, "threshold": settings.threshold, "calibration_fitted_on": settings.fitted_on,
+            "min_plant_fraction": leaf_check.min_plant_fraction, "leaf_check_fitted_on": leaf_check.fitted_on}
 
 
 @app.get("/districts")
@@ -72,6 +75,9 @@ async def diagnose(image: UploadFile = File(...), district: str | None = Form(de
         picture.load()
     except (UnidentifiedImageError, OSError):
         raise HTTPException(status_code=422, detail="The file is not a readable image")
+    if not leaf_check.looks_like_leaf(picture):
+        # Refused before the model: no diagnosis, nothing logged.
+        raise HTTPException(status_code=422, detail="This does not look like a leaf photo. Take one cassava leaf filling the frame, in daylight.")
 
     logits = classifier.predict_logits(picture)
     decision = gate.decide(calibrator.calibrate(logits))

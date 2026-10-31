@@ -6,6 +6,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 MODELS_DIRECTORY = PROJECT_ROOT / "models"
 WEIGHTS_PATH = MODELS_DIRECTORY / "mobilenetv3_baseline.pt"
 CALIBRATION_PATH = MODELS_DIRECTORY / "calibration.json"
+LEAF_CHECK_PATH = MODELS_DIRECTORY / "leaf_check.json"
 DISTRICT_TABLE_PATH = PROJECT_ROOT / "data" / "district_prevalence.csv"
 # Overridable so the test suite writes to a temporary log instead of the officer's real one.
 LOG_DATABASE_PATH = Path(os.environ.get("CASSACHECK_LOG_PATH", PROJECT_ROOT / "data" / "diagnosis_log.sqlite"))
