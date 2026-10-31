@@ -1,1 +1,1 @@
-Place `mobilenetv3_baseline.pt` here (saved by notebook 02). Weights are not committed to git; link them from Google Drive in the main README if the file is too large for Canvas.
+Place `mobilenetv3_baseline.pt` here: the frozen MobileNetV3-Large checkpoint (8 epochs, seed 1) exported by notebook 04b, with its `calibration.json`.

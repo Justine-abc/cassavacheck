@@ -1,8 +1,8 @@
 {
-  "temperature": 0.9313,
-  "threshold": 0.6455,
+  "temperature": 1.1514,
+  "threshold": 0.6752,
   "target_coverage": 0.8,
   "fitted_on": "validation split, stratified fit half (1,605 images), seed 42",
-  "measured_on": "validation split, other half (1,605 images)",
-  "model": "mobilenetv3_baseline.pt"
+  "measured_on": "validation split, other half; internal test evaluated in notebook 04b",
+  "model": "MobileNetV3-Large, 8 epochs, seed 1, selected on validation macro-F1 among five seeds"
 }

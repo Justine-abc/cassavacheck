@@ -12,13 +12,15 @@ A farmer or extension officer uploads one photograph of a cassava leaf. The syst
 
 Research protocol behind it: public Makerere field photographs (21,397) with a published 70/15/15 split and near-duplicate control; MobileNetV3-Large fine-tuned with class-weighted loss; temperature scaling and an abstention threshold fitted on one half of the validation split and measured on the other; the test split and the Ghanaian CCMT set are reserved for the final evaluation.
 
-Current results (validation split, one seed, two epochs)
+Current results (deployed model: MobileNetV3-Large, 8 epochs, seed 1 of five, chosen on validation macro-F1; notebooks 03 and 04b)
 Measure	Value
-Accuracy / macro-F1	0.8237 / 0.7109
-Per-class F1	CBB 0.5955, CBSD 0.7123, CGM 0.6838, CMD 0.9292, healthy 0.6336
-Temperature / threshold	0.931 / 0.6455 (target coverage 0.80)
-ECE before / after calibration (held-out half)	0.0275 / 0.0296
-Abstention (held-out half)	coverage 0.791; accuracy 0.907 on retained answers vs 0.825 on all; 0.513 on abstained
+Validation macro-F1 (model selection)	0.7439
+Temperature / threshold	1.1514 / 0.6752 (target coverage 0.80, fitted on the validation fit half)
+ECE before / after calibration, 15 bins (validation measure half)	0.0249 / 0.0160
+Internal test, 3,210 images: accuracy / macro-F1	0.8346 / 0.7246 (macro-F1 bootstrap 95% interval 0.705 to 0.745)
+Per-class F1 (internal test)	CBB 0.5436, CBSD 0.7290, CGM 0.7597, CMD 0.9346, healthy 0.6559
+ECE before / after calibration, 15 bins (internal test)	0.0294 / 0.0116
+Abstention (internal test)	coverage 0.792; accuracy 0.916 on answered photos vs 0.835 on all; 0.523 on abstained
 Forward pass, 1 CPU thread, batch 1, median of 100	19.8 ms (MobileNetV3-Large); 61.7 ms (ResNet-18 architecture)
 End to end	261 ms (laptop Chrome); under 1 s (iPhone Safari over hotspot)
 Technical requirements
