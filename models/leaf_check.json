@@ -1,0 +1,6 @@
+{
+  "min_plant_fraction": 0.1764,
+  "rule": "1st percentile of plant fraction on the validation fit half",
+  "fitted_on": "validation split, stratified fit half (1,605 images), seed 42",
+  "measured_on": "validation split, other half: 8 of 1605 real leaves refused"
+}
