@@ -121,7 +121,6 @@ uvicorn api.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 - Web interface: http://localhost:8000/ (choose district and season, upload a photo, read the result card and the district panel)
 - API interface (Swagger UI): http://localhost:8000/docs
-- Command line, one image: `python3 demo.py path/to/leaf.jpg`
 
 ## 4. Data (notebook 01)
 - 21,397 labelled field photographs, all 800 by 600 pixels. Class counts: CMD 13,158 (61.5%), healthy 2,577, CGM 2,386, CBSD 2,189, CBB 1,087.
@@ -155,7 +154,6 @@ api/main.py                 FastAPI: /health, /districts, /diagnose, Swagger at 
 api/static/index.html       one-page web interface
 data/district_prevalence.csv
 data/split_v1_seed42.csv
-demo.py                     command-line check for one image
 docs/deployment_plan.md, docs/video_script.md, docs/screenshots/
 models/mobilenetv3_baseline.pt   (16.3 MB, in the repository)
 notebooks/01_data_and_split.ipynb, notebooks/02_baseline_train.ipynb
