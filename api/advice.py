@@ -31,7 +31,7 @@ GUIDANCE_BY_ANSWER: dict[tuple[str, str], str] = {
 ABSTAIN_ADVICE: list[str] = [
     "Check two more leaves on the same plant and take another photo in daylight.",
     "Do not take cuttings from this plant until an officer has checked it.",
-    "Ask your RAB extension officer and show them this result.",
+    "Ask your sector agronomist and show them this result.",
 ]
 
 FORBIDDEN_WORDS = ("pesticide", "fungicide", "insecticide", "spray", "dose", "ml per", "litre")
