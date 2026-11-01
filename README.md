@@ -73,11 +73,11 @@ docs/              technical report, design exports (docs/design), screenshots, 
 CONTRIBUTING.md    design constraints every change must respect
 Scope status against the approved proposal
 
-Completed: FR-01 to FR-06, near-duplicate split, calibration and abstention, latency measurement, tests. Partial: district table (2 of 13 districts verified), baseline (one seed, two epochs; ResNet-18 implemented, not trained), interface (designed in six screens, implemented as one static page). Scheduled: five-seed runs (2 November), external evaluation on CCMT (9 November), Render deployment, React build. Details and evidence in the technical report, Section 1.
+Completed: FR-01 to FR-06, near-duplicate split, five seeds of MobileNetV3-Large and ResNet-18 (8 epochs, notebook 03), calibration and abstention with the internal test (notebook 04b), external test on CCMT (notebook 05), leaf check before the classifier (notebook 06), web app with four pages, latency measurement, tests. Partial: district table (2 of 13 districts verified). Scheduled: matched-coverage comparison against plain softmax. Details and evidence in the technical report, Section 1.
 
 Deployment plan
 
-See docs/deployment_plan.md: FastAPI and the page on Render (HTTPS), PostgreSQL for the district table and the log, calibration values loaded with the weights.
+See docs/deployment_plan.md: one Render web service from render.yaml, weights and frozen values bundled, SQLite log for demonstration data.
 
 
 
@@ -144,7 +144,7 @@ Precision and recall per class are in the notebook output. The confusion matrix 
 Screenshots in `docs/screenshots/`: the web page before upload, the result card with the district panel, the Swagger UI, and the `/diagnose` response. The page has one flow: choose district and season, upload a photo, read the result.
 
 ## 8. Deployment plan
-See `docs/deployment_plan.md`: FastAPI and the static page on Render, PostgreSQL for the district table and the anonymised log, calibration and abstention loaded with the weights, latency measured as the forward pass at batch size 1 on one CPU core.
+See `docs/deployment_plan.md`: one Render web service defined in `render.yaml` (CPU torch, `requirements-deploy.txt`), weights, calibration and leaf check cut-off bundled with the service, SQLite log for demonstration data. Latency is measured as the forward pass at batch size 1 on one CPU core.
 
 ## 9. Video demo
 Video: https://youtu.be/mjl7zWxg7eI?si=HbVunf069Q01zJS2

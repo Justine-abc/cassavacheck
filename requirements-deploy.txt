@@ -1,0 +1,10 @@
+# What the web service needs and nothing else (training and notebook libraries are in requirements.txt).
+# CPU-only torch: the server has no GPU, and the CPU wheels are much smaller.
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.3.1+cpu
+torchvision==0.18.1+cpu
+numpy==1.26.4
+Pillow==10.4.0
+fastapi==0.111.0
+uvicorn[standard]==0.30.1
+python-multipart==0.0.9
