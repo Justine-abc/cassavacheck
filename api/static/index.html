@@ -7,14 +7,15 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <link rel="icon" href="/static/favicon.svg" type="image/svg+xml"/>
+<link rel="stylesheet" href="/static/app.css"/>
 <script src="https://cdn.tailwindcss.com/3.4.16"></script>
 <script src="/static/theme.js"></script>
 <script src="/static/app.js"></script>
 </head>
 <body class="bg-surface font-body-md text-on-surface min-h-screen">
 <div id="app-header"></div>
-<main class="pt-20 pb-24 px-margin-mobile max-w-3xl mx-auto flex flex-col gap-space-md">
-  <div>
+<main id="page" class="pt-20 pb-24 px-margin-mobile lg:px-8 max-w-3xl lg:max-w-6xl mx-auto grid gap-space-md lg:grid-cols-2 lg:grid-rows-[auto_auto_1fr] lg:gap-6 lg:items-start">
+  <div class="lg:col-span-2">
     <h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary">Check a cassava leaf</h1>
     <p class="font-body-md text-body-md text-on-surface-variant">One leaf photo. You get a diagnosis with an honest confidence, or "not sure" and the next steps.</p>
   </div>
@@ -30,7 +31,7 @@
     <p class="font-body-sm text-body-sm text-on-surface-variant">Used only for the district information panel. It never changes the diagnosis.</p>
   </section>
 
-  <section class="bg-surface-container-lowest rounded-xl p-space-lg border border-outline-variant/30 shadow-sm flex flex-col gap-space-sm">
+  <section id="drop-zone" class="bg-surface-container-lowest rounded-xl p-space-lg border border-outline-variant/30 shadow-sm flex flex-col gap-space-sm lg:row-span-2 transition-colors">
     <div class="flex items-center justify-between">
       <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-primary text-on-primary font-label-md text-label-md flex items-center justify-center">2</span><h2 class="font-title-md text-title-md">Leaf photo</h2></div>
       <span id="photo-badge" class="hidden font-label-sm text-label-sm bg-surface-container px-2 py-1 rounded-full uppercase">1 photo attached</span>
@@ -40,17 +41,21 @@
       <span><b>Field tip:</b> one leaf filling the frame, in daylight, phone held steady.</span>
     </div>
     <input id="photo-input" type="file" accept="image/jpeg,image/png" class="hidden"/>
-    <button id="pick-button" type="button" class="h-36 rounded-xl border-2 border-dashed border-outline-variant bg-surface-container-low flex flex-col items-center justify-center gap-1 text-primary">
+    <button id="pick-button" type="button" class="h-36 lg:h-56 rounded-xl border-2 border-dashed border-outline-variant bg-surface-container-low flex flex-col items-center justify-center gap-1 text-primary">
       <span class="material-symbols-outlined text-[36px]">add_a_photo</span>
       <span class="font-title-md text-title-md">Take or choose a photo</span>
-      <span class="font-body-sm text-body-sm text-on-surface-variant">JPEG or PNG, up to 10 MB</span>
+      <span class="font-body-sm text-body-sm text-on-surface-variant">JPEG or PNG, up to 10 MB<span class="hidden lg:inline">, or drag a photo here</span></span>
     </button>
     <div id="preview-block" class="hidden flex flex-col gap-2">
-      <img id="preview" alt="Selected leaf photo" class="w-full max-h-72 object-cover rounded-xl"/>
+      <div id="preview-frame" class="rounded-xl overflow-hidden"><img id="preview" alt="Selected leaf photo" class="w-full max-h-72 lg:max-h-[420px] object-cover"/></div>
       <div class="flex gap-2">
         <button id="retake-button" type="button" class="flex-1 h-12 rounded-lg bg-surface-container-high font-label-lg text-label-lg flex items-center justify-center gap-2"><span class="material-symbols-outlined text-[20px]">refresh</span>Retake photo</button>
         <button id="remove-button" type="button" class="w-12 h-12 rounded-lg bg-surface-container-high text-error flex items-center justify-center" aria-label="Remove photo"><span class="material-symbols-outlined text-[20px]">delete</span></button>
       </div>
+    </div>
+    <div class="flex flex-col gap-2 border-t border-outline-variant/40 pt-3 mt-1">
+      <span class="font-body-sm text-body-sm text-on-surface-variant">No photo at hand? Try one of these, taken in Kicukiro in October 2026:</span>
+      <div id="samples" class="grid grid-cols-3 gap-2"></div>
     </div>
   </section>
 
@@ -125,6 +130,7 @@ function thumbnail(file) {
 async function diagnose() {
   const button = document.getElementById("diagnose-button");
   button.disabled = true; document.getElementById("diagnose-label").textContent = "Checking the leaf…"; showError("");
+  document.getElementById("preview-frame").classList.add("scanning");
   const form = new FormData();
   form.append("image", selectedFile);
   const district = document.getElementById("district").value;
@@ -138,6 +144,7 @@ async function diagnose() {
   } catch (error) {
     showError(error.message === "Failed to fetch" ? "No connection to the server. Check your internet and try again." : error.message);
     button.disabled = false; document.getElementById("diagnose-label").textContent = "Diagnose leaf";
+    document.getElementById("preview-frame").classList.remove("scanning");
   }
 }
 
@@ -146,8 +153,40 @@ document.getElementById("retake-button").onclick = () => input.click();
 document.getElementById("remove-button").onclick = () => setPhoto(null);
 input.onchange = () => input.files[0] && setPhoto(input.files[0]);
 document.getElementById("diagnose-button").onclick = diagnose;
+
+// Three of the author's own field photos, so the app can be tried without a leaf at hand. Labels say only what is visible.
+const SAMPLES = [
+  { file: "sample_looks_healthy.jpg", label: "Looks healthy" },
+  { file: "sample_symptoms_1.jpg", label: "Visible symptoms" },
+  { file: "sample_symptoms_2.jpg", label: "Visible symptoms" },
+];
+document.getElementById("samples").innerHTML = SAMPLES.map((sample) => `
+  <button type="button" data-sample="${sample.file}" class="rounded-lg overflow-hidden border border-outline-variant/60 bg-surface-container-low text-left">
+    <img src="/static/samples/${sample.file}" alt="${sample.label}" class="w-full h-20 lg:h-24 object-cover"/>
+    <span class="block px-2 py-1 font-label-sm text-label-sm">${sample.label}</span>
+  </button>`).join("");
+document.querySelectorAll("[data-sample]").forEach((button) => button.onclick = async () => {
+  const blob = await (await fetch(`/static/samples/${button.dataset.sample}`)).blob();
+  setPhoto(new File([blob], button.dataset.sample, { type: "image/jpeg" }));
+});
+
+// Drag and drop on a laptop: drop a photo anywhere on the page.
+const dropZone = document.getElementById("drop-zone");
+["dragenter", "dragover"].forEach((type) => document.addEventListener(type, (event) => { event.preventDefault(); dropZone.classList.add("drop-active"); }));
+["dragleave", "drop"].forEach((type) => document.addEventListener(type, (event) => {
+  event.preventDefault();
+  if (type === "drop" || !event.relatedTarget) dropZone.classList.remove("drop-active");
+}));
+document.addEventListener("drop", (event) => {
+  const file = event.dataTransfer.files[0];
+  if (!file) return;
+  if (!["image/jpeg", "image/png"].includes(file.type)) { showError("Drop a JPEG or PNG photo."); return; }
+  setPhoto(file);
+});
+
 renderSeasons();
 loadDistricts();
+reveal(document.getElementById("page"));
 </script>
 </body>
 </html>

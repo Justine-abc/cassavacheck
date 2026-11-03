@@ -7,13 +7,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <link rel="icon" href="/static/favicon.svg" type="image/svg+xml"/>
+<link rel="stylesheet" href="/static/app.css"/>
 <script src="https://cdn.tailwindcss.com/3.4.16"></script>
 <script src="/static/theme.js"></script>
 <script src="/static/app.js"></script>
 </head>
 <body class="bg-surface font-body-md text-on-surface min-h-screen">
 <div id="app-header"></div>
-<main class="pt-20 pb-24 px-margin-mobile max-w-3xl mx-auto flex flex-col gap-space-md">
+<main id="page" class="pt-20 pb-24 px-margin-mobile lg:px-8 max-w-3xl lg:max-w-6xl mx-auto flex flex-col gap-space-md">
   <section class="bg-primary text-on-primary rounded-xl p-space-lg">
     <span class="font-label-sm text-label-sm uppercase text-primary-fixed-dim">Extension officer</span>
     <h1 class="font-headline-md text-headline-md">Officer view</h1>
@@ -27,15 +28,15 @@
     <div id="status-filter" class="grid grid-cols-4 gap-1 bg-surface-container-low p-1 rounded-lg"></div>
   </section>
 
-  <div id="stats" class="grid grid-cols-3 gap-2"></div>
+  <div id="stats" class="grid grid-cols-3 gap-2 lg:gap-4"></div>
 
   <div class="flex items-center justify-between px-1">
     <h2 class="font-title-lg text-title-lg flex items-center gap-2"><span class="material-symbols-outlined">inventory_2</span>Checks</h2>
     <span id="showing" class="font-label-sm text-label-sm text-on-surface-variant"></span>
   </div>
-  <div id="rows" class="flex flex-col gap-2"></div>
+  <div id="rows" class="grid gap-2 lg:grid-cols-2 lg:gap-4 lg:items-start"></div>
 
-  <button id="export-button" class="h-12 rounded-lg bg-surface-container-high font-label-lg text-label-lg flex items-center justify-center gap-2"><span class="material-symbols-outlined text-[20px]">download</span>Download as CSV</button>
+  <button id="export-button" class="lg:self-center lg:w-80 h-12 rounded-lg bg-surface-container-high font-label-lg text-label-lg flex items-center justify-center gap-2"><span class="material-symbols-outlined text-[20px]">download</span>Download as CSV</button>
 </main>
 <div id="app-nav"></div>
 
@@ -90,7 +91,8 @@ function render() {
     stat("Referrals", rows.filter((r) => r.referral_requested).length, "asked for an officer", "text-secondary");
   document.getElementById("showing").textContent = `Showing ${shown.length}`;
   document.getElementById("rows").innerHTML = shown.length ? shown.map(rowCard).join("")
-    : `<p class="text-center font-body-md text-body-md text-on-surface-variant py-8">No checks yet for this filter.</p>`;
+    : `<p class="text-center font-body-md text-body-md text-on-surface-variant py-8 lg:col-span-2">No checks yet for this filter.</p>`;
+  reveal(document.getElementById("rows"));
 }
 
 async function load() {
@@ -115,6 +117,7 @@ document.getElementById("export-button").onclick = () => {
 };
 
 renderStatus();
+reveal(document.getElementById("page"));
 loadDistricts().then(load);
 </script>
 </body>

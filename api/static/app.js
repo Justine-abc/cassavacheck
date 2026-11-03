@@ -9,6 +9,42 @@ const SEASONS = { A: "Sep – Feb", B: "Mar – Jun", C: "Jul – Aug" };
 
 function percent(value) { return `${Math.round(value * 100)}%`; }
 
+// Staggered entrance for the direct children of a container (styles in app.css).
+function reveal(container) {
+  container.classList.add("reveal");
+  [...container.children].forEach((child, index) => child.style.setProperty("--i", index));
+}
+
+// Bars are drawn empty with data-width, then filled on the next frame so the width change animates.
+// Bars inside a closed <details> wait until it is opened.
+function fillBars(root = document) {
+  requestAnimationFrame(() => requestAnimationFrame(() =>
+    root.querySelectorAll(".bar-fill[data-width]").forEach((bar) => {
+      if (!bar.closest("details:not([open])")) bar.style.width = bar.dataset.width;
+    })));
+}
+
+// Confidence against the decision line: the core idea of the app in one picture.
+function confidenceMeter(confidence, threshold) {
+  const answered = confidence >= threshold;
+  const line = Math.round(threshold * 100);
+  return `
+    <div class="flex flex-col gap-1" aria-label="Confidence ${percent(confidence)}, decision line ${percent(threshold)}">
+      <div class="relative h-4 bg-surface-container-high rounded-full">
+        <div class="bar-fill h-4 rounded-full ${answered ? "bg-primary" : "bg-secondary"}" data-width="${Math.max(1, confidence * 100)}%"></div>
+        <div class="absolute -top-1.5 -bottom-1.5 w-0.5 bg-on-surface" style="left:${line}%"></div>
+      </div>
+      <div class="relative h-9 font-label-sm text-label-sm text-on-surface-variant">
+        <span class="absolute left-0 top-0.5">0%</span>
+        <span class="absolute top-0.5 -translate-x-1/2 text-center leading-tight text-on-surface" style="left:${line}%">Decision line<br/>${percent(threshold)}</span>
+        <span class="absolute right-0 top-0.5">100%</span>
+      </div>
+      <p class="font-body-sm text-body-sm text-on-surface-variant">${answered
+        ? "Above the line, CassaCheck names a condition."
+        : "Below the line, CassaCheck does not guess: it says not sure."}</p>
+    </div>`;
+}
+
 function escapeHtml(text) {
   return String(text ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 }
@@ -19,7 +55,7 @@ function renderHeader(title, { back = false } = {}) {
     : "";
   document.getElementById("app-header").innerHTML = `
     <header class="fixed top-0 w-full z-50 bg-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]">
-      <div class="h-16 px-margin-mobile max-w-3xl mx-auto flex items-center justify-between">
+      <div class="h-16 px-margin-mobile lg:px-8 max-w-6xl mx-auto flex items-center justify-between">
         <div class="flex items-center gap-space-sm">
           ${backButton}
           <span class="w-9 h-9 rounded-lg bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[20px]">eco</span></span>

@@ -1,0 +1,31 @@
+/* Motion for every page. All of it is switched off for people who ask their device for reduced motion. */
+
+/* Cards and blocks rise in one after another; --i is set by reveal() in app.js. */
+.reveal > * { animation: rise 0.45s ease-out both; animation-delay: calc(var(--i, 0) * 70ms); }
+@keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+/* Bars start empty and fill to their value; fillBars() in app.js sets the final width. */
+.bar-fill { width: 0; transition: width 0.9s cubic-bezier(0.2, 0.8, 0.2, 1); }
+
+/* Buttons give a small press feedback. */
+button:not(:disabled), a.press { transition: transform 0.12s ease, background-color 0.2s ease, color 0.2s ease; }
+button:not(:disabled):active, a.press:active { transform: scale(0.98); }
+
+/* "Checking the leaf": a light band sweeps over the photo while the server answers. */
+.scanning { position: relative; overflow: hidden; }
+.scanning::after {
+  content: ""; position: absolute; left: 0; right: 0; height: 30%; top: -30%;
+  background: linear-gradient(to bottom, transparent, rgba(208, 228, 255, 0.55), transparent);
+  animation: sweep 1.3s ease-in-out infinite;
+}
+@keyframes sweep { to { top: 100%; } }
+
+/* Drop zone highlight when a photo is dragged over the page. */
+.drop-active { outline: 3px dashed #153857; outline-offset: 4px; background-color: #d0e4ff !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal > * { animation: none; }
+  .bar-fill { transition: none; }
+  .scanning::after { animation: none; display: none; }
+  button:not(:disabled):active, a.press:active { transform: none; }
+}

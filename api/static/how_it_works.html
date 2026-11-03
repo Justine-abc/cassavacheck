@@ -7,14 +7,15 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <link rel="icon" href="/static/favicon.svg" type="image/svg+xml"/>
+<link rel="stylesheet" href="/static/app.css"/>
 <script src="https://cdn.tailwindcss.com/3.4.16"></script>
 <script src="/static/theme.js"></script>
 <script src="/static/app.js"></script>
 </head>
 <body class="bg-surface font-body-md text-on-surface min-h-screen">
 <div id="app-header"></div>
-<main class="pt-20 pb-24 px-margin-mobile max-w-3xl mx-auto flex flex-col gap-space-md">
-  <div>
+<main id="page" class="pt-20 pb-24 px-margin-mobile lg:px-8 max-w-3xl lg:max-w-6xl mx-auto grid gap-space-md lg:grid-cols-3 lg:gap-6 lg:items-start">
+  <div class="lg:col-span-3">
     <h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary">How CassaCheck works</h1>
     <p class="font-body-md text-body-md text-on-surface-variant">Plain facts about the leaf diagnosis, for farmers and extension officers.</p>
   </div>
@@ -58,7 +59,7 @@
     </div>
   </section>
 
-  <section class="bg-surface-container-high rounded-xl p-space-lg flex flex-col gap-space-sm">
+  <section class="bg-surface-container-high rounded-xl p-space-lg flex flex-col gap-space-sm lg:col-span-3 lg:grid lg:grid-cols-4 lg:items-center lg:gap-3">
     <div class="flex items-center gap-3"><span class="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center"><span class="material-symbols-outlined text-on-secondary">checklist</span></span>
       <div><span class="font-label-sm text-label-sm text-secondary uppercase">Field practice</span><h2 class="font-headline-sm text-headline-sm">Photo rules for a clear result</h2></div></div>
     <div class="bg-surface-container-lowest rounded-lg px-3 py-2"><b>One leaf</b><br/><span class="font-body-sm text-body-sm">Photograph one leaf with symptoms, not the whole plant.</span></div>
@@ -66,9 +67,9 @@
     <div class="bg-surface-container-lowest rounded-lg px-3 py-2"><b>Daylight, no shadow</b><br/><span class="font-body-sm text-body-sm">Avoid harsh midday sun and your own shadow on the leaf.</span></div>
   </section>
 
-  <a href="/" class="h-14 rounded-lg bg-primary text-on-primary font-title-md text-title-md flex items-center justify-center gap-2"><span class="material-symbols-outlined">photo_camera</span>Check a leaf now</a>
+  <a href="/" class="press lg:col-span-3 lg:w-80 lg:mx-auto lg:px-6 h-14 rounded-lg bg-primary text-on-primary font-title-md text-title-md flex items-center justify-center gap-2"><span class="material-symbols-outlined">photo_camera</span>Check a leaf now</a>
 </main>
 <div id="app-nav"></div>
-<script>renderHeader("How it works"); renderBottomNav("how");</script>
+<script>renderHeader("How it works"); renderBottomNav("how"); reveal(document.getElementById("page"));</script>
 </body>
 </html>
