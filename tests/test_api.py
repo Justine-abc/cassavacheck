@@ -72,6 +72,13 @@ def test_follow_up_for_unknown_diagnosis_is_404():
 
 
 def test_every_page_is_served():
-    for path in ("/", "/result", "/how-it-works", "/officer"):
+    for path in ("/", "/result", "/how-it-works", "/diseases", "/officer"):
         response = client.get(path)
         assert response.status_code == 200 and "<html" in response.text
+
+
+def test_disease_page_names_no_chemical():
+    from api.advice import AdvisoryService
+    # The cited source's title contains "Pesticides"; that is a name, not advice.
+    text = client.get("/diseases").text.replace("Weeds &amp; Pesticides", "").replace("Weeds & Pesticides", "")
+    assert not AdvisoryService.contains_forbidden_words(text)

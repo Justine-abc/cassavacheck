@@ -1,7 +1,7 @@
 # Deployment
 
 ## What is deployed
-- One web service on Render (free plan), defined in `render.yaml`. FastAPI serves the API and the four pages (diagnose, result, how it works, officer view) from `api/static/`.
+- One web service on Render (free plan), defined in `render.yaml`. FastAPI serves the API and the five pages (diagnose, result, how it works, diseases, officer view) from `api/static/`.
 - Python 3.12, CPU-only torch, packages in `requirements-deploy.txt` (training and notebook libraries stay in `requirements.txt`).
 - Model weights and frozen values are bundled with the service: `models/mobilenetv3_baseline.pt` (MobileNetV3-Large, 8 epochs, seed 1), `models/calibration.json` (temperature and threshold, notebook 04b) and `models/leaf_check.json` (input check cut-off, notebook 06). Nothing is fitted on the server.
 - Health check: `/health` reports the loaded weights, temperature, threshold and leaf check cut-off.

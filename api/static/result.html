@@ -107,7 +107,8 @@ function renderConfident(result) {
       <div class="flex items-center gap-2"><span class="w-9 h-9 rounded-lg bg-secondary-fixed flex items-center justify-center"><span class="material-symbols-outlined text-[20px] text-secondary">eco</span></span>
         <div><span class="font-label-sm text-label-sm text-secondary uppercase">What to do</span><h3 class="font-title-md text-title-md">Management advice</h3></div></div>
       ${bullets(result.advice)}
-      <p class="font-body-sm text-body-sm text-on-surface-variant">Management steps only. CassaCheck never recommends a chemical or a dose.</p>`)}
+      <p class="font-body-sm text-body-sm text-on-surface-variant">Management steps only. CassaCheck never recommends a chemical or a dose.</p>
+      ${result.decision === "healthy" ? "" : `<a href="/diseases#${escapeHtml(result.decision)}" class="press self-start flex items-center gap-1 text-primary font-label-lg text-label-lg"><span class="material-symbols-outlined text-[20px]">menu_book</span>About this disease: cause, spread, prevention</a>`}`)}
     ${districtPanel(result)}
     <div id="referral-area">
       <button id="refer-button" class="w-full h-14 rounded-lg bg-primary text-on-primary font-title-md text-title-md flex items-center justify-center gap-2"><span class="material-symbols-outlined">support_agent</span>Send to extension officer</button>

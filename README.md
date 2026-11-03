@@ -73,7 +73,7 @@ docs/              technical report, design exports (docs/design), screenshots, 
 CONTRIBUTING.md    design constraints every change must respect
 Scope status against the approved proposal
 
-Completed: FR-01 to FR-06, near-duplicate split, five seeds of MobileNetV3-Large and ResNet-18 (8 epochs, notebook 03), calibration and abstention with the internal test (notebook 04b), external test on CCMT (notebook 05), leaf check before the classifier (notebook 06), web app with four pages, latency measurement, tests. Partial: district table (2 of 13 districts verified). Scheduled: matched-coverage comparison against plain softmax. Details and evidence in the technical report, Section 1.
+Completed: FR-01 to FR-06, near-duplicate split, five seeds of MobileNetV3-Large and ResNet-18 (8 epochs, notebook 03), calibration and abstention with the internal test (notebook 04b), external test on CCMT (notebook 05), leaf check before the classifier (notebook 06), web app with five pages, latency measurement, tests. Partial: district table (2 of 13 districts verified). Scheduled: matched-coverage comparison against plain softmax. Details and evidence in the technical report, Section 1.
 
 Deployment plan
 

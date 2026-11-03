@@ -79,6 +79,7 @@ function renderBottomNav(active) {
       <div class="h-16 max-w-3xl mx-auto flex">
         ${item("/", "photo_camera", "Diagnose", "diagnose")}
         ${item("/how-it-works", "menu_book", "How it works", "how")}
+        ${item("/diseases", "coronavirus", "Diseases", "diseases")}
         ${item("/officer", "assignment", "Officer view", "officer")}
       </div>
     </nav>`;

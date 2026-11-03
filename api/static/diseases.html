@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>Cassava diseases</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link rel="icon" href="/static/favicon.svg" type="image/svg+xml"/>
+<link rel="stylesheet" href="/static/app.css"/>
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<script src="/static/theme.js"></script>
+<script src="/static/app.js"></script>
+</head>
+<body class="bg-surface font-body-md text-on-surface min-h-screen">
+<div id="app-header"></div>
+<main id="page" class="pt-20 pb-24 px-margin-mobile lg:px-8 max-w-3xl lg:max-w-6xl mx-auto grid gap-space-md lg:grid-cols-2 lg:gap-6 lg:items-start"></main>
+<div id="app-nav"></div>
+<script>
+// Every line is taken from the fact sheet linked on its card (Pacific Pests, Pathogens, Weeds & Pesticides, online edition).
+// Management steps only: no chemical is named, the same rule as the advice in api/advice.py.
+const SHEETS = "https://apps.lucidcentral.org/pppw_v13/text/web_full/entities/";
+const DISEASES = [
+  { code: "CMD", icon: "grid_view", cause: "Viruses (cassava mosaic viruses).",
+    see: ["Pale green to yellow patches on the leaves, a pattern called a mosaic.", "Leaves and shoots twisted or deformed; the plant may stay small."],
+    spread: ["Stem cuttings taken from sick plants and shared between farmers.", "Whiteflies feeding on the leaves."],
+    prevent: ["Take cuttings only from plants without symptoms. Never plant stems from a sick plant.", "Pull out sick plants as soon as you see symptoms. Done early, the plants around them make up the lost yield.", "Plant resistant varieties."],
+    sheet: "cassava_mosaic_diseases_520.htm" },
+  { code: "CBSD", icon: "texture", cause: "Two viruses (cassava brown streak virus and Ugandan cassava brown streak virus).",
+    see: ["Yellow patches along the side veins of older leaves, often joining together.", "Dark streaks on young green stems, not always visible.", "Roots smaller than normal, with dark brown dry rot inside when cut."],
+    spread: ["Whiteflies, over short distances.", "Planting material moved between farmers, over long distances."],
+    prevent: ["Take cuttings only from plants you watched for symptoms during the season.", "Use certified, virus-cleaned planting material.", "Remove plants with leaf or stem symptoms, and burn their stems after harvest.", "Plant tolerant varieties where they are available. Neighbours removing sick plants together works best."],
+    sheet: "cassava_brown_streak_disease_439.htm" },
+  { code: "CBB", icon: "water_drop", cause: "A bacterium (Xanthomonas axonopodis pv. manihotis).",
+    see: ["Angular, water-soaked spots between the veins, best seen under the leaf.", "Spots grow, join, and turn brown with yellow edges.", "Leaves wilt and fall; stem tips turn black."],
+    spread: ["Rain blown by the wind, and tools such as knives and hoes, over short distances.", "Infected cuttings, over long distances."],
+    prevent: ["Take cuttings only from healthy fields. Do not plant next to, or downwind of, a sick field.", "When only a few plants are sick, remove them in dry weather. Clean your tools and keep animals out.", "After harvest, burn or bury old stems you are not keeping for planting.", "Do not plant cassava again on the same land after a sick crop; wait one to two years."],
+    sheet: "cassava_bacterial_blight_173.htm" },
+  { code: "CGM", icon: "bug_report", cause: "A tiny mite (Mononychellus tanajoa) that sucks juice from the leaves, mostly from the underside.",
+    see: ["Small yellow spots, then yellowing and mottled leaves that die and fall.", "Shoot tips lost, leaving a bare stem like a candle.", "Worst in the dry season: rain washes the mites off the leaves."],
+    spread: ["Mites walking between plants, or carried by wind and water.", "People moving cuttings and leaves, over long distances."],
+    prevent: ["Take planting material from healthy plants.", "Plant early in the rainy season.", "Plant mite-tolerant varieties. Predatory mites that eat green mites are the main natural control."],
+    lookalike: "Easy to confuse with mosaic disease. Mosaic gives yellow and green patches that are not limited to the veins and twists the leaf.",
+    sheet: "cassava_green_mite_438.htm" },
+];
+
+function list(items) {
+  return `<ul class="flex flex-col gap-1 font-body-sm text-body-sm list-disc pl-5">${items.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>`;
+}
+
+function diseaseCard(disease) {
+  return `
+    <section id="${disease.code}" class="scroll-mt-24 bg-surface-container-lowest rounded-xl p-space-lg border border-outline-variant/30 shadow-sm flex flex-col gap-space-sm">
+      <div class="flex items-center gap-3"><span class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary">${disease.icon}</span></span>
+        <div><span class="font-label-sm text-label-sm text-secondary uppercase">${disease.code}</span><h2 class="font-headline-sm text-headline-sm">${CLASS_LONG_NAMES[disease.code]}</h2></div></div>
+      <p class="font-body-md text-body-md"><b>Cause:</b> ${escapeHtml(disease.cause)}</p>
+      <div><h3 class="font-title-md text-title-md">What you see</h3>${list(disease.see)}</div>
+      <div><h3 class="font-title-md text-title-md">How it spreads</h3>${list(disease.spread)}</div>
+      <div class="bg-surface-container-low rounded-lg px-3 py-2"><h3 class="font-title-md text-title-md text-primary">Prevent it, without chemicals</h3>${list(disease.prevent)}</div>
+      ${disease.lookalike ? `<p class="font-body-sm text-body-sm"><b class="text-secondary">Look-alike:</b> ${escapeHtml(disease.lookalike)}</p>` : ""}
+      <a class="font-label-sm text-label-sm text-on-surface-variant underline" href="${SHEETS}${disease.sheet}" target="_blank" rel="noopener">Source: Pacific Pests, Pathogens, Weeds &amp; Pesticides fact sheet</a>
+    </section>`;
+}
+
+const page = document.getElementById("page");
+page.innerHTML = `
+  <div class="lg:col-span-2">
+    <h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary">Cassava diseases</h1>
+    <p class="font-body-md text-body-md text-on-surface-variant">The four conditions CassaCheck recognises: what causes them, what you see, how they spread and how to prevent them.</p>
+  </div>
+  ${DISEASES.map(diseaseCard).join("")}
+  <section class="bg-surface-container-high rounded-xl p-space-lg flex flex-col gap-space-sm lg:col-span-2">
+    <div class="flex items-center gap-3"><span class="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center"><span class="material-symbols-outlined text-on-secondary">checklist</span></span>
+      <h2 class="font-headline-sm text-headline-sm">The same three habits protect against all four</h2></div>
+    <div class="grid gap-2 lg:grid-cols-3">
+      <div class="bg-surface-container-lowest rounded-lg px-3 py-2"><b>Clean cuttings</b><br/><span class="font-body-sm text-body-sm">Plant only stems from healthy plants or certified material.</span></div>
+      <div class="bg-surface-container-lowest rounded-lg px-3 py-2"><b>Remove sick plants early</b><br/><span class="font-body-sm text-body-sm">The sooner a sick plant is out, the less it spreads.</span></div>
+      <div class="bg-surface-container-lowest rounded-lg px-3 py-2"><b>Tolerant varieties</b><br/><span class="font-body-sm text-body-sm">Ask your farmer promoter or sector agronomist which varieties suit your area.</span></div>
+    </div>
+  </section>
+  <a href="/" class="press lg:col-span-2 lg:w-80 lg:mx-auto lg:px-6 h-14 rounded-lg bg-primary text-on-primary font-title-md text-title-md flex items-center justify-center gap-2"><span class="material-symbols-outlined">photo_camera</span>Check a leaf now</a>`;
+renderHeader("Diseases"); renderBottomNav("diseases"); reveal(page);
+</script>
+</body>
+</html>

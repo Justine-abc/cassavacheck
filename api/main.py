@@ -122,7 +122,7 @@ app.mount("/static", StaticFiles(directory=config.STATIC_DIRECTORY), name="stati
 
 
 # One HTML file per screen of the design; all logic is in the API, the pages only call it.
-PAGES = {"/": "index.html", "/result": "result.html", "/how-it-works": "how_it_works.html", "/officer": "officer.html"}
+PAGES = {"/": "index.html", "/result": "result.html", "/how-it-works": "how_it_works.html", "/diseases": "diseases.html", "/officer": "officer.html"}
 
 
 def page_route(file_name: str):
