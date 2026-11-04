@@ -36,7 +36,7 @@ The API is documented at `/docs` (Swagger UI) and `/health` shows the loaded mod
 - Data: Makerere cassava leaf dataset (Kaggle competition), 21,397 field photographs. Published split, stratified by class, seed 42: train 14,977 / validation 3,210 / test 3,210 (`data/split_v1_seed42.csv`). Near-duplicate check by perceptual hash.
 - Model: MobileNetV3-Large fine-tuned from ImageNet weights with class-weighted cross-entropy (CMD is 61.5% of labels). Five seeds of MobileNetV3-Large and ResNet-18 trained for 8 epochs; the deployed model is MobileNetV3-Large seed 1, chosen on validation macro-F1.
 - Calibration and abstention: temperature scaling and the abstention threshold are fitted on one half of the validation split, measured on the other half, then frozen in `models/calibration.json`. They are never refitted on the test set or in the API.
-- Evaluation: the internal test split and the external CCMT set from Ghana are read once, after everything is frozen. CCMT is never used for tuning.
+- Evaluation: the internal test split and the external CCMT set from Ghana are evaluated only after everything is frozen and are never used for any choice. Notebook 04b was run twice (CPU, then GPU) with identical code and frozen values; the results agree to the fourth decimal. CCMT is never used for tuning.
 
 ## Results
 
