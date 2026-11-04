@@ -4,7 +4,7 @@ Cassava leaf disease diagnosis for Rwanda that reports a calibrated confidence a
 
 | | |
 |---|---|
-| Live app | Address added after the Render deployment |
+| Live app | https://cassacheck.onrender.com (free plan: the first visit after a quiet period takes up to a minute) |
 | Repository | https://github.com/Justine-abc/cassavacheck |
 | Technical report | https://docs.google.com/document/d/1vgKi-RFGxIOhqZMwrSjIWANC7bGGATMXlVcnxsnRL3s/edit?usp=sharing (PDF copy in `docs/`) |
 | Walkthrough video (technical report) | https://youtu.be/vphYf2nHZVs?si=BnazzsQD0cSPHhoS |
