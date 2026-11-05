@@ -55,7 +55,7 @@ Automated suite: 28 tests (`python3 -m pytest --verbose`), all passing.
 | 18 | Follow-up for an unknown case | 404 | 404 | 404 |
 | 19 | Officer log without a code | 401 | 401 | Before 2cc282f: **200 (open)**. Deployed, before the code was set: 503 (closed). With the code set on Render: 401 |
 | 20 | Officer log with a wrong code | 401 | 401 | Before: 200 (open). With the code set: 401 |
-| 21 | Officer log with the right code | 200 | 200 | Checked by the author in the browser; the code is not written in any file |
+| 21 | Officer log with the right code | 200 | 200 | To be checked by the author in the browser; the code is not written in any file |
 
 What this shows: the blurred and tiny photos were not given a confident wrong answer; the gate said "not sure". The dark and black and white photos were stopped before the model. Weak spot: the tiny 16 x 12 image passed the leaf check because it is green; the leaf check measures colour only.
 
