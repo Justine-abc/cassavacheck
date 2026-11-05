@@ -29,7 +29,7 @@ flowchart LR
     P -- "POST /diagnose: photo, district, season" --> L
     A -- "JSON: label or not sure, confidence, advice" --> P
     P -- "POST /follow_up: answers, referral" --> S
-    S -- "GET /log" --> P
+    S -- "GET /log, officer code required" --> P
     D -. "shown beside the result" .-> P
     G -- "case written" --> S
     N --> W & J & K
@@ -44,6 +44,7 @@ flowchart LR
 |---|---|---|
 | Pages | `api/static/` | Five static pages (HTML, Tailwind, JavaScript). They only call the API; no diagnosis logic runs in the browser. |
 | Routes | `api/main.py` | `/diagnose`, `/follow_up`, `/log`, `/districts`, `/health` and the pages. Routes only. |
+| Officer access | `api/main.py`, `require_officer` | `/log` answers only when the request carries the officer access code, compared on the server with the `CASSACHECK_OFFICER_CODE` environment variable. Without the variable the log is closed (503); a wrong or missing code gets 401. Farmers have no account and their menu has no officer link. |
 | Leaf check | `api/leaf_check.py` | Refuses a photo whose plant-colour fraction is below the cut-off in `models/leaf_check.json` (notebook 06), before the model. |
 | Classifier | `api/classifier.py` | MobileNetV3-Large, 224 by 224 centre crop, five class scores. |
 | Calibration and abstention | `api/calibration.py` | Divides the scores by the temperature, then answers only above the threshold. Both values come from `models/calibration.json` (notebook 04b) and are never refitted on the server. |

@@ -11,6 +11,9 @@ DISTRICT_TABLE_PATH = PROJECT_ROOT / "data" / "district_prevalence.csv"
 # Overridable so the test suite writes to a temporary log instead of the officer's real one.
 LOG_DATABASE_PATH = Path(os.environ.get("CASSACHECK_LOG_PATH", PROJECT_ROOT / "data" / "diagnosis_log.sqlite"))
 STATIC_DIRECTORY = PROJECT_ROOT / "api" / "static"
+# Access code for the officer view. Set on the server (Render environment variable), never written in the repository.
+# When it is not set, the officer log is closed to everyone.
+OFFICER_CODE_VARIABLE = "CASSACHECK_OFFICER_CODE"
 
 # Same order as the Kaggle label ids 0 to 4; the model's output index is this list's index.
 CLASS_NAMES = ["CBB", "CBSD", "CGM", "CMD", "healthy"]

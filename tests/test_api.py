@@ -1,5 +1,6 @@
 """Integration tests through the HTTP layer. Diagnosis tests are skipped automatically when the weights file is absent."""
 import io
+import os
 
 import pytest
 from fastapi.testclient import TestClient
@@ -9,6 +10,9 @@ from api import config
 from api.main import app
 
 client = TestClient(app)
+OFFICER_CODE = "test-officer-code"
+os.environ[config.OFFICER_CODE_VARIABLE] = OFFICER_CODE
+OFFICER = {"X-Officer-Code": OFFICER_CODE}
 
 
 def green_leaf_jpeg() -> bytes:
@@ -62,7 +66,7 @@ def test_follow_up_is_logged_for_the_officer_and_leaves_the_diagnosis_alone():
     diagnosis = client.post("/diagnose", data={"district": "Nyanza", "season": "A"}, files={"image": ("leaf.jpg", green_leaf_jpeg(), "image/jpeg")}).json()
     reply = client.post("/follow_up", json={"diagnosis_id": diagnosis["diagnosis_id"], "answers": {"whiteflies": "Yes"}, "referral_requested": True})
     assert reply.status_code == 200 and reply.json()["guidance"]
-    logged = next(row for row in client.get("/log").json() if row["id"] == diagnosis["diagnosis_id"])
+    logged = next(row for row in client.get("/log", headers=OFFICER).json() if row["id"] == diagnosis["diagnosis_id"])
     assert logged["referral_requested"] and logged["answers"] == {"whiteflies": "Yes"}
     assert logged["decision"] == diagnosis["decision"] and logged["confidence"] == diagnosis["confidence"]
 
@@ -82,3 +86,19 @@ def test_disease_page_names_no_chemical():
     # The cited source's title contains "Pesticides"; that is a name, not advice.
     text = client.get("/diseases").text.replace("Weeds &amp; Pesticides", "").replace("Weeds & Pesticides", "")
     assert not AdvisoryService.contains_forbidden_words(text)
+
+
+def test_officer_log_needs_the_access_code():
+    assert client.get("/log").status_code == 401
+    assert client.get("/log", headers={"X-Officer-Code": "wrong"}).status_code == 401
+    assert client.get("/log", headers=OFFICER).status_code == 200
+
+
+def test_officer_log_is_closed_when_no_code_is_set(monkeypatch):
+    monkeypatch.delenv(config.OFFICER_CODE_VARIABLE)
+    assert client.get("/log", headers=OFFICER).status_code == 503
+
+
+def test_farmer_pages_do_not_link_to_the_officer_view():
+    for path in ("/", "/result", "/diseases"):
+        assert 'href="/officer"' not in client.get(path).text

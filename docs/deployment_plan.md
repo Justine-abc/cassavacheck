@@ -9,12 +9,14 @@
 ## Steps
 1. Push the repository to GitHub.
 2. On render.com: New, Blueprint, connect the GitHub repository. Render reads `render.yaml`, installs `requirements-deploy.txt` and starts `uvicorn api.main:app --host 0.0.0.0 --port $PORT`.
-3. Open `/health` on the new address and check that `weights_loaded` is true and the temperature is 1.1514.
+3. Render asks for `CASSACHECK_OFFICER_CODE` (declared in `render.yaml` without a value). Enter the officer access code there; it is stored only in Render's environment settings, never in the repository.
+4. Open `/health` on the new address and check that `weights_loaded` is true and the temperature is 1.1514.
 
 ## Known limits of the free plan
 - The service sleeps after a period without visits; the first request after that takes about a minute while it starts.
 - The officer log is a SQLite file on the service's disk. It is cleared when the service restarts or is redeployed, so it holds demonstration data only. A persistent database (PostgreSQL) is the step for real use.
+- Officer access is one shared code checked on the server. Real use needs one account per officer with hashed passwords and a limit on failed attempts.
 - Memory: about 350 MB measured locally after six diagnoses with the same packages, under the plan's 512 MB.
 
 ## Not planned
-- No accounts, no location reading from the phone, no pesticide recommendations.
+- No farmer accounts, no location reading from the phone, no pesticide recommendations.

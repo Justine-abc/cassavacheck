@@ -6,11 +6,11 @@
 <title>CassaCheck officer view</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-<link rel="icon" href="/static/favicon.svg?v=2" type="image/svg+xml"/>
-<link rel="stylesheet" href="/static/app.css?v=2"/>
+<link rel="icon" href="/static/favicon.svg?v=3" type="image/svg+xml"/>
+<link rel="stylesheet" href="/static/app.css?v=3"/>
 <script src="https://cdn.tailwindcss.com/3.4.16"></script>
-<script src="/static/theme.js?v=2"></script>
-<script src="/static/app.js?v=2"></script>
+<script src="/static/theme.js?v=3"></script>
+<script src="/static/app.js?v=3"></script>
 </head>
 <body class="bg-surface font-body-md text-on-surface min-h-screen">
 <div id="app-header"></div>
@@ -21,6 +21,16 @@
     <p class="font-body-sm text-body-sm text-primary-fixed-dim">Anonymised checks from farmers: district, season, result and their answers. No photos, no names.</p>
   </section>
 
+  <form id="signin" class="hidden bg-surface-container-lowest rounded-xl p-space-lg border border-outline-variant/30 shadow-sm flex flex-col gap-space-sm">
+    <h2 class="font-title-lg text-title-lg flex items-center gap-2"><span class="material-symbols-outlined">lock</span>Officer sign-in</h2>
+    <p class="font-body-sm text-body-sm text-on-surface-variant">This list is for extension officers only. Farmers do not need an account to check a leaf.</p>
+    <label for="officer-code" class="font-label-lg text-label-lg">Access code</label>
+    <input id="officer-code" type="password" autocomplete="current-password" required class="h-12 rounded-lg border border-outline-variant bg-surface-container-low px-3"/>
+    <p id="signin-error" class="hidden font-body-sm text-body-sm text-error"></p>
+    <button type="submit" class="h-12 rounded-lg bg-primary text-on-primary font-label-lg text-label-lg">Sign in</button>
+  </form>
+
+  <div id="officer-content" class="hidden flex flex-col gap-space-md">
   <section class="bg-surface-container-lowest rounded-xl p-space-lg border border-outline-variant/30 shadow-sm flex flex-col gap-space-sm">
     <label for="district-filter" class="font-label-lg text-label-lg">District</label>
     <select id="district-filter" class="h-12 rounded-lg border border-outline-variant bg-surface-container-low px-3"><option value="">All districts</option></select>
@@ -37,6 +47,8 @@
   <div id="rows" class="grid gap-2 lg:grid-cols-2 lg:gap-4 lg:items-start"></div>
 
   <button id="export-button" class="lg:self-center lg:w-80 h-12 rounded-lg bg-surface-container-high font-label-lg text-label-lg flex items-center justify-center gap-2"><span class="material-symbols-outlined text-[20px]">download</span>Download as CSV</button>
+  <button id="signout-button" class="lg:self-center lg:w-80 h-12 rounded-lg border border-outline-variant font-label-lg text-label-lg flex items-center justify-center gap-2"><span class="material-symbols-outlined text-[20px]">logout</span>Sign out</button>
+  </div>
 </main>
 <div id="app-nav"></div>
 
@@ -95,11 +107,38 @@ function render() {
   reveal(document.getElementById("rows"));
 }
 
+// The code is kept only for this browser tab and is sent with each request; the server checks it.
+const CODE_KEY = "cassacheck-officer-code";
+const readCode = () => { try { return sessionStorage.getItem(CODE_KEY); } catch { return null; } };
+const saveCode = (code) => { try { code ? sessionStorage.setItem(CODE_KEY, code) : sessionStorage.removeItem(CODE_KEY); } catch {} };
+
+function showSignIn(message) {
+  document.getElementById("officer-content").classList.add("hidden");
+  document.getElementById("signin").classList.remove("hidden");
+  const error = document.getElementById("signin-error");
+  error.textContent = message || ""; error.classList.toggle("hidden", !message);
+}
+
 async function load() {
+  const code = readCode();
+  if (!code) { showSignIn(); return; }
   const district = document.getElementById("district-filter").value;
-  rows = await (await fetch(`/log?limit=200${district ? `&district=${encodeURIComponent(district)}` : ""}`)).json();
+  const response = await fetch(`/log?limit=200${district ? `&district=${encodeURIComponent(district)}` : ""}`, { headers: { "X-Officer-Code": code } });
+  if (response.status === 401) { saveCode(null); showSignIn("That access code is not right."); return; }
+  if (!response.ok) { showSignIn("Officer access is not set up on this server yet."); return; }
+  rows = await response.json();
+  document.getElementById("signin").classList.add("hidden");
+  document.getElementById("officer-content").classList.remove("hidden");
   render();
 }
+
+document.getElementById("signin").onsubmit = (event) => {
+  event.preventDefault();
+  saveCode(document.getElementById("officer-code").value.trim());
+  document.getElementById("officer-code").value = "";
+  load();
+};
+document.getElementById("signout-button").onclick = () => { saveCode(null); rows = []; showSignIn(); };
 
 async function loadDistricts() {
   const choices = await (await fetch("/districts/choices")).json();

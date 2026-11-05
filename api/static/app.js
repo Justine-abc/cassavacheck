@@ -80,7 +80,7 @@ function renderBottomNav(active) {
         ${item("/", "photo_camera", "Diagnose", "diagnose")}
         ${item("/how-it-works", "menu_book", "How it works", "how")}
         ${item("/diseases", "coronavirus", "Diseases", "diseases")}
-        ${item("/officer", "assignment", "Officer view", "officer")}
+        ${active === "officer" ? item("/officer", "assignment", "Officer view", "officer") : ""}
       </div>
     </nav>`;
 }

@@ -17,7 +17,7 @@ A farmer or extension officer uploads one photograph of a cassava leaf. CassaChe
 - A photo with too little leaf colour (a screenshot, a wall) is refused before the model sees it.
 - Advice is management steps only. It never names a pesticide or a dose, and a test enforces this.
 - Published district survey information is shown beside the result and never changes the diagnosis.
-- No accounts and no photos stored. The officer's list keeps district, season, result and answers only.
+- Farmers need no account, and no photos or names are stored. The officer's list keeps district, season, result and answers only, and only an extension officer with the access code can open it.
 
 ## The web app
 
@@ -27,7 +27,7 @@ A farmer or extension officer uploads one photograph of a cassava leaf. CassaChe
 | Result | `/result` | Diagnosis or "not sure", confidence against the decision line, advice, questions, referral |
 | How it works | `/how-it-works` | What the model is, what the confidence means, why it says "not sure" |
 | Diseases | `/diseases` | Cause, symptoms, spread and prevention without chemicals for the four diseases, with sources |
-| Officer view | `/officer` | Recent cases and referrals by district |
+| Officer view | `/officer` | Recent cases and referrals by district. Needs the officer access code; not linked from the farmer's menu |
 
 The API is documented at `/docs` (Swagger UI) and `/health` shows the loaded model, temperature, threshold and leaf check cut-off. The sample photos are my own, taken in Busanza, Kanombe sector, Kicukiro district on 31 October 2026. They carry no disease label.
 
@@ -71,17 +71,18 @@ uv venv --python 3.12 .venv            # or: python3.12 -m venv .venv
 source .venv/bin/activate              # Windows: .venv\Scripts\activate
 uv pip install torch==2.3.1 torchvision==0.18.1 --index-url https://download.pytorch.org/whl/cpu   # or pip
 uv pip install --requirement requirements.txt
+export CASSACHECK_OFFICER_CODE=choose-a-code   # Windows: set CASSACHECK_OFFICER_CODE=choose-a-code
 uvicorn api.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
-Open http://localhost:8000/. From a phone on the same network: `http://<laptop IP>:8000/` (direct camera capture needs HTTPS, so choose a file there; the deployed app has HTTPS).
+Open http://localhost:8000/. The officer view is at http://localhost:8000/officer and asks for the code you exported; without it the case log stays closed. From a phone on the same network: `http://<laptop IP>:8000/` (direct camera capture needs HTTPS, so choose a file there; the deployed app has HTTPS).
 
 The model weights (`models/mobilenetv3_baseline.pt`, 16.3 MB), the calibration values and the leaf check cut-off are in the repository; no download is needed to run the app. The notebooks are written for Google Colab with a T4 GPU and download the data with a Kaggle API token stored as a Colab secret.
 
 ## Test and measure
 
 ```bash
-python3 -m pytest --verbose                      # 25 unit and integration tests
+python3 -m pytest --verbose                      # 28 unit and integration tests
 python3 -m scripts.measure_latency --runs 100    # forward-pass latency, one CPU thread
 ```
 

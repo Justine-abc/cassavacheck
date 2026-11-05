@@ -4,8 +4,10 @@ Run: uvicorn api.main:app --host 0.0.0.0 --port 8000 --reload
 Swagger UI: http://localhost:8000/docs   Web page: http://localhost:8000/
 """
 import io
+import os
+import secrets
 
-from fastapi import FastAPI, File, Form, HTTPException, UploadFile
+from fastapi import Depends, FastAPI, File, Form, Header, HTTPException, UploadFile
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from PIL import Image, UnidentifiedImageError
@@ -54,7 +56,17 @@ def district_choices():
     return districts.choices()
 
 
-@app.get("/log")
+def require_officer(x_officer_code: str | None = Header(default=None)) -> None:
+    """Only extension officers read the case log. Farmers never sign in and never see it.
+    The code lives in an environment variable on the server; if it is missing the log stays closed."""
+    expected = os.environ.get(config.OFFICER_CODE_VARIABLE)
+    if not expected:
+        raise HTTPException(status_code=503, detail="Officer access is not set up on this server.")
+    if not x_officer_code or not secrets.compare_digest(x_officer_code.encode(), expected.encode()):
+        raise HTTPException(status_code=401, detail="Officer access code required.")
+
+
+@app.get("/log", dependencies=[Depends(require_officer)])
 def recent_log(limit: int = 50, district: str | None = None):
     """Extension-officer view: anonymised recent requests (date, district, season, decision, confidence)."""
     return log.recent(limit=min(limit, 200), district=district)
