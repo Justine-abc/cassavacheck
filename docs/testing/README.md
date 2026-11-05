@@ -7,7 +7,7 @@ How CassaCheck was tested as a whole system, under what conditions, and what the
 | Item | Value |
 |---|---|
 | Laptop (client and local server) | Intel Core i7-1165G7, 8 logical cores, 6 GB RAM, Linux 7.0, Python 3.12.15, torch 2.3.1 (CPU) |
-| Deployed service | Render free plan (shared CPU, 512 MB RAM), `https://cassacheck.onrender.com`, client in Kigali |
+| Deployed service | Render free plan (shared CPU, 512 MB RAM), region Oregon (United States), `https://cassacheck.onrender.com`; client in Kigali, so every request crosses to the United States and back |
 | Browser tests | Google Chrome 153 driven by Playwright 1.64.1, phone-sized window 390 x 844 |
 | HTTP tests | httpx 0.27.0 |
 | CPU limit used to imitate the free plan locally | `systemd-run --user --scope -p CPUQuota=10%` (one tenth of one core) |
@@ -31,7 +31,7 @@ Automated suite: 28 tests (`python3 -m pytest --verbose`), all passing.
 
 ## 3. Edge cases, end to end over HTTP
 
-`python -m scripts.edge_case_tests --base-url <address>`. Raw results: `edge_cases_local.json`, `edge_cases_live.json`. Live times include the trip from Kigali to the server (about 0.4 s for a request that does no work, such as the GIF case).
+`python -m scripts.edge_case_tests --base-url <address>`. Raw results: `edge_cases_local.json`, `edge_cases_live.json`. Live column: the version deployed before the fixes (`edge_cases_live.json`); the same cases after the fixes are in `edge_cases_live_after_fix.json`, with every diagnosis answer unchanged and JPEG diagnoses taking 0.5 to 1.3 s. Live times include the trip from Kigali to the server (about 0.4 s for a request that does no work, such as the GIF case).
 
 | # | Input | Expected | Local result | Live result (time) |
 |---|---|---|---|---|
@@ -53,8 +53,8 @@ Automated suite: 28 tests (`python3 -m pytest --verbose`), all passing.
 | 16 | Unknown district name | Answer, no panel | CGM 0.95, no panel | CGM 0.95, no panel |
 | 17 | Follow-up answers with referral | 200 with guidance | 200 | 200 |
 | 18 | Follow-up for an unknown case | 404 | 404 | 404 |
-| 19 | Officer log without a code | 401 | 401 | **200 (open)**: deployed version predates the fix |
-| 20 | Officer log with a wrong code | 401 | 401 | **200 (open)**: same |
+| 19 | Officer log without a code | 401 | 401 | Before 2cc282f: **200 (open)**. After deployment, before the code was set: 503 (closed) |
+| 20 | Officer log with a wrong code | 401 | 401 | Same as 19 |
 | 21 | Officer log with the right code | 200 | 200 | not run |
 
 What this shows: the blurred and tiny photos were not given a confident wrong answer; the gate said "not sure". The dark and black and white photos were stopped before the model. Weak spot: the tiny 16 x 12 image passed the leaf check because it is green; the leaf check measures colour only.
@@ -66,7 +66,8 @@ What this shows: the blurred and tiny photos were not given a confident wrong an
 | Model forward pass, one CPU thread, median of 100 | 19.8 ms (MobileNetV3-Large); ResNet-18 61.7 ms | `scripts/measure_latency.py`, README |
 | Same, re-run 5 Nov while a browser test ran on the same laptop | 21.0 ms; ResNet-18 63.9 ms | `scripts/measure_latency.py` |
 | Live service waking from sleep (first request after idle) | 82.8 s | `curl` on `/health`, 5 Nov |
-| Live diagnosis, one user, deployed version | median 5.7 s (2 requests); 3.8 to 8.8 s in the edge-case run | `load_live_before_fix.json`, `edge_cases_live.json` |
+| Live diagnosis, one user, before the thread fix | median 5.7 s (2 requests); 3.8 to 8.8 s in the edge-case run | `load_live_before_fix.json`, `edge_cases_live.json` |
+| Live diagnosis, one user, after the thread fix (commit d987f0b) | median 0.9 s (3 requests); 0.5 to 1.3 s for JPEG photos in the edge-case run | `load_live_after_fix.json`, `edge_cases_live_after_fix.json` |
 
 **Problem found and fixed.** The live diagnosis took seconds although the model needs 20 ms. Under a 10% CPU cap on the laptop, the model took a median of 8,550 ms per photo with PyTorch's default of 4 threads and 504 ms with 1 thread (25% cap: 898 ms and 197 ms). Several threads compete for a fraction of one CPU. The server now sets one thread (`CASSACHECK_TORCH_THREADS`, default 1, `api/config.py`). On all 27 field and sample photos the logits changed by at most 0.000004 and every answer or "not sure" stayed the same.
 
@@ -79,6 +80,10 @@ What this shows: the blurred and tiny photos were not given a confident wrong an
 | Live, deployed version (4 threads) | 1 | 2 of 2 | 5,710 ms | 5,889 ms | 0.18 |
 | | 5 | 9 of 10 | 12,800 ms | 33,671 ms | 0.24 |
 | | 10 | 7 of 20 | 18,415 ms | 29,273 ms | 0.23 |
+| Live, after the fix (1 thread, d987f0b) | 1 | 3 of 3 | 894 ms | 1,459 ms | 0.93 |
+| | 5 | 15 of 15 | 1,560 ms | 2,970 ms | 2.50 |
+| | 10 | 30 of 30 | 2,566 ms | 4,953 ms | 3.03 |
+| | 20 | 60 of 60 | 2,411 ms | 12,120 ms | 3.50 |
 | Local, 10% CPU cap, 4 threads | 1 | 2 of 2 | 10,893 ms | 13,387 ms | 0.09 |
 | | 5 | 10 of 10 | 32,951 ms | 57,884 ms | 0.11 |
 | | 10 | 6 of 20 | 30,583 ms | 56,982 ms | 0.05 |
@@ -87,9 +92,9 @@ What this shows: the blurred and tiny photos were not given a confident wrong an
 | | 10 | 30 of 30 | 8,151 ms | 10,088 ms | 1.11 |
 | | 20 | 60 of 60 | 16,796 ms | 17,998 ms | 1.12 |
 
-Raw results: `load_live_before_fix.json`, `load_local_cap10_threads4.json`, `load_local_cap10_threads1.json`. Live failures were HTTP 502 from Render; local failures were 60 s timeouts.
+Raw results: `load_live_before_fix.json`, `load_live_after_fix.json`, `load_local_cap10_threads4.json`, `load_local_cap10_threads1.json`. Live failures were HTTP 502 from Render; local failures were 60 s timeouts.
 
-Reading: with one thread, a tenth of a CPU serves about 1.1 diagnoses per second, ten times more than before, and no request failed up to 20 users. Photos queue, so waiting grows with the number of users: the median stays under 3 s up to about 5 users at once. The live service after the fix is to be measured once it is deployed. For more users, a paid instance with a full CPU is the step; the code does not change.
+Reading: with one thread, a tenth of a CPU serves about 1.1 diagnoses per second, ten times more than before, and no request failed up to 20 users. Photos queue, so waiting grows with the number of users: the median stays under 3 s up to about 5 users at once. On the live service the fix took one diagnosis from 5.7 s to 0.9 s, and all 60 requests from 20 simultaneous users succeeded with a median of 2.4 s, where before the fix 13 of 20 requests failed at 10 users. The 95th percentile at 20 users (12.1 s) shows that some users still wait while photos queue. For more users, a paid instance with a full CPU is the step; the code does not change.
 
 ## 6. Network conditions
 
