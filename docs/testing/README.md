@@ -23,7 +23,7 @@ How CassaCheck was tested as a whole system, under what conditions, and what the
 | FR-03 Calibrated probabilities for five classes | `tests/test_calibration.py` (6 tests); `/health` shows T = 1.1514 live | Pass |
 | FR-04 Frozen threshold: a condition or "not sure" | `test_gate_answers_above_threshold_and_abstains_below`; blurred and tiny photos returned "not sure" (0.49) | Pass |
 | FR-05 Advice or follow-up questions and referral, no chemical named | Edge cases 17 and 18; `test_advice_never_names_a_pesticide`, `test_disease_page_names_no_chemical` | Pass |
-| FR-06 Anonymised case log for the extension officer | Edge cases 19 to 21; `test_follow_up_is_logged_for_the_officer_and_leaves_the_diagnosis_alone` | Pass locally. Live: the log was readable without a code before commit 2cc282f; to be re-run after deployment |
+| FR-06 Anonymised case log for the extension officer | Edge cases 19 to 21; `test_follow_up_is_logged_for_the_officer_and_leaves_the_diagnosis_alone` | Pass. Live: the log was readable without a code before commit 2cc282f; after deployment with the code set, 401 without or with a wrong code |
 | Access control: only officers read the log | `test_officer_log_needs_the_access_code`, `test_officer_log_is_closed_when_no_code_is_set`, `test_farmer_pages_do_not_link_to_the_officer_view` | Pass locally (401 without or with a wrong code, 503 when no code is configured) |
 | Leaf check before the model | `tests/test_leaf_check.py`; edge cases 5, 7, 9, 10 | Pass |
 
@@ -53,9 +53,9 @@ Automated suite: 28 tests (`python3 -m pytest --verbose`), all passing.
 | 16 | Unknown district name | Answer, no panel | CGM 0.95, no panel | CGM 0.95, no panel |
 | 17 | Follow-up answers with referral | 200 with guidance | 200 | 200 |
 | 18 | Follow-up for an unknown case | 404 | 404 | 404 |
-| 19 | Officer log without a code | 401 | 401 | Before 2cc282f: **200 (open)**. After deployment, before the code was set: 503 (closed) |
-| 20 | Officer log with a wrong code | 401 | 401 | Same as 19 |
-| 21 | Officer log with the right code | 200 | 200 | not run |
+| 19 | Officer log without a code | 401 | 401 | Before 2cc282f: **200 (open)**. Deployed, before the code was set: 503 (closed). With the code set on Render: 401 |
+| 20 | Officer log with a wrong code | 401 | 401 | Before: 200 (open). With the code set: 401 |
+| 21 | Officer log with the right code | 200 | 200 | Checked by the author in the browser; the code is not written in any file |
 
 What this shows: the blurred and tiny photos were not given a confident wrong answer; the gate said "not sure". The dark and black and white photos were stopped before the model. Weak spot: the tiny 16 x 12 image passed the leaf check because it is green; the leaf check measures colour only.
 
@@ -148,7 +148,7 @@ External test, Ghana (CCMT, 6,027 images, notebook 05): accuracy 0.6187, macro-F
 | Speed of the model | Under 100 ms, batch 1, one CPU core, median of 100 | 19.8 ms | Yes |
 | End to end | Under 3 s on 3G | Fast 3G, local server: answer in 2.4 s for a 149 KB photo, but 6.2 s for 459 KB and 21.4 s for a phone-sized photo; first page visit 13.1 s | No (met only for small photos) |
 | Safety of advice | No chemical or dose named | Enforced by two tests | Yes |
-| Privacy | No photos, names or phone numbers stored; officer-only log | Checked by tests and edge cases 19 to 21 (local) | Yes locally; live after deployment |
+| Privacy | No photos, names or phone numbers stored; officer-only log | Checked by tests and edge cases 19 to 21 (local) | Yes (local and live) |
 
 ## 9. Not tested
 
