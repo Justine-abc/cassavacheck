@@ -91,6 +91,8 @@ One Render web service defined in `render.yaml` (free plan, Python 3.12, CPU-onl
 
 ## Repository structure
 
+The system architecture diagram and the job of each component are in [docs/architecture.md](docs/architecture.md).
+
 ```
 api/
   main.py          routes only
@@ -107,7 +109,7 @@ data/              split_v1_seed42.csv, district_prevalence.csv
 models/            weights, calibration.json, leaf_check.json, diagrams
 tests/             API, calibration, advice and districts, leaf check
 scripts/           measure_latency.py, near_duplicates.py
-docs/              technical report, design exports, screenshots, deployment plan
+docs/              architecture, technical report, design exports, screenshots, deployment plan
 CONTRIBUTING.md    design constraints every change must respect
 ```
 
