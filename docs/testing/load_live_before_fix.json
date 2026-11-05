@@ -1,0 +1,48 @@
+{
+  "base_url": "https://cassacheck.onrender.com",
+  "label": "live Render free plan, before the thread fix (deployed 1ce8a31 or earlier)",
+  "run_at": "2026-11-05T15:48:50+00:00",
+  "client": "Linux-7.0.0-38-generic-x86_64-with-glibc2.43",
+  "photo": "sample_symptoms_2.jpg",
+  "rounds": 2,
+  "timeout_s": 60.0,
+  "levels": [
+    {
+      "users": 1,
+      "requests": 2,
+      "succeeded": 2,
+      "errors": 0,
+      "error_types": [],
+      "median_ms": 5710,
+      "p95_ms": 5889,
+      "max_ms": 5889,
+      "diagnoses_per_second": 0.18
+    },
+    {
+      "users": 5,
+      "requests": 10,
+      "succeeded": 9,
+      "errors": 1,
+      "error_types": [
+        "HTTP 502"
+      ],
+      "median_ms": 12800,
+      "p95_ms": 33671,
+      "max_ms": 33671,
+      "diagnoses_per_second": 0.24
+    },
+    {
+      "users": 10,
+      "requests": 20,
+      "succeeded": 7,
+      "errors": 13,
+      "error_types": [
+        "HTTP 502"
+      ],
+      "median_ms": 18415,
+      "p95_ms": 29273,
+      "max_ms": 29273,
+      "diagnoses_per_second": 0.23
+    }
+  ]
+}

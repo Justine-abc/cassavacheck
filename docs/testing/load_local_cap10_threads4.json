@@ -1,0 +1,46 @@
+{
+  "base_url": "http://localhost:8766",
+  "label": "local, 10% CPU cap, 4 torch threads",
+  "run_at": "2026-11-05T15:46:27+00:00",
+  "client": "Linux-7.0.0-38-generic-x86_64-with-glibc2.43",
+  "photo": "sample_symptoms_2.jpg",
+  "rounds": 2,
+  "timeout_s": 60.0,
+  "levels": [
+    {
+      "users": 1,
+      "requests": 2,
+      "succeeded": 2,
+      "errors": 0,
+      "error_types": [],
+      "median_ms": 10893,
+      "p95_ms": 13387,
+      "max_ms": 13387,
+      "diagnoses_per_second": 0.09
+    },
+    {
+      "users": 5,
+      "requests": 10,
+      "succeeded": 10,
+      "errors": 0,
+      "error_types": [],
+      "median_ms": 32951,
+      "p95_ms": 57884,
+      "max_ms": 57884,
+      "diagnoses_per_second": 0.11
+    },
+    {
+      "users": 10,
+      "requests": 20,
+      "succeeded": 6,
+      "errors": 14,
+      "error_types": [
+        "ReadTimeout"
+      ],
+      "median_ms": 30583,
+      "p95_ms": 56982,
+      "max_ms": 56982,
+      "diagnoses_per_second": 0.05
+    }
+  ]
+}

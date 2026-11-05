@@ -1,0 +1,175 @@
+{
+  "base_url": "http://localhost:8765",
+  "run_at": "2026-11-05T15:25:02+00:00",
+  "client": "Linux-7.0.0-38-generic-x86_64-with-glibc2.43",
+  "results": [
+    {
+      "case": "Normal field photo (JPEG)",
+      "checks": "FR-01, FR-03, FR-04",
+      "expected": "200: a condition or not sure",
+      "status": 200,
+      "actual": "CGM 0.95, no district panel",
+      "ms": 137
+    },
+    {
+      "case": "Same photo with district and season",
+      "checks": "FR-02: district shown, diagnosis unchanged",
+      "expected": "200: a condition or not sure",
+      "status": 200,
+      "actual": "CGM 0.95, with district panel",
+      "ms": 35
+    },
+    {
+      "case": "Field photo as PNG",
+      "checks": "FR-01: second accepted type",
+      "expected": "200: a condition or not sure",
+      "status": 200,
+      "actual": "healthy 0.93, no district panel",
+      "ms": 80
+    },
+    {
+      "case": "Photo rotated 90 degrees",
+      "checks": "Robustness: phone held sideways",
+      "expected": "200: a condition or not sure",
+      "status": 200,
+      "actual": "CGM 0.97, no district panel",
+      "ms": 70
+    },
+    {
+      "case": "Very dark photo (10% brightness)",
+      "checks": "Robustness: evening light",
+      "expected": "422 refused or not sure",
+      "status": 422,
+      "actual": "This does not look like a leaf photo. Take one cassava leaf filling the frame, in daylight",
+      "ms": 17
+    },
+    {
+      "case": "Blurred photo (Gaussian radius 8)",
+      "checks": "Robustness: shaking hand",
+      "expected": "not sure or answer",
+      "status": 200,
+      "actual": "abstain 0.49, no district panel",
+      "ms": 70
+    },
+    {
+      "case": "Black and white photo",
+      "checks": "Robustness: colour lost",
+      "expected": "422 refused (no plant colour)",
+      "status": 422,
+      "actual": "This does not look like a leaf photo. Take one cassava leaf filling the frame, in daylight",
+      "ms": 24
+    },
+    {
+      "case": "Tiny image (16 x 12 pixels)",
+      "checks": "Edge: very small input",
+      "expected": "200: a condition or not sure",
+      "status": 200,
+      "actual": "abstain 0.49, no district panel",
+      "ms": 25
+    },
+    {
+      "case": "Plain grey image",
+      "checks": "Leaf check: not a plant",
+      "expected": "422 refused",
+      "status": 422,
+      "actual": "This does not look like a leaf photo. Take one cassava leaf filling the frame, in daylight",
+      "ms": 10
+    },
+    {
+      "case": "Random noise image",
+      "checks": "Leaf check: not a plant",
+      "expected": "422 refused",
+      "status": 422,
+      "actual": "This does not look like a leaf photo. Take one cassava leaf filling the frame, in daylight",
+      "ms": 14
+    },
+    {
+      "case": "File over 10 MB",
+      "checks": "FR-01: size limit",
+      "expected": "413 too large",
+      "status": 413,
+      "actual": "Image larger than 10 MB",
+      "ms": 115
+    },
+    {
+      "case": "Text file sent as a photo",
+      "checks": "FR-01: corrupt file",
+      "expected": "422 unreadable",
+      "status": 422,
+      "actual": "The file is not a readable image",
+      "ms": 44
+    },
+    {
+      "case": "Empty file",
+      "checks": "FR-01: empty upload",
+      "expected": "422 unreadable",
+      "status": 422,
+      "actual": "The file is not a readable image",
+      "ms": 2
+    },
+    {
+      "case": "GIF file",
+      "checks": "FR-01: wrong type",
+      "expected": "415 wrong type",
+      "status": 415,
+      "actual": "Upload a JPEG or PNG photograph",
+      "ms": 1
+    },
+    {
+      "case": "No photo at all",
+      "checks": "FR-01: missing field",
+      "expected": "422 missing",
+      "status": 422,
+      "actual": "[{\"type\": \"missing\", \"loc\": [\"body\", \"image\"], \"msg\": \"Field required\", \"input\": null}]",
+      "ms": 1
+    },
+    {
+      "case": "Unknown district name",
+      "checks": "FR-02: bad district text",
+      "expected": "200, no district panel",
+      "status": 200,
+      "actual": "CGM 0.95, no district panel",
+      "ms": 43
+    },
+    {
+      "case": "Follow-up answers and referral",
+      "checks": "FR-05",
+      "expected": "200 with guidance",
+      "status": 200,
+      "actual": "Whiteflies carry the mosaic and brown streak viruses. Tell t",
+      "ms": 3
+    },
+    {
+      "case": "Follow-up for a case that does not exist",
+      "checks": "FR-05: bad id",
+      "expected": "404",
+      "status": 404,
+      "actual": "Unknown diagnosis",
+      "ms": 2
+    },
+    {
+      "case": "Officer log without the access code",
+      "checks": "Access control",
+      "expected": "401",
+      "status": 401,
+      "actual": "Officer access code required.",
+      "ms": 1
+    },
+    {
+      "case": "Officer log with a wrong code",
+      "checks": "Access control",
+      "expected": "401",
+      "status": 401,
+      "actual": "Officer access code required.",
+      "ms": 2
+    },
+    {
+      "case": "Officer log with the right code",
+      "checks": "FR-06, access control",
+      "expected": "200, case listed",
+      "status": 200,
+      "actual": "8 cases",
+      "ms": 2
+    }
+  ]
+}

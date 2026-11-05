@@ -12,6 +12,7 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from PIL import Image, UnidentifiedImageError
 from pydantic import BaseModel
+import torch
 
 from api import config
 from api.advice import AdvisoryService
@@ -24,6 +25,8 @@ from api.log_store import DiagnosisLog
 app = FastAPI(title="CassaCheck API", version="0.2.0",
               description="Five-class cassava leaf diagnosis with calibrated confidence and abstention. "
                           "District information is served separately and never changes the diagnosis.")
+
+torch.set_num_threads(config.TORCH_THREADS)
 
 # Built once at start-up; each object has one responsibility and can be swapped (another backbone, PostgreSQL log) without touching routes.
 classifier = MobileNetV3Classifier(config.WEIGHTS_PATH)

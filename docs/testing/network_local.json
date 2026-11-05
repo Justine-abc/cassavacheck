@@ -1,0 +1,355 @@
+{
+  "base_url": "http://localhost:8767",
+  "label": "local server (1 thread, no CPU cap), network throttled in Chrome",
+  "run_at": "2026-11-05T16:21:49+00:00",
+  "client": "Linux-7.0.0-38-generic-x86_64-with-glibc2.43",
+  "profiles": {
+    "No throttling": null,
+    "Fast 3G": {
+      "latency": 562.5,
+      "downloadThroughput": 180000.0,
+      "uploadThroughput": 84375.0
+    },
+    "Slow 3G": {
+      "latency": 2000,
+      "downloadThroughput": 50000.0,
+      "uploadThroughput": 50000.0
+    }
+  },
+  "results": [
+    {
+      "photo": "sample_symptoms_2.jpg",
+      "photo_kb": 149,
+      "network": "No throttling",
+      "runs": 2,
+      "page_load_ms_median": 2520,
+      "page_kb_median": 1930,
+      "upload_and_answer_ms_median": 131,
+      "diagnose_ms_median": 360,
+      "diagnose_ms_max": 393,
+      "largest_files_kb": [
+        [
+          1114,
+          "https://fonts.gstatic.com/s/materialsymbolsoutlined/v383/kJEPBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzBwG-RpA6RzaxHMPdY40KH8nGzv3fzfVJO1Q.woff2"
+        ],
+        [
+          193,
+          "http://localhost:8767/static/samples/sample_looks_healthy.jpg"
+        ],
+        [
+          175,
+          "http://localhost:8767/static/samples/sample_symptoms_1.jpg"
+        ],
+        [
+          149,
+          "http://localhost:8767/static/samples/sample_symptoms_2.jpg"
+        ],
+        [
+          128,
+          "https://cdn.tailwindcss.com/3.4.16"
+        ],
+        [
+          109,
+          "https://fonts.gstatic.com/l/font"
+        ]
+      ]
+    },
+    {
+      "photo": "sample_symptoms_2.jpg",
+      "photo_kb": 149,
+      "network": "Fast 3G",
+      "runs": 2,
+      "page_load_ms_median": 13093,
+      "page_kb_median": 1927,
+      "upload_and_answer_ms_median": 2414,
+      "diagnose_ms_median": 3196,
+      "diagnose_ms_max": 3214,
+      "largest_files_kb": [
+        [
+          1114,
+          "https://fonts.gstatic.com/s/materialsymbolsoutlined/v383/kJEPBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzBwG-RpA6RzaxHMPdY40KH8nGzv3fzfVJO1Q.woff2"
+        ],
+        [
+          193,
+          "http://localhost:8767/static/samples/sample_looks_healthy.jpg"
+        ],
+        [
+          175,
+          "http://localhost:8767/static/samples/sample_symptoms_1.jpg"
+        ],
+        [
+          149,
+          "http://localhost:8767/static/samples/sample_symptoms_2.jpg"
+        ],
+        [
+          128,
+          "https://cdn.tailwindcss.com/3.4.16"
+        ],
+        [
+          95,
+          "https://fonts.gstatic.com/s/merriweather/v33/u-4e0qyriQwlOrhSvowK_l5UcA6zuSYEqOzpPe3HOZJ5eX1WtLaQwmYiSeqqJ-k.woff2"
+        ]
+      ]
+    },
+    {
+      "photo": "sample_symptoms_2.jpg",
+      "photo_kb": 149,
+      "network": "Slow 3G",
+      "runs": 2,
+      "page_load_ms_median": 45832,
+      "page_kb_median": 1927,
+      "upload_and_answer_ms_median": 5101,
+      "diagnose_ms_median": 7546,
+      "diagnose_ms_max": 7564,
+      "largest_files_kb": [
+        [
+          1114,
+          "https://fonts.gstatic.com/s/materialsymbolsoutlined/v383/kJEPBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzBwG-RpA6RzaxHMPdY40KH8nGzv3fzfVJO1Q.woff2"
+        ],
+        [
+          193,
+          "http://localhost:8767/static/samples/sample_looks_healthy.jpg"
+        ],
+        [
+          175,
+          "http://localhost:8767/static/samples/sample_symptoms_1.jpg"
+        ],
+        [
+          149,
+          "http://localhost:8767/static/samples/sample_symptoms_2.jpg"
+        ],
+        [
+          128,
+          "https://cdn.tailwindcss.com/3.4.16"
+        ],
+        [
+          95,
+          "https://fonts.gstatic.com/s/merriweather/v33/u-4e0qyriQwlOrhSvowK_l5UcA6zuSYEqOzpPe3HOZJ5eX1WtLaQwmYiSeqqJ-k.woff2"
+        ]
+      ]
+    },
+    {
+      "photo": "field_symptoms_06.jpeg",
+      "photo_kb": 459,
+      "network": "No throttling",
+      "runs": 2,
+      "page_load_ms_median": 2605,
+      "page_kb_median": 1928,
+      "upload_and_answer_ms_median": 186,
+      "diagnose_ms_median": 432,
+      "diagnose_ms_max": 442,
+      "largest_files_kb": [
+        [
+          1114,
+          "https://fonts.gstatic.com/s/materialsymbolsoutlined/v383/kJEPBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzBwG-RpA6RzaxHMPdY40KH8nGzv3fzfVJO1Q.woff2"
+        ],
+        [
+          193,
+          "http://localhost:8767/static/samples/sample_looks_healthy.jpg"
+        ],
+        [
+          175,
+          "http://localhost:8767/static/samples/sample_symptoms_1.jpg"
+        ],
+        [
+          149,
+          "http://localhost:8767/static/samples/sample_symptoms_2.jpg"
+        ],
+        [
+          128,
+          "https://cdn.tailwindcss.com/3.4.16"
+        ],
+        [
+          95,
+          "https://fonts.gstatic.com/s/merriweather/v33/u-4e0qyriQwlOrhSvowK_l5UcA6zuSYEqOzpPe3HOZJ5eX1WtLaQwmYiSeqqJ-k.woff2"
+        ]
+      ]
+    },
+    {
+      "photo": "field_symptoms_06.jpeg",
+      "photo_kb": 459,
+      "network": "Fast 3G",
+      "runs": 2,
+      "page_load_ms_median": 14466,
+      "page_kb_median": 1928,
+      "upload_and_answer_ms_median": 6194,
+      "diagnose_ms_median": 7063,
+      "diagnose_ms_max": 7070,
+      "largest_files_kb": [
+        [
+          1114,
+          "https://fonts.gstatic.com/s/materialsymbolsoutlined/v383/kJEPBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzBwG-RpA6RzaxHMPdY40KH8nGzv3fzfVJO1Q.woff2"
+        ],
+        [
+          193,
+          "http://localhost:8767/static/samples/sample_looks_healthy.jpg"
+        ],
+        [
+          175,
+          "http://localhost:8767/static/samples/sample_symptoms_1.jpg"
+        ],
+        [
+          149,
+          "http://localhost:8767/static/samples/sample_symptoms_2.jpg"
+        ],
+        [
+          128,
+          "https://cdn.tailwindcss.com/3.4.16"
+        ],
+        [
+          95,
+          "https://fonts.gstatic.com/s/merriweather/v33/u-4e0qyriQwlOrhSvowK_l5UcA6zuSYEqOzpPe3HOZJ5eX1WtLaQwmYiSeqqJ-k.woff2"
+        ]
+      ]
+    },
+    {
+      "photo": "field_symptoms_06.jpeg",
+      "photo_kb": 459,
+      "network": "Slow 3G",
+      "runs": 2,
+      "page_load_ms_median": 45861,
+      "page_kb_median": 1928,
+      "upload_and_answer_ms_median": 11475,
+      "diagnose_ms_median": 13999,
+      "diagnose_ms_max": 14007,
+      "largest_files_kb": [
+        [
+          1115,
+          "https://fonts.gstatic.com/s/materialsymbolsoutlined/v383/kJEPBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzBwG-RpA6RzaxHMPdY40KH8nGzv3fzfVJO1Q.woff2"
+        ],
+        [
+          193,
+          "http://localhost:8767/static/samples/sample_looks_healthy.jpg"
+        ],
+        [
+          175,
+          "http://localhost:8767/static/samples/sample_symptoms_1.jpg"
+        ],
+        [
+          149,
+          "http://localhost:8767/static/samples/sample_symptoms_2.jpg"
+        ],
+        [
+          128,
+          "https://cdn.tailwindcss.com/3.4.16"
+        ],
+        [
+          95,
+          "https://fonts.gstatic.com/s/merriweather/v33/u-4e0qyriQwlOrhSvowK_l5UcA6zuSYEqOzpPe3HOZJ5eX1WtLaQwmYiSeqqJ-k.woff2"
+        ]
+      ]
+    },
+    {
+      "photo": "phone_size_4000x3000.jpg",
+      "photo_kb": 1712,
+      "network": "No throttling",
+      "runs": 2,
+      "page_load_ms_median": 2555,
+      "page_kb_median": 1928,
+      "upload_and_answer_ms_median": 338,
+      "diagnose_ms_median": 641,
+      "diagnose_ms_max": 659,
+      "largest_files_kb": [
+        [
+          1114,
+          "https://fonts.gstatic.com/s/materialsymbolsoutlined/v383/kJEPBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzBwG-RpA6RzaxHMPdY40KH8nGzv3fzfVJO1Q.woff2"
+        ],
+        [
+          193,
+          "http://localhost:8767/static/samples/sample_looks_healthy.jpg"
+        ],
+        [
+          175,
+          "http://localhost:8767/static/samples/sample_symptoms_1.jpg"
+        ],
+        [
+          149,
+          "http://localhost:8767/static/samples/sample_symptoms_2.jpg"
+        ],
+        [
+          128,
+          "https://cdn.tailwindcss.com/3.4.16"
+        ],
+        [
+          95,
+          "https://fonts.gstatic.com/s/merriweather/v33/u-4e0qyriQwlOrhSvowK_l5UcA6zuSYEqOzpPe3HOZJ5eX1WtLaQwmYiSeqqJ-k.woff2"
+        ]
+      ]
+    },
+    {
+      "photo": "phone_size_4000x3000.jpg",
+      "photo_kb": 1712,
+      "network": "Fast 3G",
+      "runs": 2,
+      "page_load_ms_median": 13105,
+      "page_kb_median": 1927,
+      "upload_and_answer_ms_median": 21418,
+      "diagnose_ms_median": 22367,
+      "diagnose_ms_max": 22389,
+      "largest_files_kb": [
+        [
+          1114,
+          "https://fonts.gstatic.com/s/materialsymbolsoutlined/v383/kJEPBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzBwG-RpA6RzaxHMPdY40KH8nGzv3fzfVJO1Q.woff2"
+        ],
+        [
+          193,
+          "http://localhost:8767/static/samples/sample_looks_healthy.jpg"
+        ],
+        [
+          175,
+          "http://localhost:8767/static/samples/sample_symptoms_1.jpg"
+        ],
+        [
+          149,
+          "http://localhost:8767/static/samples/sample_symptoms_2.jpg"
+        ],
+        [
+          128,
+          "https://cdn.tailwindcss.com/3.4.16"
+        ],
+        [
+          95,
+          "https://fonts.gstatic.com/s/merriweather/v33/u-4e0qyriQwlOrhSvowK_l5UcA6zuSYEqOzpPe3HOZJ5eX1WtLaQwmYiSeqqJ-k.woff2"
+        ]
+      ]
+    },
+    {
+      "photo": "phone_size_4000x3000.jpg",
+      "photo_kb": 1712,
+      "network": "Slow 3G",
+      "runs": 2,
+      "page_load_ms_median": 45855,
+      "page_kb_median": 1927,
+      "upload_and_answer_ms_median": 37147,
+      "diagnose_ms_median": 39694,
+      "diagnose_ms_max": 39699,
+      "largest_files_kb": [
+        [
+          1114,
+          "https://fonts.gstatic.com/s/materialsymbolsoutlined/v383/kJEPBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzBwG-RpA6RzaxHMPdY40KH8nGzv3fzfVJO1Q.woff2"
+        ],
+        [
+          193,
+          "http://localhost:8767/static/samples/sample_looks_healthy.jpg"
+        ],
+        [
+          175,
+          "http://localhost:8767/static/samples/sample_symptoms_1.jpg"
+        ],
+        [
+          149,
+          "http://localhost:8767/static/samples/sample_symptoms_2.jpg"
+        ],
+        [
+          128,
+          "https://cdn.tailwindcss.com/3.4.16"
+        ],
+        [
+          95,
+          "https://fonts.gstatic.com/s/merriweather/v33/u-4e0qyriQwlOrhSvowK_l5UcA6zuSYEqOzpPe3HOZJ5eX1WtLaQwmYiSeqqJ-k.woff2"
+        ]
+      ]
+    }
+  ],
+  "offline": "No connection to the server. Check your internet and try again. (button usable again: True)"
+}

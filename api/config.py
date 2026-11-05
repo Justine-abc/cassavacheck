@@ -24,5 +24,8 @@ CLASS_LONG_NAMES = {
     "CMD": "Cassava mosaic disease",
     "healthy": "Healthy",
 }
+# CPU threads for the model. The free Render plan gives a fraction of one CPU; several threads then compete for it
+# and one diagnosis took 4 to 9 s. One thread: about 0.5 s under a 10% CPU cap (docs/testing/README.md).
+TORCH_THREADS = int(os.environ.get("CASSACHECK_TORCH_THREADS", "1"))
 ACCEPTED_IMAGE_TYPES = {"image/jpeg", "image/png"}
 MAX_IMAGE_BYTES = 10 * 1024 * 1024
