@@ -1,3 +1,14 @@
-district,survey_year,season,cbsd_incidence_pct,cmd_incidence_pct,fields_surveyed,source
-Nyanza,2019,A,62,,10,Nyirakanani et al. (2021)
-Bugesera,2019,A,60,,10,Nyirakanani et al. (2021)
+district,survey_year,sampling_period,cbsd_incidence_pct,ci_low_pct,ci_high_pct,plants_examined,source
+Gisagara,2019,May to September,58.3,52,63,300,"Nyirakanani et al. (2021), Table 1"
+Nyanza,2019,May to September,62,56,67,300,"Nyirakanani et al. (2021), Table 1"
+Ruhango,2019,May to September,35.6,30,41,300,"Nyirakanani et al. (2021), Table 1"
+Muhanga,2019,May to September,30,24,35,300,"Nyirakanani et al. (2021), Table 1"
+Kamonyi,2019,May to September,25.3,20,30,300,"Nyirakanani et al. (2021), Table 1"
+Bugesera,2019,May to September,60,54,65,300,"Nyirakanani et al. (2021), Table 1"
+Kayonza,2019,May to September,32.3,27,37,300,"Nyirakanani et al. (2021), Table 1"
+Gatsibo,2019,May to September,18,13,22,300,"Nyirakanani et al. (2021), Table 1"
+Nyagatare,2019,May to September,30,24,35,300,"Nyirakanani et al. (2021), Table 1"
+Ngoma,2019,May to September,20.6,16,25,300,"Nyirakanani et al. (2021), Table 1"
+Kirehe,2019,May to September,50,44,55,300,"Nyirakanani et al. (2021), Table 1"
+Gakenke,2019,May to September,12,8,16,300,"Nyirakanani et al. (2021), Table 1"
+Nyamasheke,2019,May to September,14.3,10,18,300,"Nyirakanani et al. (2021), Table 1"

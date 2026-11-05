@@ -27,7 +27,7 @@ How CassaCheck was tested as a whole system, under what conditions, and what the
 | Access control: only officers read the log | `test_officer_log_needs_the_access_code`, `test_officer_log_is_closed_when_no_code_is_set`, `test_farmer_pages_do_not_link_to_the_officer_view` | Pass locally (401 without or with a wrong code, 503 when no code is configured) |
 | Leaf check before the model | `tests/test_leaf_check.py`; edge cases 5, 7, 9, 10 | Pass |
 
-Automated suite: 28 tests (`python3 -m pytest --verbose`), all passing.
+Automated suite: 29 tests (`python3 -m pytest --verbose`), all passing.
 
 ## 3. Edge cases, end to end over HTTP
 

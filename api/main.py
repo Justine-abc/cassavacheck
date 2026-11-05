@@ -97,7 +97,7 @@ async def diagnose(image: UploadFile = File(...), district: str | None = Form(de
     logits = classifier.predict_logits(picture)
     decision = gate.decide(calibrator.calibrate(logits))
     guidance = advisory.advice_for(decision)
-    panel = districts.lookup(district, season or "A") if district else None
+    panel = districts.lookup(district) if district else None
     diagnosis_id = log.record(district, season, decision, MODEL_VERSION)
 
     return {

@@ -7,23 +7,31 @@ from api.districts import RWANDA_DISTRICTS, DistrictRepository
 
 
 def write_table(path: Path) -> Path:
-    path.write_text("district,survey_year,season,cbsd_incidence_pct,cmd_incidence_pct,fields_surveyed,source\n"
-                    "Nyanza,2019,A,62,,10,Nyirakanani et al. (2021)\n"
-                    "Bugesera,2019,A,60,,10,Nyirakanani et al. (2021)\n", encoding="utf-8")
+    path.write_text("district,survey_year,sampling_period,cbsd_incidence_pct,ci_low_pct,ci_high_pct,plants_examined,source\n"
+                    "Nyanza,2019,May to September,62,56,67,300,\"Nyirakanani et al. (2021), Table 1\"\n"
+                    "Bugesera,2019,May to September,60,54,65,300,\"Nyirakanani et al. (2021), Table 1\"\n", encoding="utf-8")
     return path
 
 
-def test_lookup_exact_and_fallback_season(tmp_path):
+def test_lookup_known_and_unknown_district(tmp_path):
     repository = DistrictRepository(write_table(tmp_path / "districts.csv"))
-    assert repository.lookup("Nyanza", "A").cbsd_incidence_pct == 62
-    assert repository.lookup("nyanza", "C").district == "Nyanza"      # unknown season falls back to the district's row
-    assert repository.lookup("Kigali", "A") is None                   # unknown district gives no panel, never a made-up value
+    assert repository.lookup("Nyanza").cbsd_incidence_pct == 62
+    assert repository.lookup("nyanza").district == "Nyanza"           # case does not matter
+    assert repository.lookup("Kigali") is None                        # unknown district gives no panel, never a made-up value
 
 
-def test_sentence_states_year_and_denominator(tmp_path):
+def test_sentence_states_year_denominator_and_interval(tmp_path):
     repository = DistrictRepository(write_table(tmp_path / "districts.csv"))
-    sentence = repository.lookup("Bugesera", "A").sentence()
-    assert "2019 survey" in sentence and "10 fields" in sentence and "60%" in sentence
+    sentence = repository.lookup("Bugesera").sentence()
+    assert "2019" in sentence and "300 cassava plants" in sentence and "60%" in sentence and "54 to 65" in sentence
+    assert "not your leaf" in sentence
+
+
+def test_published_table_covers_the_thirteen_surveyed_districts():
+    from api import config
+    repository = DistrictRepository(config.DISTRICT_TABLE_PATH)
+    assert len(repository.rows) == 13
+    assert all(row.district in sum(RWANDA_DISTRICTS.values(), []) for row in repository.rows)
 
 
 def test_advice_never_names_a_pesticide():

@@ -16,22 +16,22 @@ RWANDA_DISTRICTS = {
 
 @dataclass(frozen=True)
 class DistrictPrevalence:
+    """One district row of the 2019 national survey (Nyirakanani et al., 2021, Table 1): the share of examined plants
+    showing CBSD leaf symptoms, its 95% confidence interval, and how many plants were examined."""
     district: str
     survey_year: int
-    season: str
-    cbsd_incidence_pct: float | None
-    cmd_incidence_pct: float | None
-    fields_surveyed: int
+    sampling_period: str
+    cbsd_incidence_pct: float
+    ci_low_pct: float
+    ci_high_pct: float
+    plants_examined: int
     source: str
 
     def sentence(self) -> str:
-        parts = []
-        if self.cbsd_incidence_pct is not None:
-            parts.append(f"CBSD found in {self.cbsd_incidence_pct:g}% of fields")
-        if self.cmd_incidence_pct is not None:
-            parts.append(f"CMD in {self.cmd_incidence_pct:g}%")
-        values = ", ".join(parts) if parts else "no incidence value recorded"
-        return f"{self.district}, season {self.season}: {values} ({self.survey_year} survey, {self.fields_surveyed} fields; {self.source})."
+        return (f"{self.district}: in the {self.survey_year} national survey ({self.sampling_period}), "
+                f"{self.cbsd_incidence_pct:g}% of {self.plants_examined} cassava plants examined showed brown streak (CBSD) leaf symptoms "
+                f"(95% interval {self.ci_low_pct:g} to {self.ci_high_pct:g}%). Source: {self.source}. "
+                f"This describes the district, not your leaf.")
 
 
 class DistrictRepository:
@@ -44,28 +44,22 @@ class DistrictRepository:
                 self.rows.append(DistrictPrevalence(
                     district=raw["district"].strip(),
                     survey_year=int(raw["survey_year"]),
-                    season=raw["season"].strip(),
-                    cbsd_incidence_pct=self._optional_float(raw.get("cbsd_incidence_pct")),
-                    cmd_incidence_pct=self._optional_float(raw.get("cmd_incidence_pct")),
-                    fields_surveyed=int(raw["fields_surveyed"]),
+                    sampling_period=raw["sampling_period"].strip(),
+                    cbsd_incidence_pct=float(raw["cbsd_incidence_pct"]),
+                    ci_low_pct=float(raw["ci_low_pct"]),
+                    ci_high_pct=float(raw["ci_high_pct"]),
+                    plants_examined=int(raw["plants_examined"]),
                     source=raw["source"].strip(),
                 ))
-
-    @staticmethod
-    def _optional_float(value: str | None) -> float | None:
-        return float(value) if value not in (None, "") else None
 
     def districts(self) -> list[str]:
         return sorted({row.district for row in self.rows})
 
-    def lookup(self, district: str, season: str) -> DistrictPrevalence | None:
-        """Exact district and season first; if that season was not surveyed, any row for the district, so the panel is never empty
-        for a known district."""
-        exact = [row for row in self.rows if row.district.lower() == district.lower() and row.season.upper() == season.upper()]
-        if exact:
-            return exact[0]
-        any_season = [row for row in self.rows if row.district.lower() == district.lower()]
-        return any_season[0] if any_season else None
+    def lookup(self, district: str) -> DistrictPrevalence | None:
+        """The surveyed row for a district, or None: a district outside the survey gets no panel, never a made-up value.
+        The survey does not report values by season, so the season the farmer picks is logged but does not change the panel."""
+        matches = [row for row in self.rows if row.district.lower() == district.lower()]
+        return matches[0] if matches else None
 
     def all_rows(self) -> list[dict]:
         return [row.__dict__ for row in self.rows]

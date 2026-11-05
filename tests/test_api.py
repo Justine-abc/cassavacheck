@@ -28,7 +28,7 @@ def test_health_lists_five_classes():
 
 def test_districts_endpoint_returns_rows():
     rows = client.get("/districts").json()
-    assert isinstance(rows, list) and rows and "fields_surveyed" in rows[0]
+    assert isinstance(rows, list) and rows and "plants_examined" in rows[0]
 
 
 def test_wrong_file_type_is_rejected_with_415():

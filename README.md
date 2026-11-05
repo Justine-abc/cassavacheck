@@ -16,7 +16,7 @@ A farmer or extension officer uploads one photograph of a cassava leaf. CassaChe
 
 - A photo with too little leaf colour (a screenshot, a wall) is refused before the model sees it.
 - Advice is management steps only. It never names a pesticide or a dose, and a test enforces this.
-- Published district survey information is shown beside the result and never changes the diagnosis.
+- Published district survey information (CBSD incidence in the 13 surveyed districts, 2019) is shown beside the result and never changes the diagnosis.
 - Farmers need no account, and no photos or names are stored. The officer's list keeps district, season, result and answers only, and only an extension officer with the access code can open it.
 
 ## The web app
@@ -82,7 +82,7 @@ The model weights (`models/mobilenetv3_baseline.pt`, 16.3 MB), the calibration v
 ## Test and measure
 
 ```bash
-python3 -m pytest --verbose                      # 28 unit and integration tests
+python3 -m pytest --verbose                      # 29 unit and integration tests
 python3 -m scripts.measure_latency --runs 100    # forward-pass latency, one CPU thread
 ```
 
@@ -128,7 +128,7 @@ CONTRIBUTING.md    design constraints every change must respect
 
 ## Scope
 
-Completed: FR-01 to FR-06, near-duplicate split, five seeds of both backbones, calibration and abstention with the internal test, external test on CCMT, leaf check, web app with five pages, latency measurement, tests. Partial: district table (2 of 13 districts verified). Scheduled: matched-coverage comparison against a plain softmax classifier. Out of scope: field testing with farmers, any claim about yield.
+Completed: FR-01 to FR-06, near-duplicate split, five seeds of both backbones, calibration and abstention with the internal test, external test on CCMT, leaf check, web app with five pages, latency measurement, tests. District table: all 13 districts of the 2019 national survey, CBSD incidence with its 95% interval and 300 plants examined per district (Nyirakanani et al., 2021, Table 1). System tests: `docs/testing/`. Scheduled: matched-coverage comparison against a plain softmax classifier. Out of scope: field testing with farmers, any claim about yield.
 
 ## Earlier submissions
 
