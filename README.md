@@ -128,7 +128,11 @@ CONTRIBUTING.md    design constraints every change must respect
 
 ## Scope
 
-Completed: FR-01 to FR-06, near-duplicate split, five seeds of both backbones, calibration and abstention with the internal test, external test on CCMT, leaf check, web app with five pages, latency measurement, tests. District table: all 13 districts of the 2019 national survey, CBSD incidence with its 95% interval and 300 plants examined per district (Nyirakanani et al., 2021, Table 1). System tests: `docs/testing/`. Scheduled: matched-coverage comparison against a plain softmax classifier. Out of scope: field testing with farmers, any claim about yield.
+Completed: FR-01 to FR-06, near-duplicate split, five seeds of both backbones, calibration and abstention with the internal test, external test on CCMT, leaf check, web app with five pages, latency measurement, tests. District table: all 13 districts of the 2019 national survey, CBSD incidence with its 95% interval and 300 plants examined per district (Nyirakanani et al., 2021, Table 1). System tests: `docs/testing/`. Matched-coverage comparison against a plain softmax classifier with its own validation threshold: notebook 07. Out of scope: field testing with farmers, any claim about yield.
+
+## Licence
+
+The code and the published split file are released under the MIT licence (`LICENSE`). The model weights in `models/` were trained on the Makerere cassava dataset, which Kaggle publishes subject to the competition rules, so the weights are shared for non-commercial research only. The training images are not included in this repository. CCMT (Mensah et al., 2023) is licensed CC BY 4.0. Library and font licences are listed in the final report, Table 3.7.
 
 ## Earlier submissions
 
