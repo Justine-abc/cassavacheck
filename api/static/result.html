@@ -6,12 +6,12 @@
 <title>CassaCheck result</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-<link rel="icon" href="/static/favicon.svg?v=5" type="image/svg+xml"/>
-<link rel="stylesheet" href="/static/app.css?v=5"/>
+<link rel="icon" href="/static/favicon.svg?v=6" type="image/svg+xml"/>
+<link rel="stylesheet" href="/static/app.css?v=6"/>
 <script src="https://cdn.tailwindcss.com/3.4.16"></script>
-<script src="/static/theme.js?v=5"></script>
-<script src="/static/i18n.js?v=5"></script>
-<script src="/static/app.js?v=5"></script>
+<script src="/static/theme.js?v=6"></script>
+<script src="/static/i18n.js?v=6"></script>
+<script src="/static/app.js?v=6"></script>
 </head>
 <body class="bg-surface font-body-md text-on-surface min-h-screen">
 <div id="app-header"></div>
@@ -46,10 +46,10 @@ function comparisonBlock(code) {
     <div class="grid grid-cols-2 gap-2">
       <figure class="flex flex-col gap-1"><img src="${stored.photo}" alt="${T("The leaf you checked")}" class="w-full h-36 lg:h-48 object-cover rounded-xl"/>
         <figcaption class="font-label-md text-label-md text-center">${T("Your leaf")}</figcaption></figure>
-      <figure class="flex flex-col gap-1"><img src="${EXAMPLE_PHOTOS[code]}" alt="${T("Example of")} ${escapeHtml(diseaseName(code))}" class="w-full h-36 lg:h-48 object-cover rounded-xl"/>
+      <figure class="flex flex-col gap-1"><img src="${EXAMPLE_PHOTOS[code].src}" alt="${T("Example of")} ${escapeHtml(diseaseName(code))}" class="w-full h-36 lg:h-48 object-cover rounded-xl"/>
         <figcaption class="font-label-md text-label-md text-center">${T("Known example")}</figcaption></figure>
     </div>
-    <p class="font-label-sm text-label-sm text-on-surface-variant">${T("Compare the two. If they look very different, take another photo or ask an extension officer.")} ${T(EXAMPLE_CREDIT)}</p>`;
+    <p class="font-label-sm text-label-sm text-on-surface-variant">${T("Compare the two. If they look very different, take another photo or ask an extension officer.")} ${T(EXAMPLE_PHOTOS[code].credit)}</p>`;
 }
 
 function probabilityBars(probabilities, highlight) {

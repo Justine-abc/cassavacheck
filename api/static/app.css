@@ -27,6 +27,13 @@ button:not(:disabled):active, a.press:active { transform: scale(0.98); }
 .hero-photo { animation: drift 1.6s ease-out both; }
 @keyframes drift { from { transform: scale(1.08); opacity: 0.6; } to { transform: scale(1); opacity: 1; } }
 
+/* Diseases page: a row opens smoothly to its full height and closes again. */
+.disease-panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.35s ease; }
+.disease.open .disease-panel { grid-template-rows: 1fr; }
+.disease.open { box-shadow: 0 4px 18px rgba(35, 85, 46, 0.12); }
+.toggle-icon { transition: transform 0.3s ease, background-color 0.2s ease; }
+.disease.open .toggle-icon { transform: rotate(180deg); background-color: #c8eccb; }
+
 /* Example photos open full size on tap. */
 .example-photo { transition: transform 0.25s ease; }
 .example-photo:hover { transform: scale(1.03); }
@@ -37,6 +44,7 @@ button:not(:disabled):active, a.press:active { transform: scale(0.98); }
 
 @media (prefers-reduced-motion: reduce) {
   .hero-photo { animation: none; }
+  .disease-panel, .toggle-icon { transition: none; }
   .example-photo, .example-photo:hover { transition: none; transform: none; }
   .reveal > * { animation: none; }
   .bar-fill { transition: none; }

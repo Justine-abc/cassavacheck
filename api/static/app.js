@@ -13,11 +13,16 @@ function diseaseName(code) {
   return LANG === "rw" ? `${T(CLASS_LONG_NAMES[code])}${code === "healthy" ? "" : ` (${code})`}` : CLASS_LONG_NAMES[code];
 }
 
-// One labelled example photo per condition, so a farmer can compare their leaf with a known case. They come from the
-// CCMT set from Ghana (Mensah et al., 2023, CC BY 4.0), which has no brown streak class, so CBSD has no example yet.
-// These photos are shown only; nothing is tuned on them.
-const EXAMPLE_PHOTOS = { CBB: "/static/examples/CBB.jpg", CGM: "/static/examples/CGM.jpg", CMD: "/static/examples/CMD.jpg" };
-const EXAMPLE_CREDIT = "Example photo: CCMT dataset, Ghana (Mensah et al., 2023), CC BY 4.0";
+// One labelled example photo per condition, so a farmer can compare their leaf with a known case. Shown only;
+// nothing is tuned on them. CBB, CGM and CMD come from the CCMT set from Ghana, which has no brown streak class;
+// the CBSD photo is from Wikimedia Commons. Sources and licences: README, "Added after the report was submitted".
+const CCMT_CREDIT = "Example photo: CCMT dataset, Ghana (Mensah et al., 2023), CC BY 4.0";
+const EXAMPLE_PHOTOS = {
+  CBB: { src: "/static/examples/CBB.jpg", credit: CCMT_CREDIT },
+  CBSD: { src: "/static/examples/CBSD.jpg", credit: "Example photo: P. Abidrabo, Kasese, Uganda, 2013, Wikimedia Commons, CC BY-SA 3.0, cropped" },
+  CGM: { src: "/static/examples/CGM.jpg", credit: CCMT_CREDIT },
+  CMD: { src: "/static/examples/CMD.jpg", credit: CCMT_CREDIT },
+};
 
 function percent(value) { return `${Math.round(value * 100)}%`; }
 

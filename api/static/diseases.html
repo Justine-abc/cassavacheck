@@ -6,38 +6,38 @@
 <title>Cassava diseases</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-<link rel="icon" href="/static/favicon.svg?v=5" type="image/svg+xml"/>
-<link rel="stylesheet" href="/static/app.css?v=5"/>
+<link rel="icon" href="/static/favicon.svg?v=6" type="image/svg+xml"/>
+<link rel="stylesheet" href="/static/app.css?v=6"/>
 <script src="https://cdn.tailwindcss.com/3.4.16"></script>
-<script src="/static/theme.js?v=5"></script>
-<script src="/static/i18n.js?v=5"></script>
-<script src="/static/app.js?v=5"></script>
+<script src="/static/theme.js?v=6"></script>
+<script src="/static/i18n.js?v=6"></script>
+<script src="/static/app.js?v=6"></script>
 </head>
 <body class="bg-surface font-body-md text-on-surface min-h-screen">
 <div id="app-header"></div>
-<main id="page" class="pt-20 pb-24 lg:pb-12 px-margin-mobile lg:px-8 max-w-3xl lg:max-w-6xl mx-auto grid gap-space-md lg:grid-cols-2 lg:gap-6 lg:items-start"></main>
+<main id="page" class="pt-20 pb-24 lg:pb-12 px-margin-mobile lg:px-8 max-w-3xl lg:max-w-5xl mx-auto flex flex-col gap-space-md"></main>
 <div id="app-nav"></div>
 <script>
 // Every line is taken from the fact sheet linked on its card (Pacific Pests, Pathogens, Weeds & Pesticides, online edition).
 // Management steps only: no chemical is named, the same rule as the advice in api/advice.py.
 const SHEETS = "https://apps.lucidcentral.org/pppw_v13/text/web_full/entities/";
 const DISEASES = [
-  { code: "CMD", icon: "grid_view", cause: "Viruses (cassava mosaic viruses).",
+  { code: "CMD", tone: "lime", short: "Yellow and green mosaic, twisted leaves", icon: "grid_view", cause: "Viruses (cassava mosaic viruses).",
     see: ["Pale green to yellow patches on the leaves, a pattern called a mosaic.", "Leaves and shoots twisted or deformed; the plant may stay small."],
     spread: ["Stem cuttings taken from sick plants and shared between farmers.", "Whiteflies feeding on the leaves."],
     prevent: ["Take cuttings only from plants without symptoms. Never plant stems from a sick plant.", "Pull out sick plants as soon as you see symptoms. Done early, the plants around them make up the lost yield.", "Plant resistant varieties."],
     sheet: "cassava_mosaic_diseases_520.htm" },
-  { code: "CBSD", icon: "texture", cause: "Two viruses (cassava brown streak virus and Ugandan cassava brown streak virus).",
+  { code: "CBSD", tone: "amber", short: "Yellow patches along the veins of older leaves", icon: "texture", cause: "Two viruses (cassava brown streak virus and Ugandan cassava brown streak virus).",
     see: ["Yellow patches along the side veins of older leaves, often joining together.", "Dark streaks on young green stems, not always visible.", "Roots smaller than normal, with dark brown dry rot inside when cut."],
     spread: ["Whiteflies, over short distances.", "Planting material moved between farmers, over long distances."],
     prevent: ["Take cuttings only from plants you watched for symptoms during the season.", "Use certified, virus-cleaned planting material.", "Remove plants with leaf or stem symptoms, and burn their stems after harvest.", "Plant tolerant varieties where they are available. Neighbours removing sick plants together works best."],
     sheet: "cassava_brown_streak_disease_439.htm" },
-  { code: "CBB", icon: "water_drop", cause: "A bacterium (Xanthomonas axonopodis pv. manihotis).",
+  { code: "CBB", tone: "orange", short: "Angular wet-looking spots, wilting leaves", icon: "water_drop", cause: "A bacterium (Xanthomonas axonopodis pv. manihotis).",
     see: ["Angular, water-soaked spots between the veins, best seen under the leaf.", "Spots grow, join, and turn brown with yellow edges.", "Leaves wilt and fall; stem tips turn black."],
     spread: ["Rain blown by the wind, and tools such as knives and hoes, over short distances.", "Infected cuttings, over long distances."],
     prevent: ["Take cuttings only from healthy fields. Do not plant next to, or downwind of, a sick field.", "When only a few plants are sick, remove them in dry weather. Clean your tools and keep animals out.", "After harvest, burn or bury old stems you are not keeping for planting.", "Do not plant cassava again on the same land after a sick crop; wait one to two years."],
     sheet: "cassava_bacterial_blight_173.htm" },
-  { code: "CGM", icon: "bug_report", cause: "A tiny mite (Mononychellus tanajoa) that sucks juice from the leaves, mostly from the underside.",
+  { code: "CGM", tone: "emerald", short: "Tiny mites, yellow speckled leaves", icon: "bug_report", cause: "A tiny mite (Mononychellus tanajoa) that sucks juice from the leaves, mostly from the underside.",
     see: ["Small yellow spots, then yellowing and mottled leaves that die and fall.", "Shoot tips lost, leaving a bare stem like a candle.", "Worst in the dry season: rain washes the mites off the leaves."],
     spread: ["Mites walking between plants, or carried by wind and water.", "People moving cuttings and leaves, over long distances."],
     prevent: ["Take planting material from healthy plants.", "Plant early in the rainy season.", "Plant mite-tolerant varieties. Predatory mites that eat green mites are the main natural control."],
@@ -49,36 +49,77 @@ function list(items) {
   return `<ul class="flex flex-col gap-1 font-body-sm text-body-sm list-disc pl-5">${items.map((item) => `<li>${escapeHtml(T(item))}</li>`).join("")}</ul>`;
 }
 
-function diseaseCard(disease) {
+// Soft colour per disease, so the four are easy to tell apart at a glance. Spelled out in full so Tailwind generates them.
+const TONES = {
+  lime: { chip: "bg-lime-200 text-lime-900", ring: "ring-lime-300" },
+  amber: { chip: "bg-amber-200 text-amber-900", ring: "ring-amber-300" },
+  orange: { chip: "bg-orange-200 text-orange-900", ring: "ring-orange-300" },
+  emerald: { chip: "bg-emerald-200 text-emerald-900", ring: "ring-emerald-300" },
+};
+
+function examplePhoto(disease) {
+  const photo = EXAMPLE_PHOTOS[disease.code];
   return `
-    <section id="${disease.code}" class="scroll-mt-24 bg-surface-container-lowest rounded-xl p-space-lg border border-outline-variant/30 shadow-sm flex flex-col gap-space-sm">
-      <div class="flex items-center gap-3"><span class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary">${disease.icon}</span></span>
-        <div><span class="font-label-sm text-label-sm text-secondary uppercase">${disease.code}</span><h2 class="font-headline-sm text-headline-sm">${diseaseName(disease.code)}</h2></div></div>
-      ${EXAMPLE_PHOTOS[disease.code] ? `
-        <figure class="flex flex-col gap-1">
-          <a href="${EXAMPLE_PHOTOS[disease.code]}" target="_blank" rel="noopener" class="block rounded-lg overflow-hidden">
-            <img src="${EXAMPLE_PHOTOS[disease.code]}" alt="${T("Example of")} ${escapeHtml(diseaseName(disease.code))}" loading="lazy" class="example-photo w-full h-48 lg:h-56 object-cover"/></a>
-          <figcaption class="font-label-sm text-label-sm text-on-surface-variant">${T(EXAMPLE_CREDIT)}</figcaption>
-        </figure>` : `
-        <div class="h-24 rounded-lg bg-surface-container-low border border-dashed border-outline-variant flex items-center justify-center gap-2 px-3 text-center font-body-sm text-body-sm text-on-surface-variant">
-          <span class="material-symbols-outlined text-[20px]">hide_image</span>${T("No example photo yet: the open photo set used here has no brown streak class.")}</div>`}
-      <p class="font-body-md text-body-md"><b>${T("Cause:")}</b> ${escapeHtml(T(disease.cause))}</p>
-      <div><h3 class="font-title-md text-title-md">${T("What you see")}</h3>${list(disease.see)}</div>
-      <div><h3 class="font-title-md text-title-md">${T("How it spreads")}</h3>${list(disease.spread)}</div>
-      <div class="bg-surface-container-low rounded-lg px-3 py-2"><h3 class="font-title-md text-title-md text-primary">${T("Prevent it, without chemicals")}</h3>${list(disease.prevent)}</div>
-      ${disease.lookalike ? `<p class="font-body-sm text-body-sm"><b class="text-secondary">${T("Look-alike:")}</b> ${escapeHtml(T(disease.lookalike))}</p>` : ""}
-      <a class="font-label-sm text-label-sm text-on-surface-variant underline" href="${SHEETS}${disease.sheet}" target="_blank" rel="noopener">${T("Source:")} Pacific Pests, Pathogens, Weeds &amp; Pesticides fact sheet</a>
+    <figure class="flex flex-col gap-1">
+      <a href="${photo.src}" target="_blank" rel="noopener" class="block rounded-xl overflow-hidden">
+        <img src="${photo.src}" alt="${T("Example of")} ${escapeHtml(diseaseName(disease.code))}" loading="lazy" class="example-photo w-full h-44 sm:h-52 lg:h-56 object-cover"/></a>
+      <figcaption class="font-label-sm text-label-sm text-on-surface-variant">${T(photo.credit)}</figcaption>
+    </figure>`;
+}
+
+// One row per disease. Tapping a row opens it (photo and facts) and closes the one that was open.
+function diseaseCard(disease) {
+  const tone = TONES[disease.tone];
+  return `
+    <section id="${disease.code}" class="disease scroll-mt-24 bg-surface-container-lowest rounded-2xl border border-outline-variant/30 shadow-sm overflow-hidden">
+      <button type="button" class="disease-toggle w-full flex items-center gap-3 p-space-md lg:p-space-lg text-left" aria-expanded="false" aria-controls="${disease.code}-panel">
+        <span class="w-11 h-11 rounded-xl ${tone.chip} flex items-center justify-center shrink-0"><span class="material-symbols-outlined">${disease.icon}</span></span>
+        <span class="flex-1 min-w-0">
+          <span class="flex items-center gap-2"><span class="font-label-sm text-label-sm ${tone.chip} px-2 py-0.5 rounded-full">${disease.code}</span></span>
+          <span class="block font-title-lg text-title-lg mt-0.5">${diseaseName(disease.code)}</span>
+          <span class="block font-body-sm text-body-sm text-on-surface-variant">${escapeHtml(T(disease.short))}</span>
+        </span>
+        <span class="toggle-icon w-9 h-9 rounded-full bg-surface-container-high flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-[22px]">add</span></span>
+      </button>
+      <div id="${disease.code}-panel" class="disease-panel" role="region">
+        <div class="overflow-hidden">
+          <div class="px-space-md lg:px-space-lg pb-space-lg grid gap-space-md lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] lg:items-start">
+            <div class="flex flex-col gap-space-sm">
+              ${examplePhoto(disease)}
+              <p class="font-body-md text-body-md"><b>${T("Cause:")}</b> ${escapeHtml(T(disease.cause))}</p>
+              ${disease.lookalike ? `<p class="font-body-sm text-body-sm bg-secondary-fixed text-on-secondary-fixed rounded-lg px-3 py-2"><b>${T("Look-alike:")}</b> ${escapeHtml(T(disease.lookalike))}</p>` : ""}
+            </div>
+            <div class="flex flex-col gap-space-sm">
+              <div><h3 class="font-title-md text-title-md flex items-center gap-1.5"><span class="material-symbols-outlined text-[20px] text-primary">visibility</span>${T("What you see")}</h3>${list(disease.see)}</div>
+              <div><h3 class="font-title-md text-title-md flex items-center gap-1.5"><span class="material-symbols-outlined text-[20px] text-primary">air</span>${T("How it spreads")}</h3>${list(disease.spread)}</div>
+              <div class="bg-surface-container-low rounded-lg px-3 py-2"><h3 class="font-title-md text-title-md text-primary flex items-center gap-1.5"><span class="material-symbols-outlined text-[20px]">shield</span>${T("Prevent it, without chemicals")}</h3>${list(disease.prevent)}</div>
+              <a class="font-label-sm text-label-sm text-on-surface-variant underline" href="${SHEETS}${disease.sheet}" target="_blank" rel="noopener">${T("Source:")} Pacific Pests, Pathogens, Weeds &amp; Pesticides fact sheet</a>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>`;
+}
+
+function openDisease(code, scroll = false) {
+  document.querySelectorAll(".disease").forEach((section) => {
+    const open = section.id === code && !section.classList.contains("open");
+    section.classList.toggle("open", open);
+    section.querySelector(".disease-toggle").setAttribute("aria-expanded", open);
+    section.querySelector(".toggle-icon .material-symbols-outlined").textContent = open ? "remove" : "add";
+  });
+  // Wait for the rows to finish opening and closing, so the open row lands just under the header.
+  if (scroll) setTimeout(() => document.getElementById(code).scrollIntoView({ block: "start", behavior: "smooth" }), 380);
 }
 
 const page = document.getElementById("page");
 page.innerHTML = `
-  <div class="lg:col-span-2">
+  <div>
     <h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary">${T("Cassava diseases")}</h1>
     <p class="font-body-md text-body-md text-on-surface-variant">${T("The four conditions CassaCheck recognises: what causes them, what you see, how they spread and how to prevent them.")}</p>
   </div>
   ${DISEASES.map(diseaseCard).join("")}
-  <section class="bg-surface-container-high rounded-xl p-space-lg flex flex-col gap-space-sm lg:col-span-2">
+  <section class="bg-surface-container-high rounded-xl p-space-lg flex flex-col gap-space-sm">
     <div class="flex items-center gap-3"><span class="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center"><span class="material-symbols-outlined text-on-secondary">checklist</span></span>
       <h2 class="font-headline-sm text-headline-sm">${T("The same three habits protect against all four")}</h2></div>
     <div class="grid gap-2 lg:grid-cols-3">
@@ -87,8 +128,16 @@ page.innerHTML = `
       <div class="bg-surface-container-lowest rounded-lg px-3 py-2"><b>${T("Tolerant varieties")}</b><br/><span class="font-body-sm text-body-sm">${T("Ask your farmer promoter or sector agronomist which varieties suit your area.")}</span></div>
     </div>
   </section>
-  <a href="/" class="press lg:col-span-2 lg:w-80 lg:mx-auto lg:px-6 h-14 rounded-lg bg-primary text-on-primary font-title-md text-title-md flex items-center justify-center gap-2"><span class="material-symbols-outlined">photo_camera</span>${T("Check a leaf now")}</a>`;
+  <a href="/" class="press lg:w-80 lg:mx-auto lg:px-6 h-14 rounded-lg bg-primary text-on-primary font-title-md text-title-md flex items-center justify-center gap-2"><span class="material-symbols-outlined">photo_camera</span>${T("Check a leaf now")}</a>`;
 renderHeader(T("Diseases")); renderBottomNav("diseases"); reveal(page);
+document.querySelectorAll(".disease-toggle").forEach((button) => button.onclick = () => openDisease(button.closest(".disease").id));
+// Opened from a result ("About this disease"): /diseases#CBSD opens that disease; otherwise the first one is open.
+const fromLink = window.location.hash.slice(1);
+openDisease(DISEASES.some((d) => d.code === fromLink) ? fromLink : DISEASES[0].code, !!fromLink);
+window.addEventListener("hashchange", () => {
+  const code = window.location.hash.slice(1);
+  if (DISEASES.some((d) => d.code === code) && !document.getElementById(code).classList.contains("open")) openDisease(code, true);
+});
 </script>
 </body>
 </html>
