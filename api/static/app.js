@@ -1,4 +1,4 @@
-// Shared by every page: the header and bottom navigation, and small formatting helpers. No diagnosis logic lives here.
+// Shared by every page (loaded after i18n.js): the header and bottom navigation, and small formatting helpers. No diagnosis logic lives here.
 const CLASS_LONG_NAMES = {
   CBB: "Cassava bacterial blight", CBSD: "Cassava brown streak disease", CGM: "Cassava green mite",
   CMD: "Cassava mosaic disease", healthy: "Healthy leaf",
@@ -6,6 +6,12 @@ const CLASS_LONG_NAMES = {
 // Short names for the follow-up questions, so the officer sees "White flies: Yes" rather than a bare "Yes".
 const QUESTION_SHORT_NAMES = { leaf_age: "Leaf", whiteflies: "White flies", other_signs: "Other signs", cuttings_source: "Cuttings from" };
 const SEASONS = { A: "Sep – Feb", B: "Mar – Jun", C: "Jul – Aug" };
+
+// Disease name in the chosen language. In Kinyarwanda the English code stays beside the name, so an officer and a
+// farmer can always match it to the fact sheet.
+function diseaseName(code) {
+  return LANG === "rw" ? `${T(CLASS_LONG_NAMES[code])}${code === "healthy" ? "" : ` (${code})`}` : CLASS_LONG_NAMES[code];
+}
 
 function percent(value) { return `${Math.round(value * 100)}%`; }
 
@@ -29,19 +35,19 @@ function confidenceMeter(confidence, threshold) {
   const answered = confidence >= threshold;
   const line = Math.round(threshold * 100);
   return `
-    <div class="flex flex-col gap-1" aria-label="Confidence ${percent(confidence)}, decision line ${percent(threshold)}">
+    <div class="flex flex-col gap-1" aria-label="${T("Confidence")} ${percent(confidence)}, ${T("Decision line")} ${percent(threshold)}">
       <div class="relative h-4 bg-surface-container-high rounded-full">
         <div class="bar-fill h-4 rounded-full ${answered ? "bg-primary" : "bg-secondary"}" data-width="${Math.max(1, confidence * 100)}%"></div>
         <div class="absolute -top-1.5 -bottom-1.5 w-0.5 bg-on-surface" style="left:${line}%"></div>
       </div>
       <div class="relative h-9 font-label-sm text-label-sm text-on-surface-variant">
         <span class="absolute left-0 top-0.5">0%</span>
-        <span class="absolute top-0.5 -translate-x-1/2 text-center leading-tight text-on-surface" style="left:${line}%">Decision line<br/>${percent(threshold)}</span>
+        <span class="absolute top-0.5 -translate-x-1/2 text-center leading-tight text-on-surface" style="left:${line}%">${T("Decision line")}<br/>${percent(threshold)}</span>
         <span class="absolute right-0 top-0.5">100%</span>
       </div>
       <p class="font-body-sm text-body-sm text-on-surface-variant">${answered
-        ? "Above the line, CassaCheck names a condition."
-        : "Below the line, CassaCheck does not guess: it says not sure."}</p>
+        ? T("Above the line, CassaCheck names a condition.")
+        : T("Below the line, CassaCheck does not guess: it says not sure.")}</p>
     </div>`;
 }
 
@@ -49,9 +55,9 @@ function escapeHtml(text) {
   return String(text ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 }
 
-function renderHeader(title, { back = false } = {}) {
+function renderHeader(title, { back = false, hideLanguageSwitch = false } = {}) {
   const backButton = back
-    ? `<a href="/" class="w-11 h-11 flex items-center justify-center text-primary -ml-2 rounded-full active:bg-surface-container" aria-label="Back"><span class="material-symbols-outlined text-[24px]">arrow_back</span></a>`
+    ? `<a href="/" class="w-11 h-11 flex items-center justify-center text-primary -ml-2 rounded-full active:bg-surface-container" aria-label="${T("Back")}"><span class="material-symbols-outlined text-[24px]">arrow_back</span></a>`
     : "";
   document.getElementById("app-header").innerHTML = `
     <header class="fixed top-0 w-full z-50 bg-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]">
@@ -64,8 +70,10 @@ function renderHeader(title, { back = false } = {}) {
             <span class="font-label-sm text-label-sm text-on-surface-variant">${escapeHtml(title)}</span>
           </div>
         </div>
+        ${hideLanguageSwitch ? "" : languageSwitch()}
       </div>
     </header>`;
+  wireLanguageSwitch();
 }
 
 function renderBottomNav(active) {
@@ -77,10 +85,28 @@ function renderBottomNav(active) {
   document.getElementById("app-nav").innerHTML = `
     <nav class="fixed bottom-0 w-full z-50 bg-surface-container-lowest border-t border-outline-variant/40">
       <div class="h-16 max-w-3xl mx-auto flex">
-        ${item("/", "photo_camera", "Diagnose", "diagnose")}
-        ${item("/how-it-works", "menu_book", "How it works", "how")}
-        ${item("/diseases", "coronavirus", "Diseases", "diseases")}
+        ${item("/", "photo_camera", T("Diagnose"), "diagnose")}
+        ${item("/my-case", "inbox", T("My case"), "my-case")}
+        ${item("/how-it-works", "menu_book", T("How it works"), "how")}
+        ${item("/diseases", "coronavirus", T("Diseases"), "diseases")}
         ${active === "officer" ? item("/officer", "assignment", "Officer view", "officer") : ""}
       </div>
     </nav>`;
+}
+
+// Cases this phone has sent, so "My case" can list them without retyping. Kept only in this browser; the server
+// still checks the code on every request. Storage can be blocked (private mode), so every access is guarded.
+const CASES_KEY = "cassacheck-my-cases";
+function rememberedCases() {
+  try { return JSON.parse(localStorage.getItem(CASES_KEY) || "[]"); } catch { return []; }
+}
+function rememberCase(caseNumber, checkCode) {
+  try {
+    const cases = rememberedCases().filter((c) => c.case_number !== caseNumber);
+    cases.unshift({ case_number: caseNumber, check_code: checkCode, sent_at: new Date().toISOString() });
+    localStorage.setItem(CASES_KEY, JSON.stringify(cases.slice(0, 10)));
+  } catch { /* the farmer still has the number and code on screen */ }
+}
+function forgetCase(caseNumber) {
+  try { localStorage.setItem(CASES_KEY, JSON.stringify(rememberedCases().filter((c) => c.case_number !== caseNumber))); } catch {}
 }

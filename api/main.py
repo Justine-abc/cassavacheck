@@ -20,7 +20,8 @@ from api.calibration import AbstentionGate, CalibrationSettings, Calibrator
 from api.classifier import MobileNetV3Classifier
 from api.districts import DistrictRepository
 from api.leaf_check import LeafCheck
-from api.log_store import DiagnosisLog
+from api.log_store import CASE_STATUSES, DiagnosisLog
+from api.referral import normalise_rwanda_phone, officer_note_problem
 
 app = FastAPI(title="CassaCheck API", version="0.2.0",
               description="Five-class cassava leaf diagnosis with calibrated confidence and abstention. "
@@ -36,7 +37,7 @@ gate = AbstentionGate(settings.threshold)
 leaf_check = LeafCheck.load(config.LEAF_CHECK_PATH)
 advisory = AdvisoryService()
 districts = DistrictRepository(config.DISTRICT_TABLE_PATH)
-log = DiagnosisLog(config.LOG_DATABASE_PATH)
+log = DiagnosisLog(config.LOG_DATABASE_PATH, config.DATABASE_URL)
 MODEL_VERSION = f"{classifier.name}:{config.WEIGHTS_PATH.name}:T{settings.temperature}:tau{settings.threshold}"
 
 
@@ -71,7 +72,8 @@ def require_officer(x_officer_code: str | None = Header(default=None)) -> None:
 
 @app.get("/log", dependencies=[Depends(require_officer)])
 def recent_log(limit: int = 50, district: str | None = None):
-    """Extension-officer view: anonymised recent requests (date, district, season, decision, confidence)."""
+    """Extension-officer view: recent requests (date, district, season, decision, confidence, answers) and, for referred
+    cases, the case status, the officer's note and a phone number only where the farmer consented to be called."""
     return log.recent(limit=min(limit, 200), district=district)
 
 
@@ -133,11 +135,65 @@ def follow_up(body: FollowUp):
             "referral_requested": body.referral_requested}
 
 
+class Referral(BaseModel):
+    diagnosis_id: int
+    answers: dict[str, str] = {}
+    contact_consent: bool = False
+    phone: str | None = None
+
+
+@app.post("/referral")
+def referral(body: Referral):
+    """The farmer sends the case to the extension officer. Returns the case number and a check code; with both, the
+    farmer can read the officer's answer on the "My case" page. A phone number is accepted only with consent."""
+    if not log.exists(body.diagnosis_id):
+        raise HTTPException(status_code=404, detail="Unknown diagnosis")
+    phone = None
+    if body.phone and body.phone.strip():
+        if not body.contact_consent:
+            raise HTTPException(status_code=422, detail="Tick the consent box to share a phone number, or leave the number empty.")
+        phone = normalise_rwanda_phone(body.phone)
+        if phone is None:
+            raise HTTPException(status_code=422, detail="Enter a Rwandan mobile number, for example 0788 123 456.")
+    log.add_follow_up(body.diagnosis_id, advisory.valid_answers(body.answers), True)
+    check_code = log.open_referral(body.diagnosis_id, phone)
+    return {"case_number": body.diagnosis_id, "check_code": check_code, "contact_saved": phone is not None}
+
+
+@app.get("/case/{case_number}")
+def case_status(case_number: int, code: str):
+    """Farmer's view of one case: status and the officer's note, never the phone number. Needs the check code."""
+    found = log.case_status(case_number, code)
+    if found is None:
+        raise HTTPException(status_code=404, detail="No case with this number and code. Check both and try again.")
+    return found
+
+
+class CaseUpdate(BaseModel):
+    status: str
+    officer_note: str | None = None
+
+
+@app.put("/cases/{case_number}", dependencies=[Depends(require_officer)])
+def update_case(case_number: int, body: CaseUpdate):
+    """The officer records progress. Marking a case answered deletes the farmer's phone number."""
+    if body.status not in CASE_STATUSES:
+        raise HTTPException(status_code=422, detail=f"Status must be one of: {', '.join(CASE_STATUSES)}")
+    note = body.officer_note.strip() if body.officer_note and body.officer_note.strip() else None
+    problem = officer_note_problem(note)
+    if problem:
+        raise HTTPException(status_code=422, detail=problem)
+    if not log.update_case(case_number, body.status, note):
+        raise HTTPException(status_code=404, detail="No referred case with this number")
+    return {"case_number": case_number, "status": body.status, "officer_note": note}
+
+
 app.mount("/static", StaticFiles(directory=config.STATIC_DIRECTORY), name="static")
 
 
 # One HTML file per screen of the design; all logic is in the API, the pages only call it.
-PAGES = {"/": "index.html", "/result": "result.html", "/how-it-works": "how_it_works.html", "/diseases": "diseases.html", "/officer": "officer.html"}
+PAGES = {"/": "index.html", "/result": "result.html", "/how-it-works": "how_it_works.html", "/diseases": "diseases.html", "/officer": "officer.html",
+         "/my-case": "my_case.html"}
 
 
 def page_route(file_name: str):

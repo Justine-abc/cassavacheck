@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>CassaCheck my case</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link rel="icon" href="/static/favicon.svg?v=4" type="image/svg+xml"/>
+<link rel="stylesheet" href="/static/app.css?v=4"/>
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<script src="/static/theme.js?v=4"></script>
+<script src="/static/i18n.js?v=4"></script>
+<script src="/static/app.js?v=4"></script>
+</head>
+<body class="bg-surface font-body-md text-on-surface min-h-screen">
+<div id="app-header"></div>
+<main id="page" class="pt-20 pb-24 px-margin-mobile lg:px-8 max-w-3xl mx-auto flex flex-col gap-space-md">
+  <div>
+    <h1 data-t class="font-headline-lg-mobile text-headline-lg-mobile text-primary">My case</h1>
+    <p data-t class="font-body-md text-body-md text-on-surface-variant">See whether the extension officer has looked at a case you sent, and read their answer.</p>
+  </div>
+
+  <div id="remembered" class="flex flex-col gap-2"></div>
+
+  <form id="lookup" class="bg-surface-container-lowest rounded-xl p-space-lg border border-outline-variant/30 shadow-sm flex flex-col gap-space-sm">
+    <h2 data-t class="font-title-md text-title-md">Find a case</h2>
+    <div class="grid grid-cols-2 gap-2">
+      <div class="flex flex-col gap-1">
+        <label data-t for="case-number" class="font-label-lg text-label-lg">Case number</label>
+        <input id="case-number" inputmode="numeric" pattern="[0-9]*" required placeholder="14" class="h-12 rounded-lg border border-outline-variant bg-surface-container-low px-3 font-body-lg text-body-lg"/>
+      </div>
+      <div class="flex flex-col gap-1">
+        <label data-t for="check-code" class="font-label-lg text-label-lg">Check code</label>
+        <input id="check-code" required autocapitalize="characters" autocomplete="off" maxlength="6" placeholder="K7P2Q9" class="h-12 rounded-lg border border-outline-variant bg-surface-container-low px-3 font-body-lg text-body-lg uppercase tracking-widest"/>
+      </div>
+    </div>
+    <p id="lookup-error" class="hidden font-body-sm text-body-sm text-error"></p>
+    <button type="submit" class="h-12 rounded-lg bg-primary text-on-primary font-label-lg text-label-lg flex items-center justify-center gap-2"><span class="material-symbols-outlined text-[20px]">search</span><span data-t>Check status</span></button>
+  </form>
+
+  <div id="result"></div>
+
+  <section class="bg-surface-container-high rounded-xl p-space-lg flex gap-3 items-start">
+    <span class="material-symbols-outlined text-secondary">schedule</span>
+    <p data-t class="font-body-md text-body-md">No answer after 3 days? Go to your sector agronomist's office and show this case number.</p>
+  </section>
+</main>
+<div id="app-nav"></div>
+
+<script>
+renderHeader(T("My case"));
+renderBottomNav("my-case");
+
+// The officer moves a case through these steps; the farmer sees how far it has gone.
+const STEPS = [
+  { key: "received", icon: "inbox", label: "Received" },
+  { key: "seen", icon: "visibility", label: "Seen by the officer" },
+  { key: "visit_planned", icon: "event", label: "Visit planned" },
+  { key: "answered", icon: "task_alt", label: "Answered" },
+];
+
+function timeline(status) {
+  const reached = STEPS.findIndex((step) => step.key === status);
+  return `<ol class="flex flex-col gap-2">${STEPS.map((step, index) => `
+    <li class="flex items-center gap-3 rounded-lg px-3 py-2 ${index <= reached ? "bg-primary-fixed text-on-primary-fixed" : "bg-surface-container-low text-on-surface-variant"}">
+      <span class="material-symbols-outlined text-[20px]" style="font-variation-settings:'FILL' ${index <= reached ? 1 : 0}">${index <= reached ? step.icon : "radio_button_unchecked"}</span>
+      <span class="font-body-md text-body-md ${index === reached ? "font-bold" : ""}">${T(step.label)}</span>
+    </li>`).join("")}</ol>`;
+}
+
+function showCase(found) {
+  const area = document.getElementById("result");
+  area.innerHTML = `
+    <section class="bg-surface-container-lowest rounded-xl p-space-lg border border-outline-variant/30 shadow-sm flex flex-col gap-space-sm">
+      <div class="flex items-center justify-between">
+        <h2 class="font-title-lg text-title-lg">${T("Case")} #${found.case_number}</h2>
+        <span class="font-label-sm text-label-sm text-on-surface-variant">${T("Updated")} ${new Date(found.updated_at).toLocaleString()}</span>
+      </div>
+      ${timeline(found.status)}
+      ${found.officer_note ? `
+        <div class="bg-secondary-fixed text-on-secondary-fixed rounded-lg px-3 py-3 flex flex-col gap-1">
+          <span class="font-label-md text-label-md uppercase flex items-center gap-1"><span class="material-symbols-outlined text-[18px]">support_agent</span>${T("From the extension officer")}</span>
+          <p class="font-body-md text-body-md whitespace-pre-line">${escapeHtml(found.officer_note)}</p>
+        </div>` : `<p class="font-body-sm text-body-sm text-on-surface-variant">${T("The officer has not written an answer yet.")}</p>`}
+    </section>`;
+  reveal(area);
+}
+
+async function lookUp(caseNumber, checkCode) {
+  const error = document.getElementById("lookup-error");
+  error.classList.add("hidden");
+  try {
+    const response = await fetch(`/case/${encodeURIComponent(caseNumber)}?code=${encodeURIComponent(checkCode)}`);
+    const body = await response.json();
+    if (!response.ok) throw new Error(T(typeof body.detail === "string" ? body.detail : "No case with this number and code. Check both and try again."));
+    rememberCase(body.case_number, checkCode.toUpperCase());
+    showCase(body);
+    renderRemembered();
+  } catch (problem) {
+    error.textContent = problem.message === "Failed to fetch" ? T("Could not reach the server. Try again.") : problem.message;
+    error.classList.remove("hidden");
+    document.getElementById("result").innerHTML = "";
+  }
+}
+
+function renderRemembered() {
+  const cases = rememberedCases();
+  document.getElementById("remembered").innerHTML = cases.length ? `
+    <span class="font-label-md text-label-md uppercase text-on-surface-variant px-1">${T("Sent from this phone")}</span>
+    ${cases.map((c) => `
+      <div class="flex gap-2">
+        <button data-case="${c.case_number}" data-code="${escapeHtml(c.check_code)}" class="press flex-1 h-12 rounded-lg bg-surface-container-lowest border border-outline-variant/40 px-3 flex items-center justify-between font-body-md text-body-md">
+          <span>${T("Case")} #${c.case_number} · <span class="tracking-widest">${escapeHtml(c.check_code)}</span></span><span class="material-symbols-outlined text-[20px] text-primary">chevron_right</span></button>
+        <button data-forget="${c.case_number}" class="w-12 h-12 rounded-lg bg-surface-container-high text-on-surface-variant flex items-center justify-center" aria-label="${T("Remove from this phone")}"><span class="material-symbols-outlined text-[20px]">close</span></button>
+      </div>`).join("")}` : "";
+  document.querySelectorAll("[data-case]").forEach((button) => button.onclick = () => {
+    document.getElementById("case-number").value = button.dataset.case;
+    document.getElementById("check-code").value = button.dataset.code;
+    lookUp(button.dataset.case, button.dataset.code);
+  });
+  document.querySelectorAll("[data-forget]").forEach((button) => button.onclick = () => { forgetCase(Number(button.dataset.forget)); renderRemembered(); });
+}
+
+document.getElementById("lookup").onsubmit = (event) => {
+  event.preventDefault();
+  lookUp(document.getElementById("case-number").value.trim(), document.getElementById("check-code").value.trim());
+};
+
+// Opened from the confirmation after a referral: the case number and code arrive in the address.
+const parameters = new URLSearchParams(window.location.search);
+if (parameters.get("case") && parameters.get("code")) {
+  document.getElementById("case-number").value = parameters.get("case");
+  document.getElementById("check-code").value = parameters.get("code");
+  lookUp(parameters.get("case"), parameters.get("code"));
+}
+renderRemembered();
+reveal(document.getElementById("page"));
+</script>
+</body>
+</html>

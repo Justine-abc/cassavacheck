@@ -17,7 +17,7 @@ A farmer or extension officer uploads one photograph of a cassava leaf. CassaChe
 - A photo with too little leaf colour (a screenshot, a wall) is refused before the model sees it.
 - Advice is management steps only. It never names a pesticide or a dose, and a test enforces this.
 - Published district survey information (CBSD incidence in the 13 surveyed districts, 2019) is shown beside the result and never changes the diagnosis.
-- Farmers need no account, and no photos or names are stored. The officer's list keeps district, season, result and answers only, and only an extension officer with the access code can open it.
+- Farmers need no account, and no photos or names are stored. The officer's list keeps district, season, result and answers, and only an extension officer with the access code can open it. A phone number is stored only if the farmer ticks consent when sending a case, and it is deleted when the officer answers the case or after 30 days.
 
 ## The web app
 
@@ -27,9 +27,23 @@ A farmer or extension officer uploads one photograph of a cassava leaf. CassaChe
 | Result | `/result` | Diagnosis or "not sure", confidence against the decision line, advice, questions, referral |
 | How it works | `/how-it-works` | What the model is, what the confidence means, why it says "not sure" |
 | Diseases | `/diseases` | Cause, symptoms, spread and prevention without chemicals for the four diseases, with sources |
-| Officer view | `/officer` | Recent cases and referrals by district. Needs the officer access code; not linked from the farmer's menu |
+| My case | `/my-case` | The farmer types the case number and check code to see the case status and the officer's answer |
+| Officer view | `/officer` | Recent cases and referrals by district; the officer sets the case status and writes a note to the farmer. Needs the officer access code; not linked from the farmer's menu |
+
+Every farmer page can be switched between English and Kinyarwanda (EN / RW in the header). The officer view is in English.
 
 The API is documented at `/docs` (Swagger UI) and `/health` shows the loaded model, temperature, threshold and leaf check cut-off. The sample photos are my own, taken in Busanza, Kanombe sector, Kicukiro district on 31 October 2026. They carry no disease label.
+
+## Added after the report was submitted (November 2026)
+
+The technical report describes the system at commit `d32ad17`. These additions came after it. None of them changes the model, the temperature, the threshold or any reported number.
+
+- **Referral loop.** A referred case gets a case number and a six-character check code. The officer sets its status (received, seen, visit planned, answered) and writes a note, and the farmer reads both on the My case page. The note follows the same rule as the advice: no chemical, no dose.
+- **Consent before contact.** The farmer can tick "the officer may call me" and give a Rwandan mobile number, so the officer can arrange the visit and find the field. Without consent no number is asked for. The number is never shown to the farmer page, never exported in the CSV, and is deleted when the case is answered or after 30 days.
+- **Persistent case log.** PostgreSQL when `DATABASE_URL` is set; SQLite otherwise.
+- **Kinyarwanda.** All farmer pages, advice and follow-up questions. Disease names keep the English code beside them.
+
+Still future work: individual officer accounts limited to a district (one shared access code today), SMS or USSD updates for phones without internet, a free helpline, and a usability study with farmers and extension officers.
 
 ## Method
 
@@ -88,7 +102,7 @@ python3 -m scripts.measure_latency --runs 100    # forward-pass latency, one CPU
 
 ## Deployment
 
-One Render web service defined in `render.yaml` (free plan, Python 3.12, CPU-only PyTorch from `requirements-deploy.txt`). Every push to `main` redeploys it. The free plan sleeps when idle, so the first visit after a pause takes about a minute, and the officer log is cleared on each restart. Details in `docs/deployment_plan.md`.
+One Render web service defined in `render.yaml` (free plan, Python 3.12, CPU-only PyTorch from `requirements-deploy.txt`). Every push to `main` redeploys it. The free plan sleeps when idle, so the first visit after a pause takes about a minute. Without a database the officer log is cleared on each restart; with `DATABASE_URL` set in the Render dashboard to a hosted PostgreSQL address, the log and the cases survive restarts. The address is a secret and is never written in the repository. Details in `docs/deployment_plan.md`.
 
 ## Repository structure
 
@@ -102,13 +116,14 @@ api/
   leaf_check.py    plant-colour check before the model
   districts.py     district survey table, never combined with the diagnosis
   advice.py        advice and follow-up questions as data; forbidden-word guard
-  log_store.py     anonymised SQLite log for the officer view
-  static/          the five pages, shared app.js, app.css, theme.js, sample photos
+  log_store.py     request log and referral cases; SQLite locally, PostgreSQL when DATABASE_URL is set
+  referral.py      phone number and officer note checks
+  static/          the six pages, shared app.js, i18n.js (English and Kinyarwanda), app.css, theme.js, sample photos
 notebooks/         01 data and split, 02 baseline, 03 five seeds, 04 and 04b calibration
                    and internal test, 05 external test on CCMT, 06 leaf check
 data/              split_v1_seed42.csv, district_prevalence.csv
 models/            weights, calibration.json, leaf_check.json, diagrams
-tests/             API, calibration, advice and districts, leaf check
+tests/             API, calibration, advice and districts, leaf check, referral cases, translations
 scripts/           measure_latency.py, near_duplicates.py
 docs/              architecture, technical report, design exports, screenshots, deployment plan
 CONTRIBUTING.md    design constraints every change must respect

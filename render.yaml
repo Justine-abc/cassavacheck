@@ -11,3 +11,6 @@ services:
         value: 3.12.7
       - key: CASSACHECK_OFFICER_CODE
         sync: false
+      # Hosted PostgreSQL address, pasted in the Render dashboard. Without it the log is SQLite and clears on restart.
+      - key: DATABASE_URL
+        sync: false

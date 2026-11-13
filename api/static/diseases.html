@@ -6,11 +6,12 @@
 <title>Cassava diseases</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-<link rel="icon" href="/static/favicon.svg?v=3" type="image/svg+xml"/>
-<link rel="stylesheet" href="/static/app.css?v=3"/>
+<link rel="icon" href="/static/favicon.svg?v=4" type="image/svg+xml"/>
+<link rel="stylesheet" href="/static/app.css?v=4"/>
 <script src="https://cdn.tailwindcss.com/3.4.16"></script>
-<script src="/static/theme.js?v=3"></script>
-<script src="/static/app.js?v=3"></script>
+<script src="/static/theme.js?v=4"></script>
+<script src="/static/i18n.js?v=4"></script>
+<script src="/static/app.js?v=4"></script>
 </head>
 <body class="bg-surface font-body-md text-on-surface min-h-screen">
 <div id="app-header"></div>
@@ -45,41 +46,41 @@ const DISEASES = [
 ];
 
 function list(items) {
-  return `<ul class="flex flex-col gap-1 font-body-sm text-body-sm list-disc pl-5">${items.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>`;
+  return `<ul class="flex flex-col gap-1 font-body-sm text-body-sm list-disc pl-5">${items.map((item) => `<li>${escapeHtml(T(item))}</li>`).join("")}</ul>`;
 }
 
 function diseaseCard(disease) {
   return `
     <section id="${disease.code}" class="scroll-mt-24 bg-surface-container-lowest rounded-xl p-space-lg border border-outline-variant/30 shadow-sm flex flex-col gap-space-sm">
       <div class="flex items-center gap-3"><span class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary">${disease.icon}</span></span>
-        <div><span class="font-label-sm text-label-sm text-secondary uppercase">${disease.code}</span><h2 class="font-headline-sm text-headline-sm">${CLASS_LONG_NAMES[disease.code]}</h2></div></div>
-      <p class="font-body-md text-body-md"><b>Cause:</b> ${escapeHtml(disease.cause)}</p>
-      <div><h3 class="font-title-md text-title-md">What you see</h3>${list(disease.see)}</div>
-      <div><h3 class="font-title-md text-title-md">How it spreads</h3>${list(disease.spread)}</div>
-      <div class="bg-surface-container-low rounded-lg px-3 py-2"><h3 class="font-title-md text-title-md text-primary">Prevent it, without chemicals</h3>${list(disease.prevent)}</div>
-      ${disease.lookalike ? `<p class="font-body-sm text-body-sm"><b class="text-secondary">Look-alike:</b> ${escapeHtml(disease.lookalike)}</p>` : ""}
-      <a class="font-label-sm text-label-sm text-on-surface-variant underline" href="${SHEETS}${disease.sheet}" target="_blank" rel="noopener">Source: Pacific Pests, Pathogens, Weeds &amp; Pesticides fact sheet</a>
+        <div><span class="font-label-sm text-label-sm text-secondary uppercase">${disease.code}</span><h2 class="font-headline-sm text-headline-sm">${diseaseName(disease.code)}</h2></div></div>
+      <p class="font-body-md text-body-md"><b>${T("Cause:")}</b> ${escapeHtml(T(disease.cause))}</p>
+      <div><h3 class="font-title-md text-title-md">${T("What you see")}</h3>${list(disease.see)}</div>
+      <div><h3 class="font-title-md text-title-md">${T("How it spreads")}</h3>${list(disease.spread)}</div>
+      <div class="bg-surface-container-low rounded-lg px-3 py-2"><h3 class="font-title-md text-title-md text-primary">${T("Prevent it, without chemicals")}</h3>${list(disease.prevent)}</div>
+      ${disease.lookalike ? `<p class="font-body-sm text-body-sm"><b class="text-secondary">${T("Look-alike:")}</b> ${escapeHtml(T(disease.lookalike))}</p>` : ""}
+      <a class="font-label-sm text-label-sm text-on-surface-variant underline" href="${SHEETS}${disease.sheet}" target="_blank" rel="noopener">${T("Source:")} Pacific Pests, Pathogens, Weeds &amp; Pesticides fact sheet</a>
     </section>`;
 }
 
 const page = document.getElementById("page");
 page.innerHTML = `
   <div class="lg:col-span-2">
-    <h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary">Cassava diseases</h1>
-    <p class="font-body-md text-body-md text-on-surface-variant">The four conditions CassaCheck recognises: what causes them, what you see, how they spread and how to prevent them.</p>
+    <h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary">${T("Cassava diseases")}</h1>
+    <p class="font-body-md text-body-md text-on-surface-variant">${T("The four conditions CassaCheck recognises: what causes them, what you see, how they spread and how to prevent them.")}</p>
   </div>
   ${DISEASES.map(diseaseCard).join("")}
   <section class="bg-surface-container-high rounded-xl p-space-lg flex flex-col gap-space-sm lg:col-span-2">
     <div class="flex items-center gap-3"><span class="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center"><span class="material-symbols-outlined text-on-secondary">checklist</span></span>
-      <h2 class="font-headline-sm text-headline-sm">The same three habits protect against all four</h2></div>
+      <h2 class="font-headline-sm text-headline-sm">${T("The same three habits protect against all four")}</h2></div>
     <div class="grid gap-2 lg:grid-cols-3">
-      <div class="bg-surface-container-lowest rounded-lg px-3 py-2"><b>Clean cuttings</b><br/><span class="font-body-sm text-body-sm">Plant only stems from healthy plants or certified material.</span></div>
-      <div class="bg-surface-container-lowest rounded-lg px-3 py-2"><b>Remove sick plants early</b><br/><span class="font-body-sm text-body-sm">The sooner a sick plant is out, the less it spreads.</span></div>
-      <div class="bg-surface-container-lowest rounded-lg px-3 py-2"><b>Tolerant varieties</b><br/><span class="font-body-sm text-body-sm">Ask your farmer promoter or sector agronomist which varieties suit your area.</span></div>
+      <div class="bg-surface-container-lowest rounded-lg px-3 py-2"><b>${T("Clean cuttings")}</b><br/><span class="font-body-sm text-body-sm">${T("Plant only stems from healthy plants or certified material.")}</span></div>
+      <div class="bg-surface-container-lowest rounded-lg px-3 py-2"><b>${T("Remove sick plants early")}</b><br/><span class="font-body-sm text-body-sm">${T("The sooner a sick plant is out, the less it spreads.")}</span></div>
+      <div class="bg-surface-container-lowest rounded-lg px-3 py-2"><b>${T("Tolerant varieties")}</b><br/><span class="font-body-sm text-body-sm">${T("Ask your farmer promoter or sector agronomist which varieties suit your area.")}</span></div>
     </div>
   </section>
-  <a href="/" class="press lg:col-span-2 lg:w-80 lg:mx-auto lg:px-6 h-14 rounded-lg bg-primary text-on-primary font-title-md text-title-md flex items-center justify-center gap-2"><span class="material-symbols-outlined">photo_camera</span>Check a leaf now</a>`;
-renderHeader("Diseases"); renderBottomNav("diseases"); reveal(page);
+  <a href="/" class="press lg:col-span-2 lg:w-80 lg:mx-auto lg:px-6 h-14 rounded-lg bg-primary text-on-primary font-title-md text-title-md flex items-center justify-center gap-2"><span class="material-symbols-outlined">photo_camera</span>${T("Check a leaf now")}</a>`;
+renderHeader(T("Diseases")); renderBottomNav("diseases"); reveal(page);
 </script>
 </body>
 </html>

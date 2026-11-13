@@ -10,6 +10,9 @@ LEAF_CHECK_PATH = MODELS_DIRECTORY / "leaf_check.json"
 DISTRICT_TABLE_PATH = PROJECT_ROOT / "data" / "district_prevalence.csv"
 # Overridable so the test suite writes to a temporary log instead of the officer's real one.
 LOG_DATABASE_PATH = Path(os.environ.get("CASSACHECK_LOG_PATH", PROJECT_ROOT / "data" / "diagnosis_log.sqlite"))
+# A hosted PostgreSQL address, set on the server only. When present the log lives there and survives a restart;
+# when absent (a laptop, the test suite) the SQLite file above is used.
+DATABASE_URL = os.environ.get("DATABASE_URL") or None
 STATIC_DIRECTORY = PROJECT_ROOT / "api" / "static"
 # Access code for the officer view. Set on the server (Render environment variable), never written in the repository.
 # When it is not set, the officer log is closed to everyone.
