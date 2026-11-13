@@ -26,9 +26,9 @@ A farmer or extension officer uploads one photograph of a cassava leaf. CassaChe
 | Diagnose | `/` | District and season, photo by camera, file or drag and drop, three sample field photos |
 | Result | `/result` | Diagnosis or "not sure", confidence against the decision line, advice, questions, referral |
 | How it works | `/how-it-works` | What the model is, what the confidence means, why it says "not sure" |
-| Diseases | `/diseases` | Cause, symptoms, spread and prevention without chemicals for the four diseases, with sources |
+| Diseases | `/diseases` | Cause, symptoms, spread and prevention without chemicals for the four diseases, with sources and an example photo |
 | My case | `/my-case` | The farmer types the case number and check code to see the case status and the officer's answer |
-| Officer view | `/officer` | Recent cases and referrals by district; the officer sets the case status and writes a note to the farmer. Needs the officer access code; not linked from the farmer's menu |
+| Officer view | `/officer` | Recent cases and referrals by district; the officer sets the case status and writes a note to the farmer. Needs the officer access code. Reached from the "Officer sign-in" link in the header, not from the farmer's menu |
 
 Every farmer page can be switched between English and Kinyarwanda (EN / RW in the header). The officer view is in English.
 
@@ -42,6 +42,7 @@ The technical report describes the system at commit `d32ad17`. These additions c
 - **Consent before contact.** The farmer can tick "the officer may call me" and give a Rwandan mobile number, so the officer can arrange the visit and find the field. Without consent no number is asked for. The number is never shown to the farmer page, never exported in the CSV, and is deleted when the case is answered or after 30 days.
 - **Persistent case log.** PostgreSQL when `DATABASE_URL` is set; SQLite otherwise.
 - **Kinyarwanda.** All farmer pages, advice and follow-up questions. Disease names keep the English code beside them.
+- **Interface.** The farmer's menu is a bar at the bottom on a phone, within reach of the thumb, and moves into the header on a wide screen. Officers reach their page from a small "Officer sign-in" link in the header. The home page opens with one of my own field photos. The Diseases page and a confident result show a labelled example photo beside the farmer's leaf, for CBB, CGM and CMD. These examples are three CCMT photos (Mensah et al., 2023, CC BY 4.0), credited on screen and used for display only; CCMT has no brown streak class, so CBSD has none. While the server works, the steps it performs are listed one after another.
 
 Still future work: individual officer accounts limited to a district (one shared access code today), SMS or USSD updates for phones without internet, a free helpline, and a usability study with farmers and extension officers.
 

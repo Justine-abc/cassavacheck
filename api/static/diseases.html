@@ -6,16 +6,16 @@
 <title>Cassava diseases</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-<link rel="icon" href="/static/favicon.svg?v=4" type="image/svg+xml"/>
-<link rel="stylesheet" href="/static/app.css?v=4"/>
+<link rel="icon" href="/static/favicon.svg?v=5" type="image/svg+xml"/>
+<link rel="stylesheet" href="/static/app.css?v=5"/>
 <script src="https://cdn.tailwindcss.com/3.4.16"></script>
-<script src="/static/theme.js?v=4"></script>
-<script src="/static/i18n.js?v=4"></script>
-<script src="/static/app.js?v=4"></script>
+<script src="/static/theme.js?v=5"></script>
+<script src="/static/i18n.js?v=5"></script>
+<script src="/static/app.js?v=5"></script>
 </head>
 <body class="bg-surface font-body-md text-on-surface min-h-screen">
 <div id="app-header"></div>
-<main id="page" class="pt-20 pb-24 px-margin-mobile lg:px-8 max-w-3xl lg:max-w-6xl mx-auto grid gap-space-md lg:grid-cols-2 lg:gap-6 lg:items-start"></main>
+<main id="page" class="pt-20 pb-24 lg:pb-12 px-margin-mobile lg:px-8 max-w-3xl lg:max-w-6xl mx-auto grid gap-space-md lg:grid-cols-2 lg:gap-6 lg:items-start"></main>
 <div id="app-nav"></div>
 <script>
 // Every line is taken from the fact sheet linked on its card (Pacific Pests, Pathogens, Weeds & Pesticides, online edition).
@@ -54,6 +54,14 @@ function diseaseCard(disease) {
     <section id="${disease.code}" class="scroll-mt-24 bg-surface-container-lowest rounded-xl p-space-lg border border-outline-variant/30 shadow-sm flex flex-col gap-space-sm">
       <div class="flex items-center gap-3"><span class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary">${disease.icon}</span></span>
         <div><span class="font-label-sm text-label-sm text-secondary uppercase">${disease.code}</span><h2 class="font-headline-sm text-headline-sm">${diseaseName(disease.code)}</h2></div></div>
+      ${EXAMPLE_PHOTOS[disease.code] ? `
+        <figure class="flex flex-col gap-1">
+          <a href="${EXAMPLE_PHOTOS[disease.code]}" target="_blank" rel="noopener" class="block rounded-lg overflow-hidden">
+            <img src="${EXAMPLE_PHOTOS[disease.code]}" alt="${T("Example of")} ${escapeHtml(diseaseName(disease.code))}" loading="lazy" class="example-photo w-full h-48 lg:h-56 object-cover"/></a>
+          <figcaption class="font-label-sm text-label-sm text-on-surface-variant">${T(EXAMPLE_CREDIT)}</figcaption>
+        </figure>` : `
+        <div class="h-24 rounded-lg bg-surface-container-low border border-dashed border-outline-variant flex items-center justify-center gap-2 px-3 text-center font-body-sm text-body-sm text-on-surface-variant">
+          <span class="material-symbols-outlined text-[20px]">hide_image</span>${T("No example photo yet: the open photo set used here has no brown streak class.")}</div>`}
       <p class="font-body-md text-body-md"><b>${T("Cause:")}</b> ${escapeHtml(T(disease.cause))}</p>
       <div><h3 class="font-title-md text-title-md">${T("What you see")}</h3>${list(disease.see)}</div>
       <div><h3 class="font-title-md text-title-md">${T("How it spreads")}</h3>${list(disease.spread)}</div>

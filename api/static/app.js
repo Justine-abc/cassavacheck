@@ -13,6 +13,12 @@ function diseaseName(code) {
   return LANG === "rw" ? `${T(CLASS_LONG_NAMES[code])}${code === "healthy" ? "" : ` (${code})`}` : CLASS_LONG_NAMES[code];
 }
 
+// One labelled example photo per condition, so a farmer can compare their leaf with a known case. They come from the
+// CCMT set from Ghana (Mensah et al., 2023, CC BY 4.0), which has no brown streak class, so CBSD has no example yet.
+// These photos are shown only; nothing is tuned on them.
+const EXAMPLE_PHOTOS = { CBB: "/static/examples/CBB.jpg", CGM: "/static/examples/CGM.jpg", CMD: "/static/examples/CMD.jpg" };
+const EXAMPLE_CREDIT = "Example photo: CCMT dataset, Ghana (Mensah et al., 2023), CC BY 4.0";
+
 function percent(value) { return `${Math.round(value * 100)}%`; }
 
 // Staggered entrance for the direct children of a container (styles in app.css).
@@ -70,28 +76,44 @@ function renderHeader(title, { back = false, hideLanguageSwitch = false } = {}) 
             <span class="font-label-sm text-label-sm text-on-surface-variant">${escapeHtml(title)}</span>
           </div>
         </div>
-        ${hideLanguageSwitch ? "" : languageSwitch()}
+        <div class="flex items-center gap-1 lg:gap-3">
+          <nav id="top-nav" class="hidden lg:flex items-center gap-1" aria-label="${T("Main menu")}"></nav>
+          ${hideLanguageSwitch ? "" : `
+          <a href="/officer" class="press h-10 px-2 lg:px-3 rounded-lg flex items-center gap-1 text-on-surface-variant hover:bg-surface-container-high font-label-md text-label-md" aria-label="${T("Extension officer sign-in")}">
+            <span class="material-symbols-outlined text-[20px]">badge</span><span class="hidden lg:inline">${T("Officer sign-in")}</span></a>
+          ${languageSwitch()}`}
+        </div>
       </div>
     </header>`;
   wireLanguageSwitch();
 }
 
+// The farmer's four places. On a phone they sit in a bar at the bottom, where the thumb reaches; on a laptop or a
+// projector they move into the header. The officer view is not one of them: officers use the sign-in link in the header.
+const NAV_ITEMS = [
+  { href: "/", icon: "photo_camera", label: "Diagnose", key: "diagnose" },
+  { href: "/my-case", icon: "inbox", label: "My case", key: "my-case" },
+  { href: "/how-it-works", icon: "menu_book", label: "How it works", key: "how" },
+  { href: "/diseases", icon: "coronavirus", label: "Diseases", key: "diseases" },
+];
+
 function renderBottomNav(active) {
-  const item = (href, icon, label, key) => `
-    <a href="${href}" class="flex flex-col items-center justify-center gap-0.5 flex-1 h-full ${active === key ? "text-primary" : "text-on-surface-variant"}">
-      <span class="material-symbols-outlined text-[22px]" style="font-variation-settings:'FILL' ${active === key ? 1 : 0}">${icon}</span>
-      <span class="font-label-sm text-label-sm">${label}</span>
-    </a>`;
+  const items = active === "officer" ? [...NAV_ITEMS, { href: "/officer", icon: "assignment", label: "Officer view", key: "officer" }] : NAV_ITEMS;
+  const fill = (key) => `style="font-variation-settings:'FILL' ${active === key ? 1 : 0}"`;
   document.getElementById("app-nav").innerHTML = `
-    <nav class="fixed bottom-0 w-full z-50 bg-surface-container-lowest border-t border-outline-variant/40">
+    <nav class="lg:hidden fixed bottom-0 w-full z-50 bg-surface-container-lowest border-t border-outline-variant/40" aria-label="${T("Main menu")}">
       <div class="h-16 max-w-3xl mx-auto flex">
-        ${item("/", "photo_camera", T("Diagnose"), "diagnose")}
-        ${item("/my-case", "inbox", T("My case"), "my-case")}
-        ${item("/how-it-works", "menu_book", T("How it works"), "how")}
-        ${item("/diseases", "coronavirus", T("Diseases"), "diseases")}
-        ${active === "officer" ? item("/officer", "assignment", "Officer view", "officer") : ""}
+        ${items.map((item) => `
+          <a href="${item.href}" class="flex flex-col items-center justify-center gap-0.5 flex-1 h-full ${active === item.key ? "text-primary" : "text-on-surface-variant"}"${active === item.key ? ' aria-current="page"' : ""}>
+            <span class="material-symbols-outlined text-[22px]" ${fill(item.key)}>${item.icon}</span>
+            <span class="font-label-sm text-label-sm">${item.key === "officer" ? item.label : T(item.label)}</span>
+          </a>`).join("")}
       </div>
     </nav>`;
+  const top = document.getElementById("top-nav");
+  if (top) top.innerHTML = items.map((item) => `
+    <a href="${item.href}" class="h-10 px-3 rounded-lg flex items-center gap-1.5 font-label-lg text-label-lg ${active === item.key ? "bg-primary-fixed text-on-primary-fixed" : "text-on-surface-variant hover:bg-surface-container-high"}"${active === item.key ? ' aria-current="page"' : ""}>
+      <span class="material-symbols-outlined text-[20px]" ${fill(item.key)}>${item.icon}</span>${item.key === "officer" ? item.label : T(item.label)}</a>`).join("");
 }
 
 // Cases this phone has sent, so "My case" can list them without retyping. Kept only in this browser; the server

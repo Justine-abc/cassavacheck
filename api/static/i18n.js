@@ -305,4 +305,22 @@ const RW = {
   "Plant mite-tolerant varieties. Predatory mites that eat green mites are the main natural control.": "Tera amoko yihanganira akarayi k'imyumbati. Uturayi turya akarayi k'imyumbati ni bwo buryo nyamukuru kamere bwo kukarwanya.",
   "Easy to confuse with mosaic disease. Mosaic gives yellow and green patches that are not limited to the veins and twists the leaf.":
     "Yitiranywa byoroshye n'ububembe. Ububembe butera amabara y'umuhondo n'icyatsi atagarukira ku mitsi kandi bugoreka ikibabi.",
+  // Menu, home banner, progress steps and example photos (November 2026).
+  "Main menu": "Ibikubiyemo",
+  "Extension officer sign-in": "Kwinjira k'umukozi ushinzwe ubuhinzi",
+  "Officer sign-in": "Kwinjira k'umukozi",
+  "Honest confidence": "Icyizere nyacyo",
+  "Says \"not sure\" instead of guessing": "Ivuga \"ntibizwi neza\" aho gukeka",
+  "Extension officer follow-up": "Gukurikiranwa n'umukozi ushinzwe ubuhinzi",
+  "Photo: cassava leaf, Kicukiro, October 2026": "Ifoto: ikibabi cy'umwumbati, Kicukiro, Ukwakira 2026",
+  "Photo sent": "Ifoto yoherejwe",
+  "Checking that the photo shows a leaf": "Kureba ko ifoto igaragaza ikibabi",
+  "Comparing with the five conditions": "Kugereranya n'ibyiciro bitanu",
+  "Measuring confidence against the decision line": "Gupima icyizere ugereranyije n'umurongo w'icyemezo",
+  "Example of": "Urugero rwa",
+  "Example photo: CCMT dataset, Ghana (Mensah et al., 2023), CC BY 4.0": "Ifoto y'urugero: amafoto ya CCMT, Ghana (Mensah et al., 2023), CC BY 4.0",
+  "No example photo yet: the open photo set used here has no brown streak class.": "Nta foto y'urugero iraboneka: amafoto rusange akoreshwa hano nta Kabore (CBSD) arimo.",
+  "Your leaf": "Ikibabi cyawe",
+  "Known example": "Urugero ruzwi",
+  "Compare the two. If they look very different, take another photo or ask an extension officer.": "Gereranya byombi. Niba bitandukanye cyane, fata indi foto cyangwa ubaze umukozi ushinzwe ubuhinzi.",
 };

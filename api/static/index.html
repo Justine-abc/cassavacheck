@@ -6,20 +6,30 @@
 <title>CassaCheck</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-<link rel="icon" href="/static/favicon.svg?v=4" type="image/svg+xml"/>
-<link rel="stylesheet" href="/static/app.css?v=4"/>
+<link rel="icon" href="/static/favicon.svg?v=5" type="image/svg+xml"/>
+<link rel="stylesheet" href="/static/app.css?v=5"/>
 <script src="https://cdn.tailwindcss.com/3.4.16"></script>
-<script src="/static/theme.js?v=4"></script>
-<script src="/static/i18n.js?v=4"></script>
-<script src="/static/app.js?v=4"></script>
+<script src="/static/theme.js?v=5"></script>
+<script src="/static/i18n.js?v=5"></script>
+<script src="/static/app.js?v=5"></script>
 </head>
 <body class="bg-surface font-body-md text-on-surface min-h-screen">
 <div id="app-header"></div>
-<main id="page" class="pt-20 pb-24 px-margin-mobile lg:px-8 max-w-3xl lg:max-w-6xl mx-auto grid gap-space-md lg:grid-cols-2 lg:grid-rows-[auto_auto_1fr] lg:gap-6 lg:items-start">
-  <div class="lg:col-span-2">
-    <h1 data-t class="font-headline-lg-mobile text-headline-lg-mobile text-primary">Check a cassava leaf</h1>
-    <p data-t class="font-body-md text-body-md text-on-surface-variant">One leaf photo. You get a diagnosis with an honest confidence, or "not sure" and the next steps.</p>
-  </div>
+<main id="page" class="pt-20 pb-24 lg:pb-12 px-margin-mobile lg:px-8 max-w-3xl lg:max-w-6xl mx-auto grid gap-space-md lg:grid-cols-2 lg:grid-rows-[auto_auto_1fr] lg:gap-6 lg:items-start">
+  <section class="hero lg:col-span-2 relative overflow-hidden rounded-2xl min-h-[220px] lg:min-h-[260px] flex items-end text-white shadow-sm">
+    <img src="/static/examples/hero.jpg" alt="" class="hero-photo absolute inset-0 w-full h-full object-cover object-[50%_35%]"/>
+    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/45 to-black/10"></div>
+    <div class="relative p-space-lg lg:p-8 flex flex-col gap-2 max-w-2xl">
+      <h1 data-t class="font-headline-lg-mobile text-headline-lg-mobile lg:text-[2.5rem] lg:leading-tight">Check a cassava leaf</h1>
+      <p data-t class="font-body-md text-body-md lg:text-body-lg text-white/90">One leaf photo. You get a diagnosis with an honest confidence, or "not sure" and the next steps.</p>
+      <div class="flex flex-wrap gap-2 mt-1">
+        <span class="flex items-center gap-1 bg-white/15 backdrop-blur rounded-full px-2.5 py-1 font-label-md text-label-md"><span class="material-symbols-outlined text-[16px]">speed</span><span data-t>Honest confidence</span></span>
+        <span class="flex items-center gap-1 bg-white/15 backdrop-blur rounded-full px-2.5 py-1 font-label-md text-label-md"><span class="material-symbols-outlined text-[16px]">help</span><span data-t>Says "not sure" instead of guessing</span></span>
+        <span class="flex items-center gap-1 bg-white/15 backdrop-blur rounded-full px-2.5 py-1 font-label-md text-label-md"><span class="material-symbols-outlined text-[16px]">support_agent</span><span data-t>Extension officer follow-up</span></span>
+      </div>
+      <span data-t class="font-label-sm text-label-sm text-white/70">Photo: cassava leaf, Kicukiro, October 2026</span>
+    </div>
+  </section>
 
   <section class="bg-surface-container-lowest rounded-xl p-space-lg border border-outline-variant/30 shadow-sm flex flex-col gap-space-sm">
     <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-primary text-on-primary font-label-md text-label-md flex items-center justify-center">1</span><h2 data-t class="font-title-md text-title-md">District and season</h2></div>
@@ -66,6 +76,13 @@
     <button id="diagnose-button" type="button" disabled class="h-14 rounded-lg bg-primary text-on-primary font-title-md text-title-md flex items-center justify-center gap-2 disabled:opacity-40">
       <span class="material-symbols-outlined text-[22px]">biotech</span><span id="diagnose-label" data-t>Diagnose leaf</span>
     </button>
+    <!-- What the server does with the photo, in order. They light up while the answer is on its way. -->
+    <ol id="steps" class="step-list hidden flex flex-col gap-1.5 font-body-sm text-body-sm">
+      <li class="flex items-center gap-2"><span class="material-symbols-outlined text-[18px] text-primary">upload</span><span data-t>Photo sent</span></li>
+      <li class="flex items-center gap-2"><span class="material-symbols-outlined text-[18px] text-primary">eco</span><span data-t>Checking that the photo shows a leaf</span></li>
+      <li class="flex items-center gap-2"><span class="material-symbols-outlined text-[18px] text-primary">biotech</span><span data-t>Comparing with the five conditions</span></li>
+      <li class="flex items-center gap-2"><span class="material-symbols-outlined text-[18px] text-primary">rule</span><span data-t>Measuring confidence against the decision line</span></li>
+    </ol>
   </section>
 </main>
 <div id="app-nav"></div>
@@ -132,6 +149,10 @@ async function diagnose() {
   const button = document.getElementById("diagnose-button");
   button.disabled = true; document.getElementById("diagnose-label").textContent = T("Checking the leaf…"); showError("");
   document.getElementById("preview-frame").classList.add("scanning");
+  const steps = [...document.querySelectorAll("#steps li")];
+  document.getElementById("steps").classList.remove("hidden");
+  steps.forEach((step) => step.classList.remove("on"));
+  const stepTimers = steps.map((step, index) => setTimeout(() => step.classList.add("on"), index * 350));
   const form = new FormData();
   form.append("image", selectedFile);
   const district = document.getElementById("district").value;
@@ -146,6 +167,7 @@ async function diagnose() {
     showError(error.message === "Failed to fetch" ? T("No connection to the server. Check your internet and try again.") : error.message);
     button.disabled = false; document.getElementById("diagnose-label").textContent = T("Diagnose leaf");
     document.getElementById("preview-frame").classList.remove("scanning");
+    stepTimers.forEach(clearTimeout); document.getElementById("steps").classList.add("hidden");
   }
 }
 
