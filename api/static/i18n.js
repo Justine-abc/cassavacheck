@@ -42,7 +42,7 @@ function districtSentenceRw(district, rows) {
   const row = rows.find((r) => r.district.toLowerCase() === String(district).toLowerCase());
   if (!row) return `Nta gaciro kavuye mu bushakashatsi kari katangazwa ku karere ka ${district}.`;
   return `${row.district}: mu ibarura ry'igihugu ryo mu ${row.survey_year} (${row.sampling_period}), ${row.cbsd_incidence_pct}% by'ibiti ${row.plants_examined} `
-    + `by'imyumbati byasuzumwe byari bifite ibimenyetso by'indwara y'imirongo y'ikigina (CBSD) ku mababi `
+    + `by'imyumbati byasuzumwe byari bifite ibimenyetso bya Kabore (CBSD) ku mababi `
     + `(intera ya 95%: ${row.ci_low_pct} kugeza ${row.ci_high_pct}%). Inkomoko: ${row.source}. Ibi bivuga akarere, si ikibabi cyawe.`;
 }
 
@@ -57,9 +57,9 @@ const RW = {
   "Decision line": "Umurongo w'icyemezo",
   "Above the line, CassaCheck names a condition.": "Hejuru y'umurongo, CassaCheck ivuga indwara.",
   "Below the line, CassaCheck does not guess: it says not sure.": "Munsi y'umurongo, CassaCheck ntikeka: ivuga ko itabizi neza.",
-  "Cassava bacterial blight": "Indwara y'imyumbati iterwa na bagiteri",
-  "Cassava brown streak disease": "Indwara y'imirongo y'ikigina ku myumbati",
-  "Cassava green mite": "Udusimba duto tw'icyatsi ku myumbati",
+  "Cassava bacterial blight": "Kirabiranya y'imyumbati",
+  "Cassava brown streak disease": "Kabore (ububore bw'imyumbati)",
+  "Cassava green mite": "Akarayi k'imyumbati",
   "Cassava mosaic disease": "Ububembe bw'imyumbati",
   "Healthy leaf": "Ikibabi kizima",
   "Check a leaf now": "Suzuma ikibabi ubu",
@@ -172,9 +172,9 @@ const RW = {
   "Ask the extension officer to confirm before replanting.": "Saba umukozi ushinzwe ubuhinzi kubyemeza mbere yo kongera gutera.",
   "Do not take cuttings from this plant.": "Ntugafate ingeri kuri iki giti.",
   "Use certified, tolerant planting material.": "Koresha imbuto zemewe kandi zihanganira indwara.",
-  "Ask the extension officer to confirm; brown streak is easy to confuse with other causes.": "Saba umukozi ushinzwe ubuhinzi kubyemeza; indwara y'imirongo y'ikigina yitiranywa byoroshye n'izindi mpamvu.",
-  "Check the undersides of young leaves for mites.": "Reba munsi y'amababi akiri mato niba hariho udusimba.",
-  "Keep the field weeded; mite damage usually eases with the rains.": "Komeza kubagara umurima; ibyangizwa n'utwo dusimba bikunze kugabanuka imvura iguye.",
+  "Ask the extension officer to confirm; brown streak is easy to confuse with other causes.": "Saba umukozi ushinzwe ubuhinzi kubyemeza; Kabore yitiranywa byoroshye n'izindi mpamvu.",
+  "Check the undersides of young leaves for mites.": "Reba munsi y'amababi akiri mato niba hariho uturayi.",
+  "Keep the field weeded; mite damage usually eases with the rains.": "Komeza kubagara umurima; ibyangizwa n'uturayi bikunze kugabanuka imvura iguye.",
   "Prefer tolerant varieties next season.": "Igihembwe gitaha, hitamo amoko yihanganira indwara.",
   "Use certified, resistant varieties for the next planting.": "Mu itera ritaha, koresha amoko yemewe kandi arwanya indwara.",
   "Remove heavily affected plants if they are few.": "Randura ibiti byafashwe cyane niba ari bike.",
@@ -189,7 +189,7 @@ const RW = {
   "No": "Oya",
   "Not checked": "Sinabirebye",
   "Do you see any other signs on the plant?": "Ubona ibindi bimenyetso ku giti?",
-  "Tiny mites or insects": "Udusimba duto cyane",
+  "Tiny mites or insects": "Uturayi cyangwa udukoko duto",
   "Spots or cracks on the stem": "Amabara cyangwa imyatuko ku giti",
   "Wilting leaves": "Amababi araraba",
   "None of these": "Nta na kimwe muri ibi",
@@ -197,10 +197,10 @@ const RW = {
   "My own field": "Mu murima wanjye",
   "A neighbour": "Ku muturanyi",
   "Certified seed": "Imbuto zemewe",
-  "Whiteflies carry the mosaic and brown streak viruses. Tell the officer you saw them.": "Udusazi twera dukwirakwiza virusi z'ububembe n'iz'imirongo y'ikigina. Bwira umukozi ko watubonye.",
-  "Mites on young leaves can cause green mite damage. Show the officer the undersides of the leaves.": "Udusimba ku mababi akiri mato dushobora kwangiza ikibabi. Erekana umukozi munsi y'amababi.",
-  "Stem spots can come with bacterial blight. Keep cuttings from this plant out of the next planting.": "Amabara ku giti ashobora kuzanwa n'indwara iterwa na bagiteri. Ntugatere ingeri z'iki giti mu itera ritaha.",
-  "Wilting can have several causes, including bacterial blight. The officer should see the plant.": "Kuraba bishobora guterwa n'impamvu nyinshi, harimo indwara iterwa na bagiteri. Umukozi akwiye kureba iki giti.",
+  "Whiteflies carry the mosaic and brown streak viruses. Tell the officer you saw them.": "Udusazi twera dukwirakwiza virusi z'ububembe n'iza Kabore. Bwira umukozi ko watubonye.",
+  "Mites on young leaves can cause green mite damage. Show the officer the undersides of the leaves.": "Uturayi ku mababi akiri mato dushobora gutera ibyangizwa n'akarayi k'imyumbati. Erekana umukozi munsi y'amababi.",
+  "Stem spots can come with bacterial blight. Keep cuttings from this plant out of the next planting.": "Amabara ku giti ashobora kuzanwa na Kirabiranya y'imyumbati. Ntugatere ingeri z'iki giti mu itera ritaha.",
+  "Wilting can have several causes, including bacterial blight. The officer should see the plant.": "Kuraba bishobora guterwa n'impamvu nyinshi, harimo Kirabiranya y'imyumbati. Umukozi akwiye kureba iki giti.",
   "Cuttings from your own field can carry viruses from last season. Certified cuttings are safer next season.": "Ingeri zo mu murima wawe zishobora kuzana virusi z'igihembwe gishize. Ingeri zemewe ni zo zizewe igihembwe gitaha.",
   "Cuttings from another field can bring viruses with them. Certified cuttings are safer next season.": "Ingeri zivuye mu wundi murima zishobora kuzana virusi. Ingeri zemewe ni zo zizewe igihembwe gitaha.",
   "Check two more leaves on the same plant and take another photo in daylight.": "Reba andi mababi abiri ku giti kimwe, maze ufate indi foto ku manywa.",
@@ -216,10 +216,10 @@ const RW = {
   "What the model is": "Porogaramu iyo ari yo",
   "A small image classifier (MobileNetV3-Large) that learned from 14,977 public field photos of cassava leaves taken in Uganda, and was checked on thousands of photos it had never seen, including photos from Ghana. It recognises five conditions:":
     "Ni porogaramu nto itandukanya amafoto (MobileNetV3-Large) yigiye ku mafoto 14,977 rusange y'amababi y'imyumbati yafatiwe mu mirima yo muri Uganda, igasuzumwa ku bihumbi by'amafoto itari yarabonye, harimo amafoto yo muri Ghana. Imenya ibyiciro bitanu:",
-  "Bacterial blight (CBB)": "Indwara iterwa na bagiteri (CBB)",
-  "Brown streak disease (CBSD)": "Indwara y'imirongo y'ikigina (CBSD)",
-  "Green mite damage (CGM)": "Ibyangizwa n'udusimba duto tw'icyatsi (CGM)",
-  "Mosaic disease (CMD)": "Ububembe (CMD)",
+  "Bacterial blight (CBB)": "Kirabiranya y'imyumbati (CBB)",
+  "Brown streak disease (CBSD)": "Kabore (CBSD)",
+  "Green mite damage (CGM)": "Ibyangizwa n'akarayi k'imyumbati (CGM)",
+  "Mosaic disease (CMD)": "Ububembe bw'imyumbati (CMD)",
   "Anything else, such as another crop or another disease, is outside what it knows. That is one reason it can say \"not sure\".":
     "Ikindi cyose, nk'ikindi gihingwa cyangwa indi ndwara, kiri hanze y'ibyo izi. Iyo ni imwe mu mpamvu ishobora kuvuga \"ntibizwi neza\".",
   "What \"confidence\" means": "\"Icyizere\" bivuga iki",
@@ -294,15 +294,15 @@ const RW = {
   "When only a few plants are sick, remove them in dry weather. Clean your tools and keep animals out.": "Iyo ibiti birwaye ari bike, birandure mu gihe cy'izuba. Sukura ibikoresho byawe kandi ubuze amatungo kwinjira.",
   "After harvest, burn or bury old stems you are not keeping for planting.": "Nyuma y'isarura, twika cyangwa uhambe ibiti bishaje utazakoresha mu gutera.",
   "Do not plant cassava again on the same land after a sick crop; wait one to two years.": "Ntukongere gutera imyumbati ku butaka bumwe nyuma y'imyaka yarwaye; tegereza umwaka umwe kugeza ku myaka ibiri.",
-  "A tiny mite (Mononychellus tanajoa) that sucks juice from the leaves, mostly from the underside.": "Agasimba gato cyane (Mononychellus tanajoa) kanyunyuza amazi y'amababi, cyane cyane munsi yayo.",
+  "A tiny mite (Mononychellus tanajoa) that sucks juice from the leaves, mostly from the underside.": "Akarayi gato cyane (Mononychellus tanajoa) kanyunyuza amazi y'amababi, cyane cyane munsi yayo.",
   "Small yellow spots, then yellowing and mottled leaves that die and fall.": "Utudomo duto tw'umuhondo, hanyuma amababi agahinduka umuhondo n'amabara, agapfa akagwa.",
   "Shoot tips lost, leaving a bare stem like a candle.": "Impera z'imishibuka zirashira, igiti kigasigara cyambaye ubusa nk'buji.",
-  "Worst in the dry season: rain washes the mites off the leaves.": "Bikabije mu gihe cy'izuba: imvura yoza udusimba ku mababi.",
-  "Mites walking between plants, or carried by wind and water.": "Udusimba tugenda hagati y'ibiti, cyangwa dutwawe n'umuyaga n'amazi.",
+  "Worst in the dry season: rain washes the mites off the leaves.": "Bikabije mu gihe cy'izuba: imvura yoza uturayi ku mababi.",
+  "Mites walking between plants, or carried by wind and water.": "Uturayi tugenda hagati y'ibiti, cyangwa dutwawe n'umuyaga n'amazi.",
   "People moving cuttings and leaves, over long distances.": "Abantu bimura ingeri n'amababi, ahantu hari kure.",
   "Take planting material from healthy plants.": "Fata imbuto ku biti bizima.",
   "Plant early in the rainy season.": "Tera kare mu gihe cy'imvura.",
-  "Plant mite-tolerant varieties. Predatory mites that eat green mites are the main natural control.": "Tera amoko yihanganira utwo dusimba. Udusimba turya utwo dusimba tw'icyatsi ni bwo buryo nyamukuru kamere bwo kuturwanya.",
+  "Plant mite-tolerant varieties. Predatory mites that eat green mites are the main natural control.": "Tera amoko yihanganira akarayi k'imyumbati. Uturayi turya akarayi k'imyumbati ni bwo buryo nyamukuru kamere bwo kukarwanya.",
   "Easy to confuse with mosaic disease. Mosaic gives yellow and green patches that are not limited to the veins and twists the leaf.":
     "Yitiranywa byoroshye n'ububembe. Ububembe butera amabara y'umuhondo n'icyatsi atagarukira ku mitsi kandi bugoreka ikibabi.",
 };
