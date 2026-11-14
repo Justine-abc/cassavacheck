@@ -6,33 +6,40 @@
 <title>CassaCheck</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-<link rel="icon" href="/static/favicon.svg?v=6" type="image/svg+xml"/>
-<link rel="stylesheet" href="/static/app.css?v=6"/>
+<link rel="icon" href="/static/favicon.svg?v=7" type="image/svg+xml"/>
+<link rel="stylesheet" href="/static/app.css?v=7"/>
 <script src="https://cdn.tailwindcss.com/3.4.16"></script>
-<script src="/static/theme.js?v=6"></script>
-<script src="/static/i18n.js?v=6"></script>
-<script src="/static/app.js?v=6"></script>
+<script src="/static/theme.js?v=7"></script>
+<script src="/static/i18n.js?v=7"></script>
+<script src="/static/app.js?v=7"></script>
 </head>
 <body class="bg-surface font-body-md text-on-surface min-h-screen">
 <div id="app-header"></div>
-<main id="page" class="pt-20 pb-24 lg:pb-12 px-margin-mobile lg:px-8 max-w-3xl lg:max-w-6xl mx-auto grid gap-space-md lg:grid-cols-2 lg:grid-rows-[auto_auto_1fr] lg:gap-6 lg:items-start">
-  <section class="hero lg:col-span-2 relative overflow-hidden rounded-2xl min-h-[220px] lg:min-h-[260px] flex items-end text-white shadow-sm">
-    <img src="/static/examples/hero.jpg" alt="" class="hero-photo absolute inset-0 w-full h-full object-cover object-[50%_35%]"/>
-    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/45 to-black/10"></div>
-    <div class="relative p-space-lg lg:p-8 flex flex-col gap-2 max-w-2xl">
-      <h1 data-t class="font-headline-lg-mobile text-headline-lg-mobile lg:text-[2.5rem] lg:leading-tight">Check a cassava leaf</h1>
-      <p data-t class="font-body-md text-body-md lg:text-body-lg text-white/90">One leaf photo. You get a diagnosis with an honest confidence, or "not sure" and the next steps.</p>
-      <div class="flex flex-wrap gap-2 mt-1">
-        <span class="flex items-center gap-1 bg-white/15 backdrop-blur rounded-full px-2.5 py-1 font-label-md text-label-md"><span class="material-symbols-outlined text-[16px]">speed</span><span data-t>Honest confidence</span></span>
-        <span class="flex items-center gap-1 bg-white/15 backdrop-blur rounded-full px-2.5 py-1 font-label-md text-label-md"><span class="material-symbols-outlined text-[16px]">help</span><span data-t>Says "not sure" instead of guessing</span></span>
-        <span class="flex items-center gap-1 bg-white/15 backdrop-blur rounded-full px-2.5 py-1 font-label-md text-label-md"><span class="material-symbols-outlined text-[16px]">support_agent</span><span data-t>Extension officer follow-up</span></span>
-      </div>
-      <span data-t class="font-label-sm text-label-sm text-white/70">Photo: cassava leaf, Kicukiro, October 2026</span>
+<main id="page" class="pt-20 pb-6 lg:pb-8 px-margin-mobile lg:px-8 max-w-3xl lg:max-w-6xl mx-auto grid grid-cols-[minmax(0,1fr)] gap-space-md lg:grid-cols-2 lg:grid-rows-[auto_auto_1fr] lg:gap-6 lg:items-start">
+  <section class="forest lg:col-span-2 rounded-3xl overflow-hidden grid grid-cols-[minmax(0,1fr)] lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] gap-space-lg lg:gap-10 p-space-lg lg:p-10 items-center shadow-sm">
+    <div class="relative lg:order-2">
+      <img src="/static/examples/hero.jpg" alt="" class="hero-photo w-full h-44 sm:h-56 lg:h-[340px] object-cover object-[50%_35%] rounded-2xl ring-1 ring-white/20"/>
+      <span class="absolute -bottom-3 left-3 lg:-left-4 rotate-[-3deg] bg-sun text-on-sun rounded-xl px-3 py-2 shadow-lg flex items-center gap-1.5 font-label-lg text-label-lg"><span class="material-symbols-outlined text-[18px]">help</span><span data-t>Not sure? It says so.</span></span>
+      <span data-t class="absolute top-2 right-2 bg-black/55 rounded-md px-2 py-0.5 font-label-sm text-label-sm text-white/85">Photo: cassava leaf, Kicukiro, October 2026</span>
+    </div>
+    <div class="flex flex-col gap-3 mt-2 lg:mt-0 lg:order-1">
+      <span class="self-start flex items-center gap-1 border border-lime/60 text-lime rounded-full px-3 py-1 font-label-md text-label-md"><span class="material-symbols-outlined text-[16px]">eco</span><span data-t>Cassava leaf check</span></span>
+      <h1 data-t class="font-headline-lg-mobile text-[30px] leading-[38px] lg:text-[44px] lg:leading-[52px]">Check a cassava leaf</h1>
+      <p data-t class="font-body-md text-body-md lg:text-body-lg text-white/85">One leaf photo. You get a diagnosis with an honest confidence, or "not sure" and the next steps.</p>
+      <ul class="flex flex-col gap-3 mt-1">
+        <li class="flex gap-3 items-start"><span class="w-9 h-9 rounded-full bg-lime text-on-lime flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-[20px]">speed</span></span>
+          <span><b data-t class="block font-title-md text-title-md">Honest confidence</b><span data-t class="font-body-sm text-body-sm text-white/75">Calibrated on photos the model did not learn from.</span></span></li>
+        <li class="flex gap-3 items-start"><span class="w-9 h-9 rounded-full bg-lime text-on-lime flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-[20px]">help</span></span>
+          <span><b data-t class="block font-title-md text-title-md">Says "not sure" instead of guessing</b><span data-t class="font-body-sm text-body-sm text-white/75">Then asks a few questions and offers an extension officer.</span></span></li>
+        <li class="flex gap-3 items-start"><span class="w-9 h-9 rounded-full bg-lime text-on-lime flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-[20px]">support_agent</span></span>
+          <span><b data-t class="block font-title-md text-title-md">Extension officer follow-up</b><span data-t class="font-body-sm text-body-sm text-white/75">A case number and code to read the officer's answer.</span></span></li>
+      </ul>
+      <a href="#drop-zone" class="press self-start mt-1 h-12 pl-5 pr-1.5 rounded-full bg-lime text-on-lime font-title-md text-title-md flex items-center gap-3"><span data-t>Take a leaf photo</span><span class="w-9 h-9 rounded-full bg-sun flex items-center justify-center"><span class="material-symbols-outlined text-[20px]">arrow_downward</span></span></a>
     </div>
   </section>
 
   <section class="bg-surface-container-lowest rounded-xl p-space-lg border border-outline-variant/30 shadow-sm flex flex-col gap-space-sm">
-    <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-primary text-on-primary font-label-md text-label-md flex items-center justify-center">1</span><h2 data-t class="font-title-md text-title-md">District and season</h2></div>
+    <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-lime text-on-lime font-label-md text-label-md flex items-center justify-center">1</span><h2 data-t class="font-title-md text-title-md">District and season</h2></div>
     <label data-t for="district" class="font-label-lg text-label-lg">District</label>
     <select id="district" class="h-12 rounded-lg border border-outline-variant bg-surface-container-low px-3 font-body-lg text-body-lg">
       <option data-t value="">Choose your district (optional)</option>
@@ -42,9 +49,9 @@
     <p data-t class="font-body-sm text-body-sm text-on-surface-variant">Used only for the district information panel. It never changes the diagnosis.</p>
   </section>
 
-  <section id="drop-zone" class="bg-surface-container-lowest rounded-xl p-space-lg border border-outline-variant/30 shadow-sm flex flex-col gap-space-sm lg:row-span-2 transition-colors">
+  <section id="drop-zone" class="scroll-mt-24 bg-surface-container-lowest rounded-xl p-space-lg border border-outline-variant/30 shadow-sm flex flex-col gap-space-sm lg:row-span-2 transition-colors">
     <div class="flex items-center justify-between">
-      <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-primary text-on-primary font-label-md text-label-md flex items-center justify-center">2</span><h2 data-t class="font-title-md text-title-md">Leaf photo</h2></div>
+      <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-lime text-on-lime font-label-md text-label-md flex items-center justify-center">2</span><h2 data-t class="font-title-md text-title-md">Leaf photo</h2></div>
       <span id="photo-badge" data-t class="hidden font-label-sm text-label-sm bg-surface-container px-2 py-1 rounded-full uppercase">1 photo attached</span>
     </div>
     <div class="flex items-center gap-2 bg-secondary-fixed text-on-secondary-fixed rounded-lg px-3 py-2 font-body-sm text-body-sm">
@@ -71,7 +78,7 @@
   </section>
 
   <section class="bg-surface-container-lowest rounded-xl p-space-lg border border-outline-variant/30 shadow-sm flex flex-col gap-space-sm">
-    <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-primary text-on-primary font-label-md text-label-md flex items-center justify-center">3</span><h2 data-t class="font-title-md text-title-md">Diagnose</h2></div>
+    <div class="flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-lime text-on-lime font-label-md text-label-md flex items-center justify-center">3</span><h2 data-t class="font-title-md text-title-md">Diagnose</h2></div>
     <div id="error-box" class="hidden bg-error-container text-on-error-container rounded-lg px-3 py-2 font-body-sm text-body-sm"></div>
     <button id="diagnose-button" type="button" disabled class="h-14 rounded-lg bg-primary text-on-primary font-title-md text-title-md flex items-center justify-center gap-2 disabled:opacity-40">
       <span class="material-symbols-outlined text-[22px]">biotech</span><span id="diagnose-label" data-t>Diagnose leaf</span>

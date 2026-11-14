@@ -115,10 +115,33 @@ function renderBottomNav(active) {
           </a>`).join("")}
       </div>
     </nav>`;
+  document.getElementById("app-nav").insertAdjacentHTML("afterbegin", siteFooter(items, active));
   const top = document.getElementById("top-nav");
   if (top) top.innerHTML = items.map((item) => `
     <a href="${item.href}" class="h-10 px-3 rounded-lg flex items-center gap-1.5 font-label-lg text-label-lg ${active === item.key ? "bg-primary-fixed text-on-primary-fixed" : "text-on-surface-variant hover:bg-surface-container-high"}"${active === item.key ? ' aria-current="page"' : ""}>
       <span class="material-symbols-outlined text-[20px]" ${fill(item.key)}>${item.icon}</span>${item.key === "officer" ? item.label : T(item.label)}</a>`).join("");
+}
+
+// Footer on every page: the menu again, and the one thing a farmer must know if the officer is slow.
+function siteFooter(items, active) {
+  const t = (item) => item.key === "officer" ? item.label : T(item.label);
+  return `
+    <footer class="forest mt-6 pb-16 lg:pb-0">
+      <div class="grid lg:grid-cols-[1fr_minmax(0,460px)]">
+        <div class="footer-start px-margin-mobile lg:pr-8 py-space-lg lg:py-8 flex flex-col gap-3">
+          <div class="flex items-center gap-2"><span class="w-9 h-9 rounded-lg bg-lime text-on-lime flex items-center justify-center"><span class="material-symbols-outlined text-[20px]">eco</span></span>
+            <span class="font-headline-sm text-headline-sm">CassaCheck</span></div>
+          <p class="font-body-sm text-body-sm text-white/75 max-w-md">${T("A cassava leaf check that says \"not sure\" instead of guessing.")}</p>
+          <nav class="flex flex-wrap gap-x-4 gap-y-1 font-label-lg text-label-lg">${items.map((item) => `
+            <a href="${item.href}" class="${active === item.key ? "text-lime" : "text-white/85 hover:text-lime"}">${t(item)}</a>`).join("")}</nav>
+        </div>
+        <a href="/my-case" class="sun-slant bg-sun text-on-sun px-margin-mobile lg:px-8 py-space-lg lg:py-8 flex items-center gap-3">
+          <span class="w-11 h-11 rounded-full bg-forest text-sun flex items-center justify-center shrink-0"><span class="material-symbols-outlined">schedule</span></span>
+          <span class="font-title-md text-title-md"><b class="block">${T("No answer after 3 days?")}</b><span class="font-body-sm text-body-sm">${T("Go to your sector agronomist's office with your case number.")}</span></span>
+        </a>
+      </div>
+      <div class="border-t border-white/10"><p class="max-w-6xl mx-auto px-margin-mobile lg:px-8 py-3 font-label-sm text-label-sm text-white/55">${T("African Leadership University, machine learning capstone, 2026. Photo credits are on the Diseases page.")}</p></div>
+    </footer>`;
 }
 
 // Cases this phone has sent, so "My case" can list them without retyping. Kept only in this browser; the server

@@ -6,19 +6,20 @@
 <title>CassaCheck my case</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-<link rel="icon" href="/static/favicon.svg?v=6" type="image/svg+xml"/>
-<link rel="stylesheet" href="/static/app.css?v=6"/>
+<link rel="icon" href="/static/favicon.svg?v=7" type="image/svg+xml"/>
+<link rel="stylesheet" href="/static/app.css?v=7"/>
 <script src="https://cdn.tailwindcss.com/3.4.16"></script>
-<script src="/static/theme.js?v=6"></script>
-<script src="/static/i18n.js?v=6"></script>
-<script src="/static/app.js?v=6"></script>
+<script src="/static/theme.js?v=7"></script>
+<script src="/static/i18n.js?v=7"></script>
+<script src="/static/app.js?v=7"></script>
 </head>
 <body class="bg-surface font-body-md text-on-surface min-h-screen">
 <div id="app-header"></div>
-<main id="page" class="pt-20 pb-24 lg:pb-12 px-margin-mobile lg:px-8 max-w-3xl mx-auto flex flex-col gap-space-md">
-  <div>
-    <h1 data-t class="font-headline-lg-mobile text-headline-lg-mobile text-primary">My case</h1>
-    <p data-t class="font-body-md text-body-md text-on-surface-variant">See whether the extension officer has looked at a case you sent, and read their answer.</p>
+<main id="page" class="pt-20 pb-6 lg:pb-8 px-margin-mobile lg:px-8 max-w-3xl mx-auto flex flex-col gap-space-md">
+  <div class="forest rounded-3xl p-space-lg lg:p-8 flex flex-col gap-2 shadow-sm">
+    <span class="self-start flex items-center gap-1 border border-lime/60 text-lime rounded-full px-3 py-1 font-label-md text-label-md"><span class="material-symbols-outlined text-[16px]">inbox</span><span data-t>Your referral</span></span>
+    <h1 data-t class="font-headline-lg-mobile text-[28px] leading-9 lg:text-[36px] lg:leading-[44px]">My case</h1>
+    <p data-t class="font-body-md text-body-md text-white/80">See whether the extension officer has looked at a case you sent, and read their answer.</p>
   </div>
 
   <div id="remembered" class="flex flex-col gap-2"></div>
@@ -41,10 +42,6 @@
 
   <div id="result"></div>
 
-  <section class="bg-surface-container-high rounded-xl p-space-lg flex gap-3 items-start">
-    <span class="material-symbols-outlined text-secondary">schedule</span>
-    <p data-t class="font-body-md text-body-md">No answer after 3 days? Go to your sector agronomist's office and show this case number.</p>
-  </section>
 </main>
 <div id="app-nav"></div>
 

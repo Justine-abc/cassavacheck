@@ -1,3 +1,22 @@
+/* Forest panels: deep green with a lime glow at the top right and a warm glow at the bottom left, over faint
+   diagonal lines like leaf veins. Used for banners, the home hero and the footer; working cards stay light for sunlight. */
+.forest {
+  color: #fff;
+  background-color: #10301a;
+  background-image:
+    radial-gradient(circle at 88% 0%, rgba(182, 227, 90, 0.30), transparent 45%),
+    radial-gradient(circle at 0% 100%, rgba(246, 196, 67, 0.18), transparent 50%),
+    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.025) 0 2px, transparent 2px 14px);
+}
+body { background-image: radial-gradient(ellipse 80% 300px at 50% 0%, rgba(200, 236, 203, 0.55), transparent); background-repeat: no-repeat; }
+/* The footer sits at the bottom of short pages too. */
+body { display: flex; flex-direction: column; }
+body > main { flex: 1 0 auto; width: 100%; }
+/* Footer text lines up with the page content; the yellow block runs to the right edge of the screen. */
+@media (min-width: 1024px) { .footer-start { padding-left: max(2rem, calc((100vw - 72rem) / 2 + 2rem)) !important; } }
+/* The yellow help block in the footer leans in from the left. */
+@media (min-width: 1024px) { .sun-slant { clip-path: polygon(6% 0, 100% 0, 100% 100%, 0 100%); padding-left: 3.5rem !important; } }
+
 /* Motion for every page. All of it is switched off for people who ask their device for reduced motion. */
 
 /* Cards and blocks rise in one after another; --i is set by reveal() in app.js. */
