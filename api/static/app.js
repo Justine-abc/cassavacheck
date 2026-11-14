@@ -135,7 +135,7 @@ function siteFooter(items, active) {
           <nav class="flex flex-wrap gap-x-4 gap-y-1 font-label-lg text-label-lg">${items.map((item) => `
             <a href="${item.href}" class="${active === item.key ? "text-lime" : "text-white/85 hover:text-lime"}">${t(item)}</a>`).join("")}</nav>
         </div>
-        <a href="/my-case" class="folded ribbon bg-sun text-on-sun pr-12 py-space-lg lg:py-8 flex items-center gap-3 lg:my-6" style="--fold: 40px">
+        <a href="/my-case" class="folded ribbon bg-[#fbecb8] text-on-sun pr-12 py-space-lg lg:py-8 flex items-center gap-3 lg:my-6" style="--fold: 40px">
           <span class="w-11 h-11 rounded-full bg-forest text-sun flex items-center justify-center shrink-0"><span class="material-symbols-outlined">schedule</span></span>
           <span class="font-title-md text-title-md"><b class="block">${T("No answer after 3 days?")}</b><span class="font-body-sm text-body-sm">${T("Go to your sector agronomist's office with your case number.")}</span></span>
         </a>
