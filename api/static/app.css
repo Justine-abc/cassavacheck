@@ -7,21 +7,30 @@
     radial-gradient(circle at 88% 0%, rgba(182, 227, 90, 0.30), transparent 45%),
     radial-gradient(circle at 0% 100%, rgba(246, 196, 67, 0.18), transparent 50%),
     repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.025) 0 2px, transparent 2px 14px);
+  /* A thin light edge, so a green panel still stands out on the green backdrop. */
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14), 0 10px 30px rgba(0, 0, 0, 0.18);
 }
 /* Page backdrop: my own leaf photo, blurred and tinted green in advance (api/static/examples/backdrop.jpg, 7 KB), so the
    phone does no blurring. It stays still while the page scrolls. Cards on top stay white for reading in sunlight. */
 body { background-color: #3f6b3a; }
 body::before {
   content: ""; position: fixed; inset: 0; z-index: -1;
-  background: linear-gradient(rgba(16, 48, 26, 0.10), rgba(16, 48, 26, 0.35)), url("/static/examples/backdrop.jpg") center / cover no-repeat;
+  background: url("/static/examples/backdrop.jpg") center / cover no-repeat;
 }
+/* Folded paper: the top right corner is cut off and the flap shows folded over. Used for the yellow blocks. */
+.folded { position: relative; clip-path: polygon(0 0, calc(100% - var(--fold, 34px)) 0, 100% var(--fold, 34px), 100% 100%, 0 100%); }
+.folded::after {
+  content: ""; position: absolute; top: 0; right: 0; width: var(--fold, 34px); height: var(--fold, 34px);
+  background: linear-gradient(225deg, transparent 50%, rgba(0, 0, 0, 0.22) 50%, rgba(0, 0, 0, 0.08) 75%, rgba(255, 255, 255, 0.25));
+}
+/* Ribbon: the left end has a V-shaped notch, like a ribbon cut at the end, plus the folded corner. */
+.ribbon { clip-path: polygon(0 0, calc(100% - var(--fold, 34px)) 0, 100% var(--fold, 34px), 100% 100%, 0 100%, 26px 50%); padding-left: 3rem !important; }
+
 /* The footer sits at the bottom of short pages too. */
 body { display: flex; flex-direction: column; }
 body > main { flex: 1 0 auto; width: 100%; }
 /* Footer text lines up with the page content; the yellow block runs to the right edge of the screen. */
 @media (min-width: 1024px) { .footer-start { padding-left: max(2rem, calc((100vw - 72rem) / 2 + 2rem)) !important; } }
-/* The yellow help block in the footer leans in from the left. */
-@media (min-width: 1024px) { .sun-slant { clip-path: polygon(6% 0, 100% 0, 100% 100%, 0 100%); padding-left: 3.5rem !important; } }
 
 /* Motion for every page. All of it is switched off for people who ask their device for reduced motion. */
 
@@ -57,7 +66,7 @@ button:not(:disabled):active, a.press:active { transform: scale(0.98); }
 .disease.open .disease-panel { grid-template-rows: 1fr; }
 .disease.open { box-shadow: 0 4px 18px rgba(35, 85, 46, 0.12); }
 .toggle-icon { transition: transform 0.3s ease, background-color 0.2s ease; }
-.disease.open .toggle-icon { transform: rotate(180deg); background-color: #c8eccb; }
+.disease.open .toggle-icon { transform: rotate(180deg); }
 
 /* Example photos open full size on tap. */
 .example-photo { transition: transform 0.25s ease; }

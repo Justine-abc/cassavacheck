@@ -6,12 +6,12 @@
 <title>Cassava diseases</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-<link rel="icon" href="/static/favicon.svg?v=8" type="image/svg+xml"/>
-<link rel="stylesheet" href="/static/app.css?v=8"/>
+<link rel="icon" href="/static/favicon.svg?v=9" type="image/svg+xml"/>
+<link rel="stylesheet" href="/static/app.css?v=9"/>
 <script src="https://cdn.tailwindcss.com/3.4.16"></script>
-<script src="/static/theme.js?v=8"></script>
-<script src="/static/i18n.js?v=8"></script>
-<script src="/static/app.js?v=8"></script>
+<script src="/static/theme.js?v=9"></script>
+<script src="/static/i18n.js?v=9"></script>
+<script src="/static/app.js?v=9"></script>
 </head>
 <body class="bg-surface font-body-md text-on-surface min-h-screen">
 <div id="app-header"></div>
@@ -49,12 +49,13 @@ function list(items) {
   return `<ul class="flex flex-col gap-1 font-body-sm text-body-sm list-disc pl-5">${items.map((item) => `<li>${escapeHtml(T(item))}</li>`).join("")}</ul>`;
 }
 
-// Soft colour per disease, so the four are easy to tell apart at a glance. Spelled out in full so Tailwind generates them.
+// Soft colour per disease, so the four are easy to tell apart at a glance. Written as exact colours because the theme
+// uses "lime" for its own accent.
 const TONES = {
-  lime: { chip: "bg-lime-200 text-lime-900", ring: "ring-lime-300" },
-  amber: { chip: "bg-amber-200 text-amber-900", ring: "ring-amber-300" },
-  orange: { chip: "bg-orange-200 text-orange-900", ring: "ring-orange-300" },
-  emerald: { chip: "bg-emerald-200 text-emerald-900", ring: "ring-emerald-300" },
+  lime: { chip: "bg-[#d9f99d] text-[#365314]", ring: "ring-lime-300" },
+  amber: { chip: "bg-[#fde68a] text-[#78350f]", ring: "ring-amber-300" },
+  orange: { chip: "bg-[#fed7aa] text-[#7c2d12]", ring: "ring-orange-300" },
+  emerald: { chip: "bg-[#a7f3d0] text-[#064e3b]", ring: "ring-emerald-300" },
 };
 
 function examplePhoto(disease) {
@@ -68,22 +69,23 @@ function examplePhoto(disease) {
 }
 
 // One row per disease. Tapping a row opens it (photo and facts) and closes the one that was open.
-function diseaseCard(disease) {
+function diseaseCard(disease, index) {
   const tone = TONES[disease.tone];
   return `
-    <section id="${disease.code}" class="disease scroll-mt-24 bg-surface-container-lowest rounded-2xl border border-outline-variant/30 shadow-sm overflow-hidden">
-      <button type="button" class="disease-toggle w-full flex items-center gap-3 p-space-md lg:p-space-lg text-left" aria-expanded="false" aria-controls="${disease.code}-panel">
-        <span class="w-11 h-11 rounded-xl ${tone.chip} flex items-center justify-center shrink-0"><span class="material-symbols-outlined">${disease.icon}</span></span>
+    <section id="${disease.code}" class="disease scroll-mt-24 bg-surface-container-lowest rounded-2xl shadow-sm overflow-hidden">
+      <button type="button" class="disease-toggle forest w-full flex items-center gap-3 lg:gap-4 p-space-md lg:p-space-lg text-left" aria-expanded="false" aria-controls="${disease.code}-panel">
+        <span class="w-12 h-12 rounded-full ring-1 ring-sun/70 bg-white/5 flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-sun">${disease.icon}</span></span>
         <span class="flex-1 min-w-0">
-          <span class="flex items-center gap-2"><span class="font-label-sm text-label-sm ${tone.chip} px-2 py-0.5 rounded-full">${disease.code}</span></span>
-          <span class="block font-title-lg text-title-lg mt-0.5">${diseaseName(disease.code)}</span>
-          <span class="block font-body-sm text-body-sm text-on-surface-variant">${escapeHtml(T(disease.short))}</span>
+          <span class="font-label-sm text-label-sm ${tone.chip} px-2 py-0.5 rounded-full">${disease.code}</span>
+          <span class="block font-title-lg text-title-lg mt-1">${diseaseName(disease.code)}</span>
+          <span class="block font-body-sm text-body-sm text-white/75">${escapeHtml(T(disease.short))}</span>
         </span>
-        <span class="toggle-icon w-9 h-9 rounded-full bg-surface-container-high flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-[22px]">add</span></span>
+        <span class="hidden sm:block font-headline-lg text-[44px] leading-none text-white/20 tabular-nums">${String(index + 1).padStart(2, "0")}</span>
+        <span class="toggle-icon w-9 h-9 rounded-full bg-sun text-on-sun flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-[22px]">add</span></span>
       </button>
       <div id="${disease.code}-panel" class="disease-panel" role="region">
         <div class="overflow-hidden">
-          <div class="px-space-md lg:px-space-lg pb-space-lg grid gap-space-md lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] lg:items-start">
+          <div class="p-space-md lg:p-space-lg grid gap-space-md lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] lg:items-start">
             <div class="flex flex-col gap-space-sm">
               ${examplePhoto(disease)}
               <p class="font-body-md text-body-md"><b>${T("Cause:")}</b> ${escapeHtml(T(disease.cause))}</p>
@@ -119,14 +121,20 @@ page.innerHTML = `
     <h1 class="font-headline-lg-mobile text-[28px] leading-9 lg:text-[36px] lg:leading-[44px]">${T("Cassava diseases")}</h1>
     <p class="font-body-md text-body-md text-white/80">${T("The four conditions CassaCheck recognises: what causes them, what you see, how they spread and how to prevent them.")}</p>
   </div>
-  ${DISEASES.map(diseaseCard).join("")}
-  <section class="bg-surface-container-high rounded-xl p-space-lg flex flex-col gap-space-sm">
-    <div class="flex items-center gap-3"><span class="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center"><span class="material-symbols-outlined text-on-secondary">checklist</span></span>
+  ${DISEASES.map((disease, index) => diseaseCard(disease, index)).join("")}
+  <section class="forest rounded-2xl p-space-lg flex flex-col gap-space-sm">
+    <div class="flex items-center gap-3"><span class="w-11 h-11 rounded-full ring-1 ring-sun/70 flex items-center justify-center"><span class="material-symbols-outlined text-sun">checklist</span></span>
       <h2 class="font-headline-sm text-headline-sm">${T("The same three habits protect against all four")}</h2></div>
-    <div class="grid gap-2 lg:grid-cols-3">
-      <div class="bg-surface-container-lowest rounded-lg px-3 py-2"><b>${T("Clean cuttings")}</b><br/><span class="font-body-sm text-body-sm">${T("Plant only stems from healthy plants or certified material.")}</span></div>
-      <div class="bg-surface-container-lowest rounded-lg px-3 py-2"><b>${T("Remove sick plants early")}</b><br/><span class="font-body-sm text-body-sm">${T("The sooner a sick plant is out, the less it spreads.")}</span></div>
-      <div class="bg-surface-container-lowest rounded-lg px-3 py-2"><b>${T("Tolerant varieties")}</b><br/><span class="font-body-sm text-body-sm">${T("Ask your farmer promoter or sector agronomist which varieties suit your area.")}</span></div>
+    <div class="grid gap-3 lg:grid-cols-3">
+      <div class="folded bg-sun text-on-sun rounded-l-lg rounded-br-lg px-4 py-3 pr-10 flex gap-3 items-start" style="--fold: 26px">
+        <span class="w-9 h-9 rounded-full bg-forest text-sun flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-[20px]">content_cut</span></span>
+        <span><b class="block font-title-md text-title-md">${T("Clean cuttings")}</b><span class="font-body-sm text-body-sm">${T("Plant only stems from healthy plants or certified material.")}</span></span></div>
+      <div class="folded bg-sun text-on-sun rounded-l-lg rounded-br-lg px-4 py-3 pr-10 flex gap-3 items-start" style="--fold: 26px">
+        <span class="w-9 h-9 rounded-full bg-forest text-sun flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-[20px]">delete_forever</span></span>
+        <span><b class="block font-title-md text-title-md">${T("Remove sick plants early")}</b><span class="font-body-sm text-body-sm">${T("The sooner a sick plant is out, the less it spreads.")}</span></span></div>
+      <div class="folded bg-sun text-on-sun rounded-l-lg rounded-br-lg px-4 py-3 pr-10 flex gap-3 items-start" style="--fold: 26px">
+        <span class="w-9 h-9 rounded-full bg-forest text-sun flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-[20px]">eco</span></span>
+        <span><b class="block font-title-md text-title-md">${T("Tolerant varieties")}</b><span class="font-body-sm text-body-sm">${T("Ask your farmer promoter or sector agronomist which varieties suit your area.")}</span></span></div>
     </div>
   </section>
   <a href="/" class="press lg:w-80 lg:mx-auto lg:px-6 h-14 rounded-lg bg-primary text-on-primary font-title-md text-title-md flex items-center justify-center gap-2"><span class="material-symbols-outlined">photo_camera</span>${T("Check a leaf now")}</a>`;
