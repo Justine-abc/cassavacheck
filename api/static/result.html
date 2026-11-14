@@ -6,12 +6,12 @@
 <title>CassaCheck result</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-<link rel="icon" href="/static/favicon.svg?v=7" type="image/svg+xml"/>
-<link rel="stylesheet" href="/static/app.css?v=7"/>
+<link rel="icon" href="/static/favicon.svg?v=8" type="image/svg+xml"/>
+<link rel="stylesheet" href="/static/app.css?v=8"/>
 <script src="https://cdn.tailwindcss.com/3.4.16"></script>
-<script src="/static/theme.js?v=7"></script>
-<script src="/static/i18n.js?v=7"></script>
-<script src="/static/app.js?v=7"></script>
+<script src="/static/theme.js?v=8"></script>
+<script src="/static/i18n.js?v=8"></script>
+<script src="/static/app.js?v=8"></script>
 </head>
 <body class="bg-surface font-body-md text-on-surface min-h-screen">
 <div id="app-header"></div>
@@ -166,7 +166,7 @@ function showAnimated(target, html) {
 }
 
 function renderConfident(result) {
-  twoColumns(`<a href="/" class="press self-start flex items-center gap-1 text-primary font-label-lg text-label-lg uppercase"><span class="material-symbols-outlined text-[20px]">arrow_back</span>${T("Check another leaf")}</a>`, `
+  twoColumns(`<a href="/" class="press self-start flex items-center gap-1 text-primary font-label-lg text-label-lg uppercase bg-surface-container-lowest/95 rounded-full px-3 py-2 shadow-sm"><span class="material-symbols-outlined text-[20px]">arrow_back</span>${T("Check another leaf")}</a>`, `
     ${card(`
       <span class="self-start flex items-center gap-1 bg-primary text-on-primary px-2.5 py-1 rounded-full font-label-md text-label-md uppercase"><span class="material-symbols-outlined text-[16px]" style="font-variation-settings:'FILL' 1">check_circle</span>${T("Diagnosis")}</span>
       <h2 class="font-headline-md-mobile text-headline-md-mobile">${result.decision === "healthy" ? T("Healthy leaf") : LANG === "rw" ? escapeHtml(diseaseName(result.decision)) : `${escapeHtml(result.label_long)} (${escapeHtml(result.decision)})`}</h2>
@@ -203,7 +203,7 @@ function questionCard(question) {
 }
 
 function renderNotSure(result) {
-  twoColumns(`<a href="/" class="press self-start flex items-center gap-1 text-primary font-label-lg text-label-lg uppercase"><span class="material-symbols-outlined text-[20px]">photo_camera</span>${T("Take another photo")}</a>`, `
+  twoColumns(`<a href="/" class="press self-start flex items-center gap-1 text-primary font-label-lg text-label-lg uppercase bg-surface-container-lowest/95 rounded-full px-3 py-2 shadow-sm"><span class="material-symbols-outlined text-[20px]">photo_camera</span>${T("Take another photo")}</a>`, `
     ${card(`
       <div class="flex items-start justify-between gap-2 pl-1">
         <span class="flex items-center gap-1 bg-secondary-fixed text-on-secondary-fixed px-2.5 py-1 rounded-full font-label-md text-label-md whitespace-nowrap"><span class="material-symbols-outlined text-[16px]" style="font-variation-settings:'FILL' 1">help</span>${T("Not sure")}</span>
@@ -214,9 +214,9 @@ function renderNotSure(result) {
       <p class="font-body-md text-body-md text-on-surface-variant pl-1">${T("The model is not confident enough to name a condition for this leaf, so it does not guess. Answer the questions for advice, or send the case to an extension officer. Your answers do not change the diagnosis.")}</p>
       <div class="pl-1">${confidenceMeter(result.confidence, result.threshold)}</div>
       ${photoBlock()}`, "bg-secondary")}`, `
-    <div class="flex items-center justify-between px-1">
-      <span class="font-label-sm text-label-sm uppercase text-on-surface-variant">${T("What do you see in the field?")}</span>
-      <span class="font-label-sm text-label-sm text-primary">${result.follow_up_questions.length} ${T("questions")}</span>
+    <div class="flex items-center justify-between bg-forest/85 text-white rounded-full px-4 py-2">
+      <span class="font-label-sm text-label-sm uppercase">${T("What do you see in the field?")}</span>
+      <span class="font-label-sm text-label-sm text-lime">${result.follow_up_questions.length} ${T("questions")}</span>
     </div>
     ${result.follow_up_questions.map(questionCard).join("")}
     <button id="advice-button" disabled class="h-14 rounded-lg bg-primary text-on-primary font-title-md text-title-md flex items-center justify-center gap-2 disabled:bg-surface-container-high disabled:text-on-surface-variant">
