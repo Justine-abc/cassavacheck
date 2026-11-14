@@ -197,7 +197,8 @@ PAGES = {"/": "index.html", "/result": "result.html", "/how-it-works": "how_it_w
 
 
 def page_route(file_name: str):
-    return lambda: FileResponse(config.STATIC_DIRECTORY / file_name)
+    # no-cache: the browser asks each time whether the page changed, so an update shows without a hard refresh.
+    return lambda: FileResponse(config.STATIC_DIRECTORY / file_name, headers={"Cache-Control": "no-cache"})
 
 
 for path, file_name in PAGES.items():
