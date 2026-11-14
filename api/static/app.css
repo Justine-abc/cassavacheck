@@ -17,14 +17,9 @@ body::before {
   content: ""; position: fixed; inset: 0; z-index: -1;
   background: url("/static/examples/backdrop.jpg") center / cover no-repeat;
 }
-/* Folded paper: the top right corner is cut off and the flap shows folded over. Used for the yellow blocks. */
-.folded { position: relative; clip-path: polygon(0 0, calc(100% - var(--fold, 34px)) 0, 100% var(--fold, 34px), 100% 100%, 0 100%); }
-.folded::after {
-  content: ""; position: absolute; top: 0; right: 0; width: var(--fold, 34px); height: var(--fold, 34px);
-  background: linear-gradient(225deg, transparent 50%, rgba(0, 0, 0, 0.22) 50%, rgba(0, 0, 0, 0.08) 75%, rgba(255, 255, 255, 0.25));
-}
-/* Ribbon: the left end has a V-shaped notch, like a ribbon cut at the end, plus the folded corner. */
-.ribbon { clip-path: polygon(0 0, calc(100% - var(--fold, 34px)) 0, 100% var(--fold, 34px), 100% 100%, 0 100%, 26px 50%); padding-left: 3rem !important; }
+/* Leaf shape: two opposite corners strongly rounded, the other two only slightly. Used for the yellow 3-day help block. */
+.leaf { border-radius: 8px 56px 8px 56px; }
+@media (min-width: 1024px) { .leaf { border-radius: 10px 72px 10px 72px; } }
 
 /* The footer sits at the bottom of short pages too. */
 body { display: flex; flex-direction: column; }
