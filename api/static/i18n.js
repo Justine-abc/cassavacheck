@@ -312,7 +312,6 @@ const RW = {
   "Honest confidence": "Icyizere nyacyo",
   "Says \"not sure\" instead of guessing": "Ivuga \"ntibizwi neza\" aho gukeka",
   "Extension officer follow-up": "Gukurikiranwa n'umukozi ushinzwe ubuhinzi",
-  "Photo: cassava leaf, Kicukiro, October 2026": "Ifoto: ikibabi cy'umwumbati, Kicukiro, Ukwakira 2026",
   "Photo sent": "Ifoto yoherejwe",
   "Checking that the photo shows a leaf": "Kureba ko ifoto igaragaza ikibabi",
   "Comparing with the five conditions": "Kugereranya n'ibyiciro bitanu",
