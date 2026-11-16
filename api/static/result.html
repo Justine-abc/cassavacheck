@@ -6,12 +6,12 @@
 <title>CassaCheck result</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-<link rel="icon" href="/static/favicon.svg?v=11" type="image/svg+xml"/>
-<link rel="stylesheet" href="/static/app.css?v=11"/>
+<link rel="icon" href="/static/favicon.svg?v=12" type="image/svg+xml"/>
+<link rel="stylesheet" href="/static/app.css?v=12"/>
 <script src="https://cdn.tailwindcss.com/3.4.16"></script>
-<script src="/static/theme.js?v=11"></script>
-<script src="/static/i18n.js?v=11"></script>
-<script src="/static/app.js?v=11"></script>
+<script src="/static/theme.js?v=12"></script>
+<script src="/static/i18n.js?v=12"></script>
+<script src="/static/app.js?v=12"></script>
 </head>
 <body class="bg-surface font-body-md text-on-surface min-h-screen">
 <div id="app-header"></div>
@@ -202,6 +202,23 @@ function questionCard(question) {
     </div>`;
 }
 
+// On a "not sure" result the two most likely conditions are shown as guesses, never as the answer.
+// The decision stays "not sure": nothing here changes what is logged, the advice or any threshold.
+function closestGuesses(result) {
+  const top = Object.entries(result.probabilities).sort((a, b) => b[1] - a[1]).slice(0, 2);
+  return `
+    <div class="bg-[#fbecb8]/60 border border-[#e8d48a] rounded-lg px-3 py-3 flex flex-col gap-2">
+      <div><span class="font-label-md text-label-md uppercase text-on-sun">${T("Closest guesses, not a diagnosis")}</span>
+        <p class="font-body-sm text-body-sm text-on-surface-variant">${T("The model leans towards these, but not strongly enough to name one. Use them to compare your leaf, not to decide.")}</p></div>
+      ${top.map(([code, value]) => `
+        <div class="flex items-center justify-between gap-2 bg-surface-container-lowest rounded-lg px-3 py-2">
+          <span class="font-body-md text-body-md">${code === "healthy" || LANG === "rw" ? escapeHtml(diseaseName(code)) : `${escapeHtml(CLASS_LONG_NAMES[code])} (${code})`}
+            <span class="font-label-md text-label-md text-on-surface-variant whitespace-nowrap">${T("guess")} ${percent(value)}</span></span>
+          ${code === "healthy" ? "" : `<a href="/diseases#${code}" class="press shrink-0 flex items-center gap-1 text-primary font-label-md text-label-md"><span class="material-symbols-outlined text-[18px]">menu_book</span>${T("How it looks")}</a>`}
+        </div>`).join("")}
+    </div>`;
+}
+
 function renderNotSure(result) {
   twoColumns(`<a href="/" class="press self-start flex items-center gap-1 text-primary font-label-lg text-label-lg uppercase bg-surface-container-lowest/95 rounded-full px-3 py-2 shadow-sm"><span class="material-symbols-outlined text-[20px]">photo_camera</span>${T("Take another photo")}</a>`, `
     ${card(`
@@ -213,6 +230,7 @@ function renderNotSure(result) {
       <h2 class="font-headline-md-mobile text-headline-md-mobile pl-1">${T("Not sure from this photo")}</h2>
       <p class="font-body-md text-body-md text-on-surface-variant pl-1">${T("The model is not confident enough to name a condition for this leaf, so it does not guess. Answer the questions for advice, or send the case to an extension officer. Your answers do not change the diagnosis.")}</p>
       <div class="pl-1">${confidenceMeter(result.confidence, result.threshold)}</div>
+      ${closestGuesses(result)}
       ${photoBlock()}`, "bg-secondary")}`, `
     <div class="flex items-center justify-between bg-forest/85 text-white rounded-full px-4 py-2">
       <span class="font-label-sm text-label-sm uppercase">${T("What do you see in the field?")}</span>

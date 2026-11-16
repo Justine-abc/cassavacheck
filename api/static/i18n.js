@@ -109,6 +109,10 @@ const RW = {
   "Not sure": "Ntibizwi neza",
   "below the threshold of": "munsi y'urugero rwa",
   "Not sure from this photo": "Ntibizwi neza kuri iyi foto",
+  "Closest guesses, not a diagnosis": "Ibikekwa cyane, si igisubizo cya nyuma",
+  "The model leans towards these, but not strongly enough to name one. Use them to compare your leaf, not to decide.": "Porogaramu yegera kuri ibi, ariko ntiyizeye bihagije ngo ivuge kimwe. Bikoreshe ugereranya ikibabi cyawe, ntubifateho icyemezo.",
+  "guess": "bikekwa",
+  "How it looks": "Uko bigaragara",
   "The model is not confident enough to name a condition for this leaf, so it does not guess. Answer the questions for advice, or send the case to an extension officer. Your answers do not change the diagnosis.":
     "Porogaramu ntifite icyizere gihagije cyo kuvuga indwara y'iki kibabi, bityo ntikeka. Subiza ibibazo uhabwe inama, cyangwa wohereze iki kibazo ku mukozi ushinzwe ubuhinzi. Ibisubizo byawe ntibihindura igisubizo cy'isuzuma.",
   "What do you see in the field?": "Ubona iki mu murima?",
