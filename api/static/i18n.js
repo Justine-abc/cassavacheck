@@ -163,7 +163,7 @@ const RW = {
   "Received": "Yakiriwe",
   "Seen by the officer": "Yarebwe n'umukozi",
   "Visit planned": "Uruzinduko rwateganyijwe",
-  "Answered": "Yashubijwe",
+  "Answered": "Yasubijwe",
   "From the extension officer": "Bivuye ku mukozi ushinzwe ubuhinzi",
   "The officer has not written an answer yet.": "Umukozi ntarandika igisubizo.",
   "Sent from this phone": "Byoherejwe kuri iyi telefoni",
