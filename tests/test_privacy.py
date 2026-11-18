@@ -70,5 +70,5 @@ def test_no_page_puts_the_check_code_in_a_web_address():
 def test_contact_and_deletion_request_are_on_the_page():
     text = privacy_text()
     assert "mailto:justineumuhoza74@gmail.com" in text
-    assert "An officer can delete it at once" in text
-    assert 'data-delete-phone' in (STATIC / "officer.html").read_text(encoding="utf-8")
+    assert "deleted when your case is marked answered" in text
+    assert "cannot delete it from the officer's own phone" in text

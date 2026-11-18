@@ -195,14 +195,6 @@ def update_case(case_number: int, body: CaseUpdate):
     return {"case_number": case_number, "status": body.status, "officer_note": note}
 
 
-@app.delete("/cases/{case_number}/phone", dependencies=[Depends(require_officer)])
-def delete_phone(case_number: int):
-    """The officer deletes the farmer's phone number at once, for example when the farmer asks, without closing the case."""
-    if not log.delete_phone(case_number):
-        raise HTTPException(status_code=404, detail="No referred case with this number")
-    return {"case_number": case_number, "phone_deleted": True}
-
-
 app.mount("/static", StaticFiles(directory=config.STATIC_DIRECTORY), name="static")
 
 

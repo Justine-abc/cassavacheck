@@ -106,8 +106,7 @@ function caseEditor(row) {
     <div class="border-t border-outline-variant/40 pt-2 flex flex-col gap-2">
       ${row.phone
         ? `<a href="tel:${escapeHtml(row.phone)}" class="self-start flex items-center gap-1 font-label-lg text-label-lg text-primary"><span class="material-symbols-outlined text-[20px]">call</span>${escapeHtml(row.phone)}</a>
-           <span class="font-label-sm text-label-sm text-on-surface-variant">The farmer agreed to be called about this case. Call to agree a time and the way to the field.</span>
-           <button data-delete-phone="${row.id}" class="self-start h-10 px-3 rounded-lg border border-error text-error font-label-md text-label-md flex items-center gap-1"><span class="material-symbols-outlined text-[18px]">phone_disabled</span>Delete phone number</button>`
+           <span class="font-label-sm text-label-sm text-on-surface-variant">The farmer agreed to be called about this case. Call to agree a time and the way to the field.</span>`
         : `<span class="font-body-sm text-body-sm text-on-surface-variant">No phone shared. The farmer brings case #${row.id} to the farmer promoter or sector office.</span>`}
       <label class="font-label-md text-label-md uppercase text-on-surface-variant" for="status-${row.id}">Case status</label>
       <select id="status-${row.id}" class="h-11 rounded-lg border border-outline-variant bg-surface-container-low px-3">
@@ -138,17 +137,6 @@ async function saveCase(caseNumber) {
   if (saved) { saved.textContent = "Saved. The farmer sees this on My case."; saved.className = "font-body-sm text-body-sm text-primary"; }
 }
 
-// For a farmer who asks for their number to be removed, or once the call has been made. The case stays open.
-async function deletePhone(caseNumber) {
-  if (!confirm("Delete this farmer's phone number now? The case stays open.")) return;
-  const response = await fetch(`/cases/${caseNumber}/phone`, { method: "DELETE", headers: { "X-Officer-Code": readCode() } });
-  if (response.status === 401) { saveCode(null); showSignIn("That access code is not right."); return; }
-  await load();
-  const message = document.getElementById(`case-message-${caseNumber}`);
-  if (message) { message.textContent = response.ok ? "Phone number deleted." : "Could not delete the phone number. Try again.";
-    message.className = `font-body-sm text-body-sm ${response.ok ? "text-primary" : "text-error"}`; }
-}
-
 function render() {
   const shown = rows.filter(matches);
   document.getElementById("stats").innerHTML =
@@ -160,7 +148,6 @@ function render() {
     : `<p class="text-center font-body-md text-body-md text-on-surface-variant py-8 lg:col-span-2">No checks yet for this filter.</p>`;
   reveal(document.getElementById("rows"));
   document.querySelectorAll("[data-save]").forEach((button) => button.onclick = () => saveCase(Number(button.dataset.save)));
-  document.querySelectorAll("[data-delete-phone]").forEach((button) => button.onclick = () => deletePhone(Number(button.dataset.deletePhone)));
 }
 
 // The code is kept only for this browser tab and is sent with each request; the server checks it.

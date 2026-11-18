@@ -402,7 +402,8 @@ const RW = {
   "Changes to this policy": "Impinduka kuri iyi politiki",
   "If what CassaCheck keeps changes, this page will change with it and show a new date.": "Niba ibyo CassaCheck ibika bihindutse, iyi paji izahinduka hamwe na byo kandi igaragaze itariki nshya.",
   "Contact": "Aho watwandikira",
-  "To have your phone number deleted sooner, write to the contact below. An officer can delete it at once, and your case stays open.": "Kugira ngo nimero yawe ya telefoni isibwe vuba, andikira aho watwandikira hari hasi. Umukozi ashobora kuyisiba ako kanya, kandi dosiye yawe igakomeza gukurikiranwa.",
+  "If you change your mind about sharing your number, write to the contact below. Your number is deleted when your case is marked answered.": "Niba uhinduye igitekerezo ku gutanga nimero yawe, andikira aho watwandikira hari hasi. Nimero yawe isibwa iyo dosiye yawe igaragajwe ko yasubijwe.",
+  "Once an officer has called you, your number may stay in their phone's call history or contacts. CassaCheck deletes it from the app, but it cannot delete it from the officer's own phone.": "Iyo umukozi amaze kuguhamagara, nimero yawe ishobora kuguma mu mateka y'amahamagara cyangwa muri nimero zibitswe muri telefoni ye. CassaCheck iyisiba muri porogaramu, ariko ntishobora kuyisiba muri telefoni y'umukozi.",
+  "Questions about your data, or a change of mind about your phone number:": "Ibibazo ku makuru yawe, cyangwa niba uhinduye igitekerezo ku nimero yawe ya telefoni:",
   "Your check code is sent inside the request, never in the web address, so it does not appear in your browser history or in the list of web addresses the host records.": "Kode yawe y'igenzura yoherezwa mu busabe ubwabwo, ntijya muri aderesi y'urubuga, bityo ntigaragara mu mateka ya mushakisha yawe cyangwa ku rutonde rw'aderesi ikigo cyakira porogaramu cyandika.",
-  "Questions about your data, or a request to delete your phone number:": "Ibibazo ku makuru yawe, cyangwa gusaba ko nimero yawe ya telefoni isibwa:",
 };
