@@ -76,7 +76,7 @@ def test_follow_up_for_unknown_diagnosis_is_404():
 
 
 def test_every_page_is_served():
-    for path in ("/", "/result", "/how-it-works", "/diseases", "/officer"):
+    for path in ("/", "/result", "/how-it-works", "/diseases", "/officer", "/my-case", "/privacy"):
         response = client.get(path)
         assert response.status_code == 200 and "<html" in response.text
 

@@ -6,12 +6,12 @@
 <title>CassaCheck result</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-<link rel="icon" href="/static/favicon.svg?v=12" type="image/svg+xml"/>
-<link rel="stylesheet" href="/static/app.css?v=12"/>
+<link rel="icon" href="/static/favicon.svg?v=13" type="image/svg+xml"/>
+<link rel="stylesheet" href="/static/app.css?v=13"/>
 <script src="https://cdn.tailwindcss.com/3.4.16"></script>
-<script src="/static/theme.js?v=12"></script>
-<script src="/static/i18n.js?v=12"></script>
-<script src="/static/app.js?v=12"></script>
+<script src="/static/theme.js?v=13"></script>
+<script src="/static/i18n.js?v=13"></script>
+<script src="/static/app.js?v=13"></script>
 </head>
 <body class="bg-surface font-body-md text-on-surface min-h-screen">
 <div id="app-header"></div>
@@ -91,6 +91,7 @@ function referralForm(target) {
       <input id="contact-consent" type="checkbox" class="mt-1 w-5 h-5 accent-[#2c5f2d] shrink-0"/>
       <span class="font-body-md text-body-md">${T("I agree that the extension officer may call me about this case.")}</span>
     </label>
+    <a id="phone-privacy-link" href="/privacy#phone" target="_blank" rel="noopener" class="self-start flex items-center gap-1 font-label-md text-label-md text-primary underline"><span class="material-symbols-outlined text-[18px]">lock</span>${T("How we use your number")}</a>
     <div id="phone-block" class="hidden flex flex-col gap-1">
       <label for="contact-phone" class="font-label-lg text-label-lg">${T("Phone number")}</label>
       <input id="contact-phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="0788 123 456" class="h-12 rounded-lg border border-outline-variant bg-surface-container-low px-3 font-body-lg text-body-lg"/>

@@ -7,7 +7,7 @@ from api import config
 from api.advice import ABSTAIN_ADVICE, ADVICE_BY_LABEL, FOLLOW_UP_QUESTIONS, GUIDANCE_BY_ANSWER, AdvisoryService
 
 STATIC = config.STATIC_DIRECTORY
-FARMER_PAGES = ("index.html", "result.html", "my_case.html", "how_it_works.html", "diseases.html")
+FARMER_PAGES = ("index.html", "result.html", "my_case.html", "how_it_works.html", "diseases.html", "privacy.html")
 
 
 def kinyarwanda_keys() -> set[str]:
