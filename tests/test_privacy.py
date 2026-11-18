@@ -57,3 +57,18 @@ def test_retention_period_on_the_page_matches_the_code():
 
 def test_privacy_page_does_not_link_to_the_officer_view():
     assert 'href="/officer"' not in client.get("/privacy").text
+
+
+def test_no_page_puts_the_check_code_in_a_web_address():
+    for page in ("my_case.html", "result.html"):
+        source = (STATIC / page).read_text(encoding="utf-8")
+        assert not re.search(r"[?&](check_)?code=", source), page   # a query parameter, not the data-code attribute
+    my_case = (STATIC / "my_case.html").read_text(encoding="utf-8")
+    assert 'fetch("/case", { method: "POST"' in my_case
+
+
+def test_contact_and_deletion_request_are_on_the_page():
+    text = privacy_text()
+    assert "mailto:justineumuhoza74@gmail.com" in text
+    assert "An officer can delete it at once" in text
+    assert 'data-delete-phone' in (STATIC / "officer.html").read_text(encoding="utf-8")

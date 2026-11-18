@@ -6,12 +6,12 @@
 <title>CassaCheck result</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-<link rel="icon" href="/static/favicon.svg?v=13" type="image/svg+xml"/>
-<link rel="stylesheet" href="/static/app.css?v=13"/>
+<link rel="icon" href="/static/favicon.svg?v=14" type="image/svg+xml"/>
+<link rel="stylesheet" href="/static/app.css?v=14"/>
 <script src="https://cdn.tailwindcss.com/3.4.16"></script>
-<script src="/static/theme.js?v=13"></script>
-<script src="/static/i18n.js?v=13"></script>
-<script src="/static/app.js?v=13"></script>
+<script src="/static/theme.js?v=14"></script>
+<script src="/static/i18n.js?v=14"></script>
+<script src="/static/app.js?v=14"></script>
 </head>
 <body class="bg-surface font-body-md text-on-surface min-h-screen">
 <div id="app-header"></div>
@@ -132,7 +132,7 @@ function referralConfirmation(target) {
         <div class="bg-surface-container-lowest rounded-lg py-2"><span class="font-label-sm text-label-sm uppercase block">${T("Check code")}</span><b class="font-headline-sm text-headline-sm tracking-widest">${escapeHtml(check_code)}</b></div>
       </div>
       <span class="font-body-sm text-body-sm">${T("Write both down or take a screenshot. You need them to read the officer's answer.")}</span>
-      <a href="/my-case?case=${case_number}&code=${encodeURIComponent(check_code)}" class="press h-12 rounded-lg bg-primary text-on-primary font-label-lg text-label-lg flex items-center justify-center gap-2"><span class="material-symbols-outlined text-[20px]">inbox</span>${T("Open My case")}</a>
+      <a href="/my-case?case=${case_number}" class="press h-12 rounded-lg bg-primary text-on-primary font-label-lg text-label-lg flex items-center justify-center gap-2"><span class="material-symbols-outlined text-[20px]">inbox</span>${T("Open My case")}</a>
       <span class="font-body-sm text-body-sm">${T("No answer after 3 days? Go to your sector agronomist's office and show this case number.")}</span>
     </div>`);
 }

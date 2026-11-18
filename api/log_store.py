@@ -134,6 +134,13 @@ class DiagnosisLog:
                            (status, officer_note, self._now(), diagnosis_id))
             return cursor.fetchone() is not None
 
+    def delete_phone(self, diagnosis_id: int) -> bool:
+        """Removes the phone number now and leaves the case open. False if there is no referred case with this number."""
+        with self._cursor() as cursor:
+            cursor.execute("UPDATE referral SET phone = NULL, updated_at = ? WHERE diagnosis_id = ? RETURNING diagnosis_id",
+                           (self._now(), diagnosis_id))
+            return cursor.fetchone() is not None
+
     def delete_expired_contacts(self) -> None:
         """Phone numbers older than the retention period are removed even if the case is still open."""
         cutoff = (datetime.now(timezone.utc) - timedelta(days=CONTACT_RETENTION_DAYS)).isoformat(timespec="seconds")

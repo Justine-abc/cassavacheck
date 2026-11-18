@@ -6,12 +6,12 @@
 <title>CassaCheck privacy policy</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-<link rel="icon" href="/static/favicon.svg?v=13" type="image/svg+xml"/>
-<link rel="stylesheet" href="/static/app.css?v=13"/>
+<link rel="icon" href="/static/favicon.svg?v=14" type="image/svg+xml"/>
+<link rel="stylesheet" href="/static/app.css?v=14"/>
 <script src="https://cdn.tailwindcss.com/3.4.16"></script>
-<script src="/static/theme.js?v=13"></script>
-<script src="/static/i18n.js?v=13"></script>
-<script src="/static/app.js?v=13"></script>
+<script src="/static/theme.js?v=14"></script>
+<script src="/static/i18n.js?v=14"></script>
+<script src="/static/app.js?v=14"></script>
 </head>
 <body class="bg-surface font-body-md text-on-surface min-h-screen">
 <div id="app-header"></div>
@@ -101,7 +101,7 @@
       <li data-t>You can check a leaf without choosing a district or season.</li>
       <li data-t>You decide whether to answer the questions and whether to send the case to an officer.</li>
       <li data-t>You can remove a remembered case from "My case" on your phone, and close the tab to clear the last result.</li>
-      <li data-t>To ask for your case or phone number to be deleted sooner, use the contact below.</li>
+      <li data-t>To have your phone number deleted sooner, write to the contact below. An officer can delete it at once, and your case stays open.</li>
     </ul>
   </section>
 
@@ -112,6 +112,7 @@
       <li data-t>The officer list is checked on the server, not only hidden on the page. Without the right access code, it stays closed. If no code is set on the server, it is closed to everyone.</li>
       <li data-t>The access code is kept in the hosting settings, never written in the app's code.</li>
       <li data-t>Each case has a random six-character check code. A wrong code and a case that does not exist give the same answer, so cases cannot be guessed one by one.</li>
+      <li data-t>Your check code is sent inside the request, never in the web address, so it does not appear in your browser history or in the list of web addresses the host records.</li>
       <li data-t>The live site uses an encrypted connection (HTTPS).</li>
     </ul>
   </section>
@@ -123,7 +124,6 @@
       <li data-t>The 30-day deletion of phone numbers runs when an officer opens the list, not on a timer. If nobody opens the list, a number can stay longer than 30 days.</li>
       <li data-t>All extension officers share one access code. Anyone who has it can see the list, including phone numbers. Separate accounts for each officer are the next step.</li>
       <li data-t>The phone number is not encrypted inside the database. It is protected by the access code and by the hosting company.</li>
-      <li data-t>The case number and check code are part of the web address on "My case", so they can appear in your browser history and in the host's records.</li>
       <li data-t>A result is a help for your decision, not a confirmed diagnosis. When the model is not sure, it says "not sure" and lets you send the case to an extension officer.</li>
       <li data-t>CassaCheck never recommends a pesticide or a dose. The officer's note cannot name one either.</li>
     </ul>
@@ -138,7 +138,8 @@
   <section class="bg-surface-container-lowest rounded-xl p-space-lg border border-outline-variant/30 shadow-sm flex flex-col gap-space-sm">
     <div class="flex items-center gap-3"><span class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-on-primary">mail</span></span>
       <h2 data-t class="font-headline-sm text-headline-sm">Contact</h2></div>
-    <p class="font-body-md text-body-md bg-error-container text-on-error-container rounded-lg px-3 py-2"><span data-t>[Contact details to be added]</span></p>
+    <p data-t class="font-body-md text-body-md">Questions about your data, or a request to delete your phone number:</p>
+    <a href="mailto:justineumuhoza74@gmail.com" class="self-start flex items-center gap-2 font-title-md text-title-md text-primary underline break-all"><span class="material-symbols-outlined">mail</span>justineumuhoza74@gmail.com</a>
   </section>
 
   <a href="/" class="press lg:w-80 lg:mx-auto lg:px-6 h-14 rounded-lg bg-primary text-on-primary font-title-md text-title-md flex items-center justify-center gap-2"><span class="material-symbols-outlined">photo_camera</span><span data-t>Check a leaf now</span></a>

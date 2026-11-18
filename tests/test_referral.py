@@ -80,11 +80,18 @@ def test_referral_for_unknown_diagnosis_is_404():
 def test_farmer_reads_status_only_with_the_right_code():
     case_number = new_case()
     code = client.post("/referral", json={"diagnosis_id": case_number, "contact_consent": True, "phone": "0788123456"}).json()["check_code"]
-    found = client.get(f"/case/{case_number}", params={"code": code.lower()})   # typed in lower case still works
+    found = client.post("/case", json={"case_number": case_number, "check_code": code.lower()})   # typed in lower case still works
     assert found.status_code == 200 and found.json()["status"] == "received"
     assert "phone" not in found.json()
-    assert client.get(f"/case/{case_number}", params={"code": "WRONG2"}).status_code == 404
-    assert client.get(f"/case/{10**9}", params={"code": code}).status_code == 404
+    assert client.post("/case", json={"case_number": case_number, "check_code": "WRONG2"}).status_code == 404
+    assert client.post("/case", json={"case_number": 10**9, "check_code": code}).status_code == 404
+
+
+def test_check_code_is_never_read_from_the_web_address():
+    case_number = new_case()
+    code = client.post("/referral", json={"diagnosis_id": case_number}).json()["check_code"]
+    assert client.get(f"/case/{case_number}", params={"code": code}).status_code != 200
+    assert client.get("/case", params={"case_number": case_number, "check_code": code}).status_code != 200
 
 
 def test_only_officers_update_a_case():
@@ -109,7 +116,7 @@ def test_answering_a_case_shows_the_note_to_the_farmer_and_deletes_the_phone():
     code = client.post("/referral", json={"diagnosis_id": case_number, "contact_consent": True, "phone": "0788123456"}).json()["check_code"]
     note = "Brown streak confirmed on visit. Uproot the plant; take cuttings only from plants without symptoms."
     client.put(f"/cases/{case_number}", json={"status": "answered", "officer_note": note}, headers=OFFICER)
-    farmer_view = client.get(f"/case/{case_number}", params={"code": code}).json()
+    farmer_view = client.post("/case", json={"case_number": case_number, "check_code": code}).json()
     assert farmer_view["status"] == "answered" and farmer_view["officer_note"] == note
     assert officer_row(case_number)["phone"] is None
     # A closed case does not take a new phone number.
@@ -131,3 +138,15 @@ def test_phone_numbers_expire_after_the_retention_period(tmp_path):
 def test_my_case_page_is_served_and_does_not_link_to_the_officer_view():
     response = client.get("/my-case")
     assert response.status_code == 200 and 'href="/officer"' not in response.text
+
+
+def test_officer_can_delete_a_phone_number_and_the_case_stays_open():
+    case_number = new_case()
+    client.post("/referral", json={"diagnosis_id": case_number, "contact_consent": True, "phone": "0788123456"})
+    assert officer_row(case_number)["phone"] == "+250788123456"
+    assert client.delete(f"/cases/{case_number}/phone").status_code == 401
+    assert client.delete(f"/cases/{case_number}/phone", headers={"X-Officer-Code": "wrong"}).status_code == 401
+    assert client.delete(f"/cases/{case_number}/phone", headers=OFFICER).status_code == 200
+    row = officer_row(case_number)
+    assert row["phone"] is None and row["case_status"] == "received"
+    assert client.delete(f"/cases/{new_case()}/phone", headers=OFFICER).status_code == 404   # never referred

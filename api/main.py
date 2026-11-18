@@ -160,10 +160,17 @@ def referral(body: Referral):
     return {"case_number": body.diagnosis_id, "check_code": check_code, "contact_saved": phone is not None}
 
 
-@app.get("/case/{case_number}")
-def case_status(case_number: int, code: str):
-    """Farmer's view of one case: status and the officer's note, never the phone number. Needs the check code."""
-    found = log.case_status(case_number, code)
+class CaseLookup(BaseModel):
+    case_number: int
+    check_code: str
+
+
+@app.post("/case")
+def case_status(body: CaseLookup):
+    """Farmer's view of one case: status and the officer's note, never the phone number. Needs the check code.
+    POST, not GET: the code travels in the request body, so it never appears in a web address, the browser history
+    or the server's request log."""
+    found = log.case_status(body.case_number, body.check_code)
     if found is None:
         raise HTTPException(status_code=404, detail="No case with this number and code. Check both and try again.")
     return found
@@ -186,6 +193,14 @@ def update_case(case_number: int, body: CaseUpdate):
     if not log.update_case(case_number, body.status, note):
         raise HTTPException(status_code=404, detail="No referred case with this number")
     return {"case_number": case_number, "status": body.status, "officer_note": note}
+
+
+@app.delete("/cases/{case_number}/phone", dependencies=[Depends(require_officer)])
+def delete_phone(case_number: int):
+    """The officer deletes the farmer's phone number at once, for example when the farmer asks, without closing the case."""
+    if not log.delete_phone(case_number):
+        raise HTTPException(status_code=404, detail="No referred case with this number")
+    return {"case_number": case_number, "phone_deleted": True}
 
 
 app.mount("/static", StaticFiles(directory=config.STATIC_DIRECTORY), name="static")

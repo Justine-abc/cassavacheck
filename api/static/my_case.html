@@ -6,12 +6,12 @@
 <title>CassaCheck my case</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-<link rel="icon" href="/static/favicon.svg?v=13" type="image/svg+xml"/>
-<link rel="stylesheet" href="/static/app.css?v=13"/>
+<link rel="icon" href="/static/favicon.svg?v=14" type="image/svg+xml"/>
+<link rel="stylesheet" href="/static/app.css?v=14"/>
 <script src="https://cdn.tailwindcss.com/3.4.16"></script>
-<script src="/static/theme.js?v=13"></script>
-<script src="/static/i18n.js?v=13"></script>
-<script src="/static/app.js?v=13"></script>
+<script src="/static/theme.js?v=14"></script>
+<script src="/static/i18n.js?v=14"></script>
+<script src="/static/app.js?v=14"></script>
 </head>
 <body class="bg-surface font-body-md text-on-surface min-h-screen">
 <div id="app-header"></div>
@@ -88,7 +88,9 @@ async function lookUp(caseNumber, checkCode) {
   const error = document.getElementById("lookup-error");
   error.classList.add("hidden");
   try {
-    const response = await fetch(`/case/${encodeURIComponent(caseNumber)}?code=${encodeURIComponent(checkCode)}`);
+    // The code goes in the request body, never in the address, so it stays out of browser history and server logs.
+    const response = await fetch("/case", { method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ case_number: Number(caseNumber), check_code: checkCode }) });
     const body = await response.json();
     if (!response.ok) throw new Error(T(typeof body.detail === "string" ? body.detail : "No case with this number and code. Check both and try again."));
     rememberCase(body.case_number, checkCode.toUpperCase());
@@ -124,12 +126,13 @@ document.getElementById("lookup").onsubmit = (event) => {
   lookUp(document.getElementById("case-number").value.trim(), document.getElementById("check-code").value.trim());
 };
 
-// Opened from the confirmation after a referral: the case number and code arrive in the address.
-const parameters = new URLSearchParams(window.location.search);
-if (parameters.get("case") && parameters.get("code")) {
-  document.getElementById("case-number").value = parameters.get("case");
-  document.getElementById("check-code").value = parameters.get("code");
-  lookUp(parameters.get("case"), parameters.get("code"));
+// Opened from the confirmation after a referral: only the case number is in the address. The code was saved on this
+// phone when the case was sent, so it is read from there; without it the farmer types the code.
+const openedCase = Number(new URLSearchParams(window.location.search).get("case"));
+if (openedCase) {
+  document.getElementById("case-number").value = openedCase;
+  const saved = rememberedCases().find((c) => c.case_number === openedCase);
+  if (saved) { document.getElementById("check-code").value = saved.check_code; lookUp(openedCase, saved.check_code); }
 }
 renderRemembered();
 reveal(document.getElementById("page"));
